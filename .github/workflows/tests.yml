@@ -14,6 +14,8 @@ jobs:
       run: composer validate
     - name: Install dependencies
       run: composer install --prefer-dist --no-dev
+    - name: testperso
+      run: docker run --rm --read-only -v ~/PrivateBin:/srv:ro --tmpfs /tmp privatebin/unit-testing
 
   PHPunit:
     runs-on: ubuntu-latest
