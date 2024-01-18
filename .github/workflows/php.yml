@@ -37,5 +37,5 @@ jobs:
 
     # - name: Run test suite
     #   run: composer run-script test
-    - run: docker run --rm --read-only -v ~/PrivateBin:/srv:ro --tmpfs /tmp privatebin/unit-testing 
+    - run: docker run --rm --read-only -v .:/srv:ro --tmpfs /tmp privatebin/unit-testing 
     
