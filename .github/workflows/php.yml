@@ -41,6 +41,8 @@ jobs:
        run: apt-get install phpunit -y
     -  name: installation xdebug
        run: apt-get install php-xdebug     
+    -  name: lancement du test de couverture
+       run: phpunit --coverage-text
      # name: code coverage
     #- run: 
     #- run: docker
