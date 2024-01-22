@@ -38,8 +38,8 @@ jobs:
        run: apt-get install php-xdebug
   
     #   run: composer run-script test
-    -  name: est1hshshshshghghgh
-       run: ../vendor/bin/phpunit 
+    -  name: installer phpunit
+       run: apt-get install phpunit -y
 
      # name: code coverage
     #- run: 
