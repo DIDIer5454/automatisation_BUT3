@@ -39,7 +39,7 @@ jobs:
     #   run: composer run-script test
     - run: docker run --rm --read-only -v .:/srv:ro --tmpfs /tmp privatebin/unit-testing 
 
-     # name: code coverage
+      name: code coverage
     #- run: 
-    #- run: docker run --rm --read-only -v .:/srv:ro --tmpfs /tmp privatebin/unit-testing echo "" >>phpunit --coverage-text  
+    - run: docker run --rm --read-only -v .:/srv:ro --tmpfs /tmp privatebin/unit-testing apt install -y xdebug2 
     
