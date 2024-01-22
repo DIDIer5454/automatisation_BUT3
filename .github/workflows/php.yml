@@ -34,12 +34,13 @@ jobs:
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
-
+      name: creation image docker
+    - run: docker build -t privatebin/unit-testing .
       name: Run test suite
     #   run: composer run-script test
-    - run: docker run --rm --read-only -v .:/srv:ro --tmpfs /tmp privatebin/unit-testing 
+    - run: docker run
 
-      name: code coverage
+     # name: code coverage
     #- run: 
-    - run: docker run --rm --read-only -v .:/srv:ro --tmpfs /tmp privatebin/unit-testing apt install -y xdebug2 
+    #- run: docker
     
