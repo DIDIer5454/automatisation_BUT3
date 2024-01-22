@@ -38,7 +38,7 @@ jobs:
     - run: docker build -t privatebin/unit-testing .
       name: Run test suite
     #   run: composer run-script test
-    - run: docker run
+    - run: docker run .
 
      # name: code coverage
     #- run: 
