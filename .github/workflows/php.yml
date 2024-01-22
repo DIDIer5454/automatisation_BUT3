@@ -34,13 +34,13 @@ jobs:
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
-    -  name: installation xdebug
-       run: apt-get install php-xdebug
+  
   
     #   run: composer run-script test
     -  name: installer phpunit
        run: apt-get install phpunit -y
-
+    -  name: installation xdebug
+       run: apt-get install php-xdebug     
      # name: code coverage
     #- run: 
     #- run: docker
