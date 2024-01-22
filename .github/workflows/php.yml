@@ -36,6 +36,6 @@ jobs:
     # Docs: https://getcomposer.org/doc/articles/scripts.md
     - name: lancer coverage
       run: docker run --rm --read-only -v ~/PrivateBin:/srv:ro --tmpfs /tmp privatebin/unit-testing phpunit ConfigurationTest.php --coverage-text
-
+ 
     # - name: Run test suite
     #   run: composer run-script test
