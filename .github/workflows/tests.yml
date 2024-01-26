@@ -93,7 +93,15 @@ jobs:
     - name: Run unit tests
       run: ../vendor/bin/phpunit --no-coverage
       working-directory: tst
-
+    - name: hey
+    
+      #run: echo $PWD/../
+      run: phpunit --coverage-text=test 
+      working-directory: tst
+    # - name: Run test suite
+    #   run: composer run-script test
+      env:
+        extensions: gd, sqlite3, xdebug
   Mocha:
     runs-on: ubuntu-latest
     steps:
