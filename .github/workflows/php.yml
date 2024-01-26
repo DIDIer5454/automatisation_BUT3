@@ -23,6 +23,6 @@ jobs:
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
     - name: hey
-      run: phpunit 
+      run: phpunit --coverage-text=test tst
     # - name: Run test suite
     #   run: composer run-script test
