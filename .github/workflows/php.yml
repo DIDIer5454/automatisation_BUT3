@@ -33,7 +33,7 @@ jobs:
     
     - name: hey
       #run: echo $PWD/../
-      run: ../vendor/bin/phpunit --coverage-text=test2 
+      run: ../vendor/bin/phpunit -d XDEBUG_MODE=coverage --coverage-text=test2 
      # env:
       #  extensions: gd, sqlite3, xdebug
        # extensions-cache-key-name: phpextensions
