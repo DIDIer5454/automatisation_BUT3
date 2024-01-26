@@ -36,6 +36,8 @@ jobs:
 
       env:
         extensions: gd, sqlite3, xdebug
+        extensions-cache-key-name: phpextensions
+
           # composer installation
 
     # - name: Run test suite
