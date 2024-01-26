@@ -33,10 +33,9 @@ jobs:
     
     - name: hey
       #run: echo $PWD/../
-      run: ../vendor/bin/phpunit --help 
-      #-d XDEBUG_MODE=coverage --coverage-text=test2 
-     # env:
-      #  extensions: gd, sqlite3, xdebug
+      run: ../vendor/bin/phpunit --coverage-text=test2 
+      env:
+       XDEBUG_MODE: coverage
        # extensions-cache-key-name: phpextensions
       working-directory: tst
 
