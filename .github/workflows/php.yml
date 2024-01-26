@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
     - name: installation des autres trucs
-      run: apt install phpunit php-gd php-sqlite3 php-xdebug -y
+      run: apt install php-xdebug -y
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
     - name: maj
