@@ -23,7 +23,7 @@ jobs:
     - name: maj
       run: composer install --no-dev --optimize-autoloader
     - name: hey
-      run: $PWD
+      run: echo $PWD
       #run: /vendor/bin/phpunit --coverage-text=test 
       working-directory: tst
     # - name: Run test suite
