@@ -31,7 +31,7 @@ jobs:
     
     - name: hey
       #run: echo $PWD/../
-      run: phpunit --coverage-text=test2 
+      run: ../vendor/bin/phpunit --coverage-text=test2 
       working-directory: tst
 
       env:
