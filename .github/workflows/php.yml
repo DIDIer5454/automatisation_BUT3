@@ -38,6 +38,10 @@ jobs:
        XDEBUG_MODE: coverage
        # extensions-cache-key-name: phpextensions
       working-directory: tst
+    - name: hey2
+      run: cat test2
+      working-directory: tst
+
 
 
           # composer installation
