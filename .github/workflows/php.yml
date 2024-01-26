@@ -24,5 +24,6 @@ jobs:
       run: composer install --no-dev --optimize-autoloader
     - name: hey
       run: ../vendor/bin/phpunit --coverage-text=test 
+      working-directory: tst
     # - name: Run test suite
     #   run: composer run-script test
