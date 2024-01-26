@@ -18,13 +18,11 @@ jobs:
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
-    - name: installation des autres trucs
-      run: apt install php-xdebug -y
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
     - name: maj
       run: composer install --no-dev --optimize-autoloader
     - name: hey
-      run: cd tst && env  && phpunit --coverage-text=test 
+      run: ../vendor/bin/phpunit --coverage-text=test 
     # - name: Run test suite
     #   run: composer run-script test
