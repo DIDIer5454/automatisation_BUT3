@@ -96,7 +96,7 @@ jobs:
     - name: hey
     
       #run: echo $PWD/../
-      run: phpunit --coverage-text=test 
+      run: ../vendor/bin/phpunit --coverage-text=test 
       working-directory: tst
     # - name: Run test suite
     #   run: composer run-script test
