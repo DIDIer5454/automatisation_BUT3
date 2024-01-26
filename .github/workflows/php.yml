@@ -25,6 +25,6 @@ jobs:
     - name: maj
       run: composer install --no-dev --optimize-autoloader
     - name: hey
-      run: export XDEBUG_CONFIG="idekey=VSCODE" && cd tst && phpunit --coverage-text=test 
+      run: export XDEBUG_CONFIG="idekey=VSCODE" && cd tst
     # - name: Run test suite
     #   run: composer run-script test
