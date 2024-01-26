@@ -31,8 +31,8 @@ jobs:
     
     - name: hey
       #run: echo $PWD/../
-      run: phpunit --coverage-text=test 
-      working-directory: tst2
+      run: phpunit --coverage-text=test2 
+      working-directory: tst
 
       env:
         extensions: gd, sqlite3, xdebug
