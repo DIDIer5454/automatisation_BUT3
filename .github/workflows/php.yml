@@ -22,16 +22,17 @@ jobs:
     # Docs: https://getcomposer.org/doc/articles/scripts.md
     - name: maj
       run: composer install --no-dev --optimize-autoloader
+          - name: Setup PHPunit
+      run: composer install -n
+
+    - name: Install Google Cloud Storage
+      run: composer require google/cloud-storage
     - name: hey
       #run: echo $PWD/../
       run: phpunit --coverage-text=test 
       working-directory: tst
           # composer installation
-    - name: Setup PHPunit
-      run: composer install -n
 
-    - name: Install Google Cloud Storage
-      run: composer require google/cloud-storage
     # - name: Run test suite
     #   run: composer run-script test
     env:
