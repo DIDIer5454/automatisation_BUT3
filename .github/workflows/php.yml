@@ -29,3 +29,5 @@ jobs:
       working-directory: tst
     # - name: Run test suite
     #   run: composer run-script test
+    env:
+      extensions: gd, sqlite3, xdebug
