@@ -46,7 +46,7 @@ class GoogleCloudStorage extends AbstractData
      * instantiantes a new Google Cloud Storage data backend.
      *
      * @access public
-     * @param array $options
+     * @param  array $options
      * @return
      */
     public function __construct(array $options)
@@ -76,7 +76,7 @@ class GoogleCloudStorage extends AbstractData
      * returns the google storage object key for $pasteid in $this->_bucket.
      *
      * @access private
-     * @param $pasteid string to get the key for
+     * @param  $pasteid string to get the key for
      * @return string
      */
     private function _getKey($pasteid)
@@ -93,8 +93,8 @@ class GoogleCloudStorage extends AbstractData
      * as the GCS object's metadata except for the fields attachment, attachmentname
      * and salt.
      *
-     * @param $key string to store the payload under
-     * @param $payload array to store
+     * @param  $key     string to store the payload under
+     * @param  $payload array to store
      * @return bool true if successful, otherwise false.
      */
     private function _upload($key, $payload)
@@ -118,8 +118,10 @@ class GoogleCloudStorage extends AbstractData
             }
             $this->_bucket->upload(Json::encode($payload), $data);
         } catch (Exception $e) {
-            error_log('failed to upload ' . $key . ' to ' . $this->_bucket->name() . ', ' .
-                trim(preg_replace('/\s\s+/', ' ', $e->getMessage())));
+            error_log(
+                'failed to upload ' . $key . ' to ' . $this->_bucket->name() . ', ' .
+                trim(preg_replace('/\s\s+/', ' ', $e->getMessage()))
+            );
             return false;
         }
         return true;
@@ -149,8 +151,10 @@ class GoogleCloudStorage extends AbstractData
         } catch (NotFoundException $e) {
             return false;
         } catch (Exception $e) {
-            error_log('failed to read ' . $pasteid . ' from ' . $this->_bucket->name() . ', ' .
-                trim(preg_replace('/\s\s+/', ' ', $e->getMessage())));
+            error_log(
+                'failed to read ' . $pasteid . ' from ' . $this->_bucket->name() . ', ' .
+                trim(preg_replace('/\s\s+/', ' ', $e->getMessage()))
+            );
             return false;
         }
     }
@@ -264,6 +268,7 @@ class GoogleCloudStorage extends AbstractData
     /**
      * For GoogleCloudStorage, the value will also be stored in the metadata for the
      * namespaces traffic_limiter and purge_limiter.
+     *
      * @inheritDoc
      */
     public function setValue($value, $namespace, $key = '')
@@ -292,8 +297,10 @@ class GoogleCloudStorage extends AbstractData
             }
             $this->_bucket->upload($value, $data);
         } catch (Exception $e) {
-            error_log('failed to set key ' . $key . ' to ' . $this->_bucket->name() . ', ' .
-                trim(preg_replace('/\s\s+/', ' ', $e->getMessage())));
+            error_log(
+                'failed to set key ' . $key . ' to ' . $this->_bucket->name() . ', ' .
+                trim(preg_replace('/\s\s+/', ' ', $e->getMessage()))
+            );
             return false;
         }
         return true;

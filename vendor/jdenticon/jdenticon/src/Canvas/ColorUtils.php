@@ -15,6 +15,7 @@ class ColorUtils
 {
     /**
      * Transparent color.
+     *
      * @var integer
      */
     const TRANSPARENT = 0;
@@ -41,7 +42,7 @@ class ColorUtils
     /**
      * Gets the alpha component of a color.
      *
-     * @param integer $color  32-bit color value on the format 0xRRGGBBAA.
+     * @param  integer $color 32-bit color value on the format 0xRRGGBBAA.
      * @return integer Alpha in the range [0, 255].
      */
     public static function alpha($color) 
@@ -52,7 +53,7 @@ class ColorUtils
     /**
      * Gets the red component of a color.
      *
-     * @param integer $color  32-bit color value on the format 0xRRGGBBAA.
+     * @param  integer $color 32-bit color value on the format 0xRRGGBBAA.
      * @return integer Red component in the range [0, 255].
      */
     public static function red($color) 
@@ -63,7 +64,7 @@ class ColorUtils
     /**
      * Gets the green component of a color.
      *
-     * @param integer $color  32-bit color value on the format 0xRRGGBBAA.
+     * @param  integer $color 32-bit color value on the format 0xRRGGBBAA.
      * @return integer Green component in the range [0, 255].
      */
     public static function green($color) 
@@ -74,7 +75,7 @@ class ColorUtils
     /**
      * Gets the blue component of a color.
      *
-     * @param integer $color  32-bit color value on the format 0xRRGGBBAA.
+     * @param  integer $color 32-bit color value on the format 0xRRGGBBAA.
      * @return integer Blue component in the range [0, 255].
      */
     public static function blue($color) 
@@ -85,7 +86,7 @@ class ColorUtils
     /**
      * Formats a color as a string.
      *
-     * @param integer $color Color to format.
+     * @param  integer $color Color to format.
      * @return string
      */
     public static function format($color) 
@@ -97,10 +98,11 @@ class ColorUtils
      * Computes a mix of the two specified colors, with the proportion given 
      * by the specified weight.
      *
-     * @param integer $color1  First color to mix.
-     * @param integer $color2  Second color to mix.
-     * @param float $weight  Weight in the range [0,1]. 
-     *      0 gives $color1, 1 gives $color2.
+     * @param  integer $color1 First color to mix.
+     * @param  integer $color2 Second color to mix.
+     * @param  float   $weight Weight in the range [0,1]. 
+     *                         0 gives $color1, 1 gives
+     *                         $color2.
      * @return integer Mixed color.
      */
     public static function mix($color1, $color2, $weight) 
@@ -131,10 +133,14 @@ class ColorUtils
             (($color2 >> 8) & 0xff) * ($color2 & 0xff) * $weight
             ) / $a;
         
-        if ($a > 255) $a = 255;    
-        if ($r > 255) $r = 255;
-        if ($g > 255) $g = 255;
-        if ($b > 255) $b = 255;
+        if ($a > 255) { $a = 255;
+        }    
+        if ($r > 255) { $r = 255;
+        }
+        if ($g > 255) { $g = 255;
+        }
+        if ($b > 255) { $b = 255;
+        }
         
         return ((int)$r << 24) | ((int)$g << 16) | ((int)$b << 8) | (int)$a;
     }
@@ -142,7 +148,7 @@ class ColorUtils
     /**
      * Parses a value to a 32-bit color on the format 0xRRGGBBAA.
      *
-     * @param integer|string $color  The value to parse.
+     * @param  integer|string $color The value to parse.
      * @return integer
      */
     public static function parse($color) 
@@ -160,9 +166,9 @@ class ColorUtils
             }
 
             switch (strlen($hexColor)) {
-                case 3:
-                    $numeric = intval($hexColor, 16);
-                    return (
+            case 3:
+                $numeric = intval($hexColor, 16);
+                return (
                         (($numeric & 0xf00) << 20) |
                         (($numeric & 0xf00) << 16) |
                         (($numeric & 0x0f0) << 16) |
@@ -170,14 +176,14 @@ class ColorUtils
                         (($numeric & 0x00f) << 12) |
                         (($numeric & 0x00f) << 8) | 
                         0xff);
-                case 6:
-                    return (intval($hexColor, 16) << 8) | 0xff;
-                case 8:
-                    // Workaround to cope with PHP limitation of intval
-                    $numeric = 
-                        (intval(substr($hexColor, 0, 4), 16) << 16) |
-                        (intval(substr($hexColor, 4, 4), 16));
-                    return $numeric;
+            case 6:
+                return (intval($hexColor, 16) << 8) | 0xff;
+            case 8:
+                // Workaround to cope with PHP limitation of intval
+                $numeric = 
+                    (intval(substr($hexColor, 0, 4), 16) << 16) |
+                    (intval(substr($hexColor, 4, 4), 16));
+                return $numeric;
             }
         }
 
@@ -187,8 +193,8 @@ class ColorUtils
     /**
      * Blends this color with another color using the over blending operation.
      *
-     * @param integer $fore  The foreground color.
-     * @param integer $back  The background color.
+     * @param  integer $fore The foreground color.
+     * @param  integer $back The background color.
      * @return integer
      */
     public static function over($fore, $back) 

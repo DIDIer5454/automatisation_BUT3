@@ -47,11 +47,11 @@ class Single extends AbstractRange
      * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
      *
      * @param string|mixed $range
-     * @param bool $supportNonDecimalIPv4
+     * @param bool         $supportNonDecimalIPv4
      *
      * @return static|null
      *
-     * @see \IPLib\Range\Single::parseString()
+     * @see   \IPLib\Range\Single::parseString()
      * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
     public static function fromString($range, $supportNonDecimalIPv4 = false)
@@ -63,11 +63,11 @@ class Single extends AbstractRange
      * Try get the range instance starting from its string representation.
      *
      * @param string|mixed $range
-     * @param int $flags A combination or zero or more flags
+     * @param int          $flags A combination or zero or more flags
      *
      * @return static|null
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function parseString($range, $flags = 0)

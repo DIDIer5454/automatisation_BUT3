@@ -98,10 +98,10 @@ class RangesFromBoundaryCalculator
     /**
      * Calculate the subnets.
      *
-     * @param string $start the start address (represented in reduced bit form)
-     * @param string $end the end address (represented in reduced bit form)
-     * @param int $position the number of bits in the mask we are comparing at this cycle
-     * @param \IPLib\Range\Subnet[] $result found ranges will be added to this variable
+     * @param string                $start    the start address (represented in reduced bit form)
+     * @param string                $end      the end address (represented in reduced bit form)
+     * @param int                   $position the number of bits in the mask we are comparing at this cycle
+     * @param \IPLib\Range\Subnet[] $result   found ranges will be added to this variable
      */
     private function calculate($start, $end, $position, array &$result)
     {
@@ -149,8 +149,8 @@ class RangesFromBoundaryCalculator
     /**
      * Create an range instance starting from the bits if the address and the length of the network prefix.
      *
-     * @param string $bits the bits of the address (represented in reduced bit form)
-     * @param int $networkPrefix the length of the network prefix
+     * @param string $bits          the bits of the address (represented in reduced bit form)
+     * @param int    $networkPrefix the length of the network prefix
      *
      * @return \IPLib\Range\Subnet
      */

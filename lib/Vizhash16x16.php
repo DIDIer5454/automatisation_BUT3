@@ -166,13 +166,14 @@ class Vizhash16x16
      * Gradient function
      *
      * taken from:
-     * @link   https://www.supportduweb.com/scripts_tutoriaux-code-source-41-gd-faire-un-degrade-en-php-gd-fonction-degrade-imagerie.html
+     *
+     * @link https://www.supportduweb.com/scripts_tutoriaux-code-source-41-gd-faire-un-degrade-en-php-gd-fonction-degrade-imagerie.html
      *
      * @access private
      * @param  resource $img
-     * @param  string $direction
-     * @param  array $color1
-     * @param  array $color2
+     * @param  string   $direction
+     * @param  array    $color1
+     * @param  array    $color2
      * @return resource
      */
     private function degrade($img, $direction, $color1, $color2)
@@ -207,27 +208,27 @@ class Vizhash16x16
      *
      * @access private
      * @param  resource $image
-     * @param  int $action
-     * @param  int $color
+     * @param  int      $action
+     * @param  int      $color
      */
     private function drawshape($image, $action, $color)
     {
         switch ($action % 7) {
-            case 0:
-                imagefilledrectangle($image, $this->getX(), $this->getY(), $this->getX(), $this->getY(), $color);
-                break;
-            case 1:
-            case 2:
-                imagefilledellipse($image, $this->getX(), $this->getY(), $this->getX(), $this->getY(), $color);
-                break;
-            case 3:
-                $points = array($this->getX(), $this->getY(), $this->getX(), $this->getY(), $this->getX(), $this->getY(), $this->getX(), $this->getY());
-                imagefilledpolygon($image, $points, 4, $color);
-                break;
-            default:
-                $start = $this->getInt() * 360 / 256;
-                $end   = $start + $this->getInt() * 180 / 256;
-                imagefilledarc($image, $this->getX(), $this->getY(), $this->getX(), $this->getY(), $start, $end, $color, IMG_ARC_PIE);
+        case 0:
+            imagefilledrectangle($image, $this->getX(), $this->getY(), $this->getX(), $this->getY(), $color);
+            break;
+        case 1:
+        case 2:
+            imagefilledellipse($image, $this->getX(), $this->getY(), $this->getX(), $this->getY(), $color);
+            break;
+        case 3:
+            $points = array($this->getX(), $this->getY(), $this->getX(), $this->getY(), $this->getX(), $this->getY(), $this->getX(), $this->getY());
+            imagefilledpolygon($image, $points, 4, $color);
+            break;
+        default:
+            $start = $this->getInt() * 360 / 256;
+            $end   = $start + $this->getInt() * 180 / 256;
+            imagefilledarc($image, $this->getX(), $this->getY(), $this->getX(), $this->getY(), $start, $end, $color, IMG_ARC_PIE);
         }
     }
 }

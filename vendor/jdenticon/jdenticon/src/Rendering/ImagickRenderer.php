@@ -27,7 +27,7 @@ class ImagickRendererLine
     /**
      * Moves the line to the right relative the direction vector.
      * 
-     * @param float $distance  The number of pixels to move the line.
+     * @param float $distance The number of pixels to move the line.
      */
     public function moveRight($distance) 
     {
@@ -66,22 +66,26 @@ class ImagickRendererLine
 
     /**
      * X coordiate of a point on the line.
+     *
      * @var float 
      */
     public $Px;
     /**
      * Y coordiate of a point on the line.
+     *
      * @var float 
      */
     public $Py;
 
     /**
      * X component of the direction vector.
+     *
      * @var float 
      */
     public $rx;
     /**
      * Y component of the direction vector.
+     *
      * @var float 
      */
     public $ry;
@@ -104,7 +108,6 @@ class ImagickRendererLine
  * lines drawn to the right side of the image.
  * 
  * To prevent this (in most cases) we add 0.00013 to all coordinates.
- * 
  */
 class ImagickRenderer extends AbstractRenderer
 {
@@ -123,7 +126,7 @@ class ImagickRenderer extends AbstractRenderer
     /**
      * Creates an instance of the class ImagickRenderer.
      *
-     * @param int $width The width of the icon in pixels.
+     * @param int $width  The width of the icon in pixels.
      * @param int $height The height of the icon in pixels.
      */
     public function __construct($width, $height)
@@ -149,13 +152,13 @@ class ImagickRenderer extends AbstractRenderer
     /**
      * Adds a circle without translating its coordinates.
      *
-     * @param  float $x  The x-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param  float $y  The y-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param  float $size  The size of the bounding rectangle.
-     * @param  bool $counterClockwise  If true the circle will be drawn 
-     *      counter clockwise.
+     * @param float $x                The x-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $y                The y-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $size             The size of the bounding rectangle.
+     * @param bool  $counterClockwise If true the circle will be drawn 
+     *                                counter clockwise.
      */
     protected function addCircleNoTransform($x, $y, $size, $counterClockwise)
     {
@@ -170,16 +173,19 @@ class ImagickRenderer extends AbstractRenderer
         $radius = $size / 2;
         $this->draw->pathMoveToAbsolute(
             $x + $size + self::PREVENT_WHITE_PIXELS_OFFSET, 
-            $y + $radius + self::PREVENT_WHITE_PIXELS_OFFSET);
-        $this->draw->pathEllipticArcRelative($radius, $radius, 
-            M_PI * 2, true, $counterClockwise, 0, 1);
+            $y + $radius + self::PREVENT_WHITE_PIXELS_OFFSET
+        );
+        $this->draw->pathEllipticArcRelative(
+            $radius, $radius, 
+            M_PI * 2, true, $counterClockwise, 0, 1
+        );
         $this->draw->pathClose();
     }
 
     /**
      * Adds a polygon without translating its coordinates.
      *
-     * @param  array $points  An array of the points that the polygon consists of.
+     * @param array $points An array of the points that the polygon consists of.
      */
     protected function addPolygonNoTransform($points)
     {
@@ -187,8 +193,8 @@ class ImagickRenderer extends AbstractRenderer
         $lastPoint = end($points);
 
         // Ensure polygon is closed
-        if ($firstPoint->x != $lastPoint->x ||
-            $firstPoint->y != $lastPoint->y
+        if ($firstPoint->x != $lastPoint->x 
+            || $firstPoint->y != $lastPoint->y
         ) {
             $points[] = $firstPoint;
         }
@@ -239,13 +245,15 @@ class ImagickRenderer extends AbstractRenderer
             if ($first) {
                 $this->draw->pathMoveToAbsolute(
                     $point->x - 0.5 + self::PREVENT_WHITE_PIXELS_OFFSET,
-                    $point->y - 0.5 + self::PREVENT_WHITE_PIXELS_OFFSET);
+                    $point->y - 0.5 + self::PREVENT_WHITE_PIXELS_OFFSET
+                );
                     
                 $first = false;
             } else {
                 $this->draw->pathLineToAbsolute(
                     $point->x - 0.5 + self::PREVENT_WHITE_PIXELS_OFFSET,
-                    $point->y - 0.5 + self::PREVENT_WHITE_PIXELS_OFFSET);
+                    $point->y - 0.5 + self::PREVENT_WHITE_PIXELS_OFFSET
+                );
             }
 
             $previousLine = $line;

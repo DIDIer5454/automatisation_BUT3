@@ -32,7 +32,7 @@ class IconGenerator
         $this->defaultShapes = array(
             // Sides
             new ShapeCategory(
-                /*$colorIndex=*/ 8,
+                /*$colorIndex=*/                8,
                 /*$shapes=*/ ShapeDefinitions::getOuterShapes(),
                 /*$shapeIndex=*/ 2,
                 /*$rotationIndex=*/ 3,
@@ -41,7 +41,7 @@ class IconGenerator
             
             // Corners
             new ShapeCategory(
-                /*$colorIndex=*/ 9,
+                /*$colorIndex=*/                9,
                 /*$shapes=*/ ShapeDefinitions::getOuterShapes(),
                 /*$shapeIndex=*/ 4,
                 /*$rotationIndex=*/ 5,
@@ -50,7 +50,7 @@ class IconGenerator
             
             // Center
             new ShapeCategory(
-                /*$colorIndex=*/ 10,
+                /*$colorIndex=*/                10,
                 /*$shapes=*/ ShapeDefinitions::getCenterShapes(),
                 /*$shapeIndex=*/ 1,
                 /*$rotationIndex=*/ null,
@@ -97,8 +97,8 @@ class IconGenerator
      */
     private static function isDuplicate(
         array $source, $newValue, 
-        array $duplicateValues)
-    {
+        array $duplicateValues
+    ) {
         if (in_array($newValue, $duplicateValues, true)) {
             foreach ($duplicateValues as $value) {
                 if (in_array($value, $source, true)) {
@@ -112,8 +112,8 @@ class IconGenerator
     /**
      * Gets the specified octet from a byte array.
      *
-     * @param string $hash The hexstring from which the octet will be retrieved.
-     * @param int $index The zero-based index of the octet to be returned.
+     * @param  string $hash  The hexstring from which the octet will be retrieved.
+     * @param  int    $index The zero-based index of the octet to be returned.
      * @return int
      */
     protected static function getOctet($hash, $index)
@@ -136,9 +136,9 @@ class IconGenerator
      * Gets an enumeration of individual shapes to be rendered in an icon for a 
      * specific hash.
      * 
-     * @param \Jdenticon\Rendering\ColorTheme $colorTheme A color theme 
-     *      specifying the colors to be used in the icon.
-     * @param string $hash The hash for which the shapes will be returned.
+     * @param  \Jdenticon\Rendering\ColorTheme $colorTheme A color theme 
+     *                                                     specifying the colors to be used in the icon.
+     * @param  string                          $hash       The hash for which the shapes will be returned.
      * @return array(Jdenticon\Shapes\Shape)
      */
     protected function getShapes($colorTheme, $hash)
@@ -154,10 +154,12 @@ class IconGenerator
 
             if (self::isDuplicate(
                     // Disallow dark gray and dark color combo
-                    $usedColorThemeIndexes, $colorThemeIndex, array(0, 4)) || 
-                self::isDuplicate(
+                $usedColorThemeIndexes, $colorThemeIndex, array(0, 4)
+            )  
+                || self::isDuplicate(
                     // Disallow light gray and light color combo
-                    $usedColorThemeIndexes, $colorThemeIndex, array(2, 3))
+                    $usedColorThemeIndexes, $colorThemeIndex, array(2, 3)
+                )
             ) {
                 $colorThemeIndex = 1;
             }
@@ -172,7 +174,7 @@ class IconGenerator
             $shape = $category->shapes[$shapeIndex];
             
             $shapes[] = new Shape(
-                /*$definition=*/ $shape,
+                /*$definition=*/                $shape,
                 /*$color=*/ $colorTheme->getByIndex($colorThemeIndex),
                 /*$positions=*/ $category->positions,
                 /*$startRotationIndex=*/ $startRotationIndex
@@ -188,7 +190,7 @@ class IconGenerator
      * as size.
      *
      * @param \Jdenticon\Rendering\Rectangle $rect The rectangle to be 
-     *      normalized.
+     *                                             normalized.
      */
     protected function normalizeRectangle(\Jdenticon\Rendering\Rectangle $rect)
     {
@@ -201,48 +203,61 @@ class IconGenerator
             (int)($rect->x + ($rect->width - $size) / 2),
             (int)($rect->y + ($rect->height - $size) / 2),
             $size,
-            $size);
+            $size
+        );
     }
 
     /**
      * Renders the background of an icon.
      *
-     * @param \Jdenticon\Rendering\RendererInterface $renderer The renderer to 
-     *      be used for rendering the icon on the target surface.
-     * @param \Jdenticon\Rendering\Rectangle $rect The outer bounds of the icon.
-     * @param \Jdenticon\IdenticonStyle $style The style of the icon.
-     * @param \Jdenticon\Rendering\ColorTheme $colorTheme A color theme 
-     *      specifying the colors to be used in the icon.
-     * @param string $hash The hash to be used as basis for the generated icon.
+     * @param \Jdenticon\Rendering\RendererInterface $renderer   The renderer to 
+     *                                                           be used for
+     *                                                           rendering the
+     *                                                           icon on the
+     *                                                           target surface.
+     * @param \Jdenticon\Rendering\Rectangle         $rect       The outer bounds of the icon.
+     * @param \Jdenticon\IdenticonStyle              $style      The style of the icon.
+     * @param \Jdenticon\Rendering\ColorTheme        $colorTheme A color theme 
+     *                                                           specifying the
+     *                                                           colors to be
+     *                                                           used in the
+     *                                                           icon.
+     * @param string                                 $hash       The hash to be used as basis for the generated icon.
      */
     protected function renderBackground(
         \Jdenticon\Rendering\RendererInterface $renderer, 
         \Jdenticon\Rendering\Rectangle $rect,
         \Jdenticon\IdenticonStyle $style, 
         \Jdenticon\Rendering\ColorTheme $colorTheme, 
-        $hash)
-    {
+        $hash
+    ) {
         $renderer->setBackgroundColor($style->getBackgroundColor());
     }
     
     /**
      * Renders the foreground of an icon.
      *
-     * @param \Jdenticon\Rendering\RendererInterface $renderer The renderer to 
-     *      be used for rendering the icon on the target surface.
-     * @param \Jdenticon\Rendering\Rectangle $rect The outer bounds of the icon.
-     * @param \Jdenticon\IdenticonStyle $style The style of the icon.
-     * @param \Jdenticon\Rendering\ColorTheme $colorTheme A color theme 
-     *      specifying the colors to be used in the icon.
-     * @param string $hash The hash to be used as basis for the generated icon.
+     * @param \Jdenticon\Rendering\RendererInterface $renderer   The renderer to 
+     *                                                           be used for
+     *                                                           rendering the
+     *                                                           icon on the
+     *                                                           target surface.
+     * @param \Jdenticon\Rendering\Rectangle         $rect       The outer bounds of the icon.
+     * @param \Jdenticon\IdenticonStyle              $style      The style of the icon.
+     * @param \Jdenticon\Rendering\ColorTheme        $colorTheme A color theme 
+     *                                                           specifying the
+     *                                                           colors to be
+     *                                                           used in the
+     *                                                           icon.
+     * @param string                                 $hash       The hash to be used as basis for the generated icon.
      */
     protected function renderForeground(
         \Jdenticon\Rendering\RendererInterface $renderer, 
         \Jdenticon\Rendering\Rectangle $rect,
         \Jdenticon\IdenticonStyle $style, 
         \Jdenticon\Rendering\ColorTheme $colorTheme, 
-        $hash)
-    {
+        $hash
+    ) {
         // Ensure rect is quadratic and a multiple of the cell count
         $normalizedRect = $this->normalizeRectangle($rect);
         $cellSize = $normalizedRect->width / $this->getCellCount();
@@ -254,10 +269,13 @@ class IconGenerator
             
             $positionCount = count($shape->positions);
             for ($i = 0; $i + 1 < $positionCount; $i += 2) {
-                $renderer->setTransform(new Transform(
-                    $normalizedRect->x + $shape->positions[$i + 0] * $cellSize,
-                    $normalizedRect->y + $shape->positions[$i + 1] * $cellSize,
-                    $cellSize, $rotation++ % 4));
+                $renderer->setTransform(
+                    new Transform(
+                        $normalizedRect->x + $shape->positions[$i + 0] * $cellSize,
+                        $normalizedRect->y + $shape->positions[$i + 1] * $cellSize,
+                        $cellSize, $rotation++ % 4
+                    )
+                );
 
                 $shape->definition->__invoke($renderer, $cellSize, $i / 2);
             }
@@ -270,17 +288,17 @@ class IconGenerator
      * Generates an identicon for the specified hash.
      *
      * @param \Jdenticon\Rendering\RendererInterface $renderer The renderer to 
-     *      be used for rendering the icon on the target surface.
-     * @param \Jdenticon\Rendering\Rectangle $rect The outer bounds of the icon.
-     * @param \Jdenticon\IdenticonStyle $style The style of the icon.
-     * @param string $hash The hash to be used as basis for the generated icon.
+     *                                                         be used for rendering the icon on the target surface.
+     * @param \Jdenticon\Rendering\Rectangle         $rect     The outer bounds of the icon.
+     * @param \Jdenticon\IdenticonStyle              $style    The style of the icon.
+     * @param string                                 $hash     The hash to be used as basis for the generated icon.
      */
     public function generate(
         \Jdenticon\Rendering\RendererInterface $renderer, 
         \Jdenticon\Rendering\Rectangle $rect,
         \Jdenticon\IdenticonStyle $style, 
-        $hash)
-    {
+        $hash
+    ) {
         $hue = self::getHue($hash);
         $colorTheme = new ColorTheme($hue, $style);
 

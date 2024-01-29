@@ -31,8 +31,10 @@ abstract class AbstractRenderer implements RendererInterface
      * Sets the current transform that will be applied on all coordinates before 
      * being rendered to the target image.
      *
-     * @param  \Jdenticon\Rendering\Transform $transform  The transform to set. 
-     *      If NULL is specified any existing transform is removed.
+     * @param \Jdenticon\Rendering\Transform $transform The transform to set. 
+     *                                                  If NULL is specified
+     *                                                  any existing transform
+     *                                                  is removed.
      */
     public function setTransform(\Jdenticon\Rendering\Transform $transform) 
     {
@@ -54,27 +56,27 @@ abstract class AbstractRenderer implements RendererInterface
     /**
      * Adds a polygon without translating its coordinates.
      *
-     * @param  array $points An array of the points that the polygon consists of.
+     * @param array $points An array of the points that the polygon consists of.
      */
     abstract protected function addPolygonNoTransform($points);
 
     /**
      * Adds a circle without translating its coordinates.
      *
-     * @param float $x The x-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $y The y-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $size The size of the bounding rectangle.
-     * @param bool $counterClockwise If true the circle will be drawn 
-     *      counter clockwise.
+     * @param float $x                The x-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $y                The y-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $size             The size of the bounding rectangle.
+     * @param bool  $counterClockwise If true the circle will be drawn 
+     *                                counter clockwise.
      */
     abstract protected function addCircleNoTransform($x, $y, $size, $counterClockwise);
 
     /**
      * Sets the background color of the image.
      *
-     * @param \Jdenticon\Color $color  The image background color.
+     * @param \Jdenticon\Color $color The image background color.
      */
     public function setBackgroundColor(\Jdenticon\Color $color)
     {
@@ -111,33 +113,35 @@ abstract class AbstractRenderer implements RendererInterface
     /**
      * Adds a rectangle to the image.
      *
-     * @param float $x The x-coordinate of the rectangle upper-left corner.
-     * @param float $y The y-coordinate of the rectangle upper-left corner.
-     * @param float $width The width of the rectangle.
+     * @param float $x      The x-coordinate of the rectangle upper-left corner.
+     * @param float $y      The y-coordinate of the rectangle upper-left corner.
+     * @param float $width  The width of the rectangle.
      * @param float $height The height of the rectangle.
-     * @param bool $invert If true the area of the rectangle will be removed 
-     *      from the filled area.
+     * @param bool  $invert If true the area of the rectangle will be removed 
+     *                      from the filled area.
      */
     public function addRectangle($x, $y, $width, $height, $invert = false)
     {
-        $this->addPolygonCore(array(
+        $this->addPolygonCore(
+            array(
             new Point($x, $y),
             new Point($x + $width, $y),
             new Point($x + $width, $y + $height),
             new Point($x, $y + $height),
-        ), $invert);
+            ), $invert
+        );
     }
 
     /**
      * Adds a circle to the image.
      *
-     * @param float $x The x-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $y The y-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $size The size of the bounding rectangle.
-     * @param bool $invert If true the area of the circle will be removed 
-     *      from the filled area.
+     * @param float $x      The x-coordinate of the bounding rectangle 
+     *                      upper-left corner.
+     * @param float $y      The y-coordinate of the bounding rectangle 
+     *                      upper-left corner.
+     * @param float $size   The size of the bounding rectangle.
+     * @param bool  $invert If true the area of the circle will be removed 
+     *                      from the filled area.
      */
     public function addCircle($x, $y, $size, $invert = false)
     {
@@ -149,8 +153,8 @@ abstract class AbstractRenderer implements RendererInterface
      * Adds a polygon to the image.
      *
      * @param array $points Array of points that the polygon consists of.
-     * @param bool $invert If true the area of the polygon will be removed 
-     *      from the filled area.
+     * @param bool  $invert If true the area of the polygon will be removed 
+     *                      from the filled area.
      */
     public function addPolygon($points, $invert = false)
     {
@@ -160,16 +164,16 @@ abstract class AbstractRenderer implements RendererInterface
     /**
      * Adds a triangle to the image.
      *
-     * @param float $x The x-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $y The y-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $width The width of the bounding rectangle.
-     * @param float $height The height of the bounding rectangle.
+     * @param float $x         The x-coordinate of the bounding rectangle 
+     *                         upper-left corner.
+     * @param float $y         The y-coordinate of the bounding rectangle 
+     *                         upper-left corner.
+     * @param float $width     The width of the bounding rectangle.
+     * @param float $height    The height of the bounding rectangle.
      * @param float $direction The direction of the 90 degree corner of the 
-     *      triangle.
-     * @param bool $invert If true the area of the triangle will be removed 
-     *      from the filled area.
+     *                         triangle.
+     * @param bool  $invert    If true the area of the triangle will be removed 
+     *                         from the filled area.
      */
     public function addTriangle($x, $y, $width, $height, $direction, $invert = false)
     {
@@ -188,22 +192,24 @@ abstract class AbstractRenderer implements RendererInterface
     /**
      * Adds a rhombus to the image.
      *
-     * @param float $x The x-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $y The y-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $width The width of the bounding rectangle.
+     * @param float $x      The x-coordinate of the bounding rectangle 
+     *                      upper-left corner.
+     * @param float $y      The y-coordinate of the bounding rectangle 
+     *                      upper-left corner.
+     * @param float $width  The width of the bounding rectangle.
      * @param float $height The height of the bounding rectangle.
-     * @param bool $invert If true the area of the rhombus will be removed 
-     *      from the filled area.
+     * @param bool  $invert If true the area of the rhombus will be removed 
+     *                      from the filled area.
      */
     public function addRhombus($x, $y, $width, $height, $invert = false)
     {
-        $this->addPolygonCore(array(
+        $this->addPolygonCore(
+            array(
             new Point($x + $width / 2, $y),
             new Point($x + $width, $y + $height / 2),
             new Point($x + $width / 2, $y + $height),
             new Point($x, $y + $height / 2),
-        ), $invert);
+            ), $invert
+        );
     }
 }

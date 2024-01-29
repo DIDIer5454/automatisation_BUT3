@@ -26,11 +26,11 @@
  */
 
 'use strict';
-(function() {
+(function () {
     /**
      * compatibility check
      *
-     * @name   Check
+     * @name  Check
      * @class
      */
     var Check = (function () {
@@ -40,7 +40,7 @@
          * Status of the initial check, true means it passed
          *
          * @private
-         * @prop   {bool}
+         * @prop    {bool}
          */
         var status = false;
 
@@ -48,7 +48,7 @@
          * Initialization check did run
          *
          * @private
-         * @prop   {bool}
+         * @prop    {bool}
          */
         var init = false;
 
@@ -56,7 +56,7 @@
          * blacklist of UserAgents (parts) known to belong to a bot
          *
          * @private
-         * @enum   {Array}
+         * @enum     {Array}
          * @readonly
          */
         var badBotUA = [
@@ -69,7 +69,7 @@
          * regardless of protocol
          *
          * @private
-         * @enum   {Array}
+         * @enum     {Array}
          * @readonly
          */
         var tld = [
@@ -82,7 +82,7 @@
          * regardless of protocol
          *
          * @private
-         * @enum   {Array}
+         * @enum     {Array}
          * @readonly
          */
         // whitelists of TLDs & local hostnames
@@ -96,9 +96,9 @@
          * check if the context is secure
          *
          * @private
-         * @name   Check.isSecureContext
+         * @name     Check.isSecureContext
          * @function
-         * @return {bool}
+         * @return   {bool}
          */
         function isSecureContext()
         {
@@ -114,11 +114,10 @@
 
             // filter out actually secure connections over HTTP
             for (var i = 0; i < tld.length; i++) {
-                if (
-                    window.location.hostname.indexOf(
-                        tld[i],
-                        window.location.hostname.length - tld[i].length
-                    ) !== -1
+                if (window.location.hostname.indexOf(
+                    tld[i],
+                    window.location.hostname.length - tld[i].length
+                ) !== -1
                 ) {
                     return true;
                 }
@@ -139,11 +138,12 @@
          * checks whether this is a bot we dislike
          *
          * @private
-         * @name   Check.isBadBot
+         * @name     Check.isBadBot
          * @function
-         * @return {bool}
+         * @return   {bool}
          */
-        function isBadBot() {
+        function isBadBot()
+        {
             // check whether a bot user agent part can be found in the current
             // user agent
             for (var i = 0; i < badBotUA.length; i++) {
@@ -158,21 +158,21 @@
          * checks whether this is an unsupported browser, via feature detection
          *
          * @private
-         * @name   Check.isOldBrowser
+         * @name     Check.isOldBrowser
          * @function
-         * @return {bool}
+         * @return   {bool}
          */
-        function isOldBrowser() {
+        function isOldBrowser()
+        {
             // webcrypto support
-            if (!(
-                'crypto' in window &&
-                'getRandomValues' in window.crypto &&
-                'subtle' in window.crypto &&
-                'encrypt' in window.crypto.subtle &&
-                'decrypt' in window.crypto.subtle &&
-                'Uint8Array' in window &&
-                'Uint32Array' in window
-            )) {
+            if (!('crypto' in window 
+                && 'getRandomValues' in window.crypto 
+                && 'subtle' in window.crypto 
+                && 'encrypt' in window.crypto.subtle 
+                && 'decrypt' in window.crypto.subtle 
+                && 'Uint8Array' in window 
+                && 'Uint32Array' in window                )
+            ) {
                 return true;
             }
 
@@ -194,8 +194,8 @@
          * shows an error message
          *
          * @private
-         * @name   Check.showError
-         * @param  {string} message
+         * @name     Check.showError
+         * @param    {string} message
          * @function
          */
         function showError(message)
@@ -215,8 +215,8 @@
          * removes "hidden" CSS class from element with given ID
          *
          * @private
-         * @name   Check.removeHiddenFromId
-         * @param  {string} id
+         * @name     Check.removeHiddenFromId
+         * @param    {string} id
          * @function
          */
         function removeHiddenFromId(id)
@@ -230,35 +230,32 @@
         /**
          * returns if the check has concluded
          *
-         * @name   Check.getInit
+         * @name     Check.getInit
          * @function
-         * @return {bool}
+         * @return   {bool}
          */
-        me.getInit = function()
-        {
+        me.getInit = function () {
             return init;
         };
         
         /**
          * returns the current status of the check
          *
-         * @name   Check.getStatus
+         * @name     Check.getStatus
          * @function
-         * @return {bool}
+         * @return   {bool}
          */
-        me.getStatus = function()
-        {
+        me.getStatus = function () {
             return status;
         };
         
         /**
          * init on application start, returns an all-clear signal
          *
-         * @name   Check.init
+         * @name     Check.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             // prevent bots from viewing a paste and potentially deleting data
             // when burn-after-reading is set
             if (isBadBot()) {

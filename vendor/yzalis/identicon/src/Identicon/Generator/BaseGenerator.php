@@ -99,9 +99,11 @@ class BaseGenerator
 
         preg_match('/#?([a-z\d]{2})([a-z\d]{2})([a-z\d]{2})$/i', $color, $matches);
 
-        return array_map(function ($value) {
-            return hexdec($value);
-        }, array_slice($matches, 1, 3));
+        return array_map(
+            function ($value) {
+                return hexdec($value);
+            }, array_slice($matches, 1, 3)
+        );
     }
 
     /**
@@ -150,9 +152,11 @@ class BaseGenerator
             ksort($this->arrayOfSquare[$index]);
         }
 
-        $this->color = array_map(function ($data) {
-            return hexdec($data) * 16;
-        }, array_reverse($chars[1]));
+        $this->color = array_map(
+            function ($data) {
+                return hexdec($data) * 16;
+            }, array_reverse($chars[1])
+        );
 
         return $this;
     }

@@ -87,8 +87,8 @@ class Matrix
      * Multiplies the specified point with the current matrix and returns the 
      * resulting point.
      *
-     * @param float $x  X coordinate.
-     * @param float $y  Y coordinate.
+     * @param  float $x X coordinate.
+     * @param  float $y Y coordinate.
      * @return \Jdenticon\Canvas\Point
      */
     public function multiplyPoint($x, $y) 
@@ -103,7 +103,7 @@ class Matrix
      * Returns a new matrix based on the current matrix with a rotation 
      * transformation applied.
      *
-     * @param float $angle  Rotation angle in radians.
+     * @param  float $angle Rotation angle in radians.
      * @return \Jdenticon\Canvas\Matrix
      */
     public function rotate($angle) 
@@ -117,8 +117,8 @@ class Matrix
      * Returns a new matrix based on the current matrix with a translation 
      * transformation applied.
      *
-     * @param float $x  Horizontal move distance.
-     * @param float $y  Vertical move distance.
+     * @param  float $x Horizontal move distance.
+     * @param  float $y Vertical move distance.
      * @return \Jdenticon\Canvas\Matrix
      */
     public function translate($x, $y) 
@@ -130,8 +130,8 @@ class Matrix
      * Returns a new matrix based on the current matrix with a scaling 
      * transformation applied.
      *
-     * @param float $x  Horizontal scale.
-     * @param float $y  Vertical scale.
+     * @param  float $x Horizontal scale.
+     * @param  float $y Vertical scale.
      * @return \Jdenticon\Canvas\Matrix
      */
     public function scale($x, $y) 

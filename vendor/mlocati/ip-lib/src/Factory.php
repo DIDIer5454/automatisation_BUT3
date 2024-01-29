@@ -19,13 +19,13 @@ class Factory
      * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
      *
      * @param string|mixed $address
-     * @param bool $mayIncludePort
-     * @param bool $mayIncludeZoneID
-     * @param bool $supportNonDecimalIPv4
+     * @param bool         $mayIncludePort
+     * @param bool         $mayIncludeZoneID
+     * @param bool         $supportNonDecimalIPv4
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\Factory::parseAddressString()
+     * @see   \IPLib\Factory::parseAddressString()
      * @since 1.1.0 added the $mayIncludePort argument
      * @since 1.3.0 added the $mayIncludeZoneID argument
      * @since 1.10.0 added the $supportNonDecimalIPv4 argument
@@ -39,11 +39,11 @@ class Factory
      * Parse an IP address string.
      *
      * @param string|mixed $address the address to parse
-     * @param int $flags A combination or zero or more flags
+     * @param int          $flags   A combination or zero or more flags
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function parseAddressString($address, $flags = 0)
@@ -85,11 +85,11 @@ class Factory
      * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
      *
      * @param string|mixed $address
-     * @param bool $supportNonDecimalIPv4
+     * @param bool         $supportNonDecimalIPv4
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\Factory::parseRangeString()
+     * @see   \IPLib\Factory::parseRangeString()
      * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
     public static function rangeFromString($address, $supportNonDecimalIPv4 = false)
@@ -101,11 +101,11 @@ class Factory
      * Parse an IP range string.
      *
      * @param string $range
-     * @param int $flags A combination or zero or more flags
+     * @param int    $flags A combination or zero or more flags
      *
      * @return \IPLib\Range\RangeInterface|null
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function parseRangeString($range, $flags = 0)
@@ -131,11 +131,11 @@ class Factory
      *
      * @param string|\IPLib\Address\AddressInterface|mixed $from
      * @param string|\IPLib\Address\AddressInterface|mixed $to
-     * @param bool $supportNonDecimalIPv4
+     * @param bool                                         $supportNonDecimalIPv4
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\Factory::getRangeFromBoundaries()
+     * @see   \IPLib\Factory::getRangeFromBoundaries()
      * @since 1.2.0
      * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
@@ -149,11 +149,11 @@ class Factory
      *
      * @param string|\IPLib\Address\AddressInterface|mixed $from
      * @param string|\IPLib\Address\AddressInterface|mixed $to
-     * @param int $flags A combination or zero or more flags
+     * @param int                                          $flags A combination or zero or more flags
      *
      * @return \IPLib\Range\RangeInterface|null return NULL if $from and/or $to are invalid addresses, or if both are NULL or empty strings, or if they are addresses of different types
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function getRangeFromBoundaries($from, $to, $flags = 0)
@@ -170,11 +170,11 @@ class Factory
      *
      * @param string|\IPLib\Address\AddressInterface|mixed $from
      * @param string|\IPLib\Address\AddressInterface|mixed $to
-     * @param bool $supportNonDecimalIPv4
+     * @param bool                                         $supportNonDecimalIPv4
      *
      * @return \IPLib\Range\Subnet[]|null
      *
-     * @see \IPLib\Factory::getRangesFromBoundaries()
+     * @see   \IPLib\Factory::getRangesFromBoundaries()
      * @since 1.14.0
      */
     public static function rangesFromBoundaries($from, $to, $supportNonDecimalIPv4 = false)
@@ -187,11 +187,11 @@ class Factory
      *
      * @param string|\IPLib\Address\AddressInterface $from
      * @param string|\IPLib\Address\AddressInterface $to
-     * @param int $flags A combination or zero or more flags
+     * @param int                                    $flags A combination or zero or more flags
      *
      * @return \IPLib\Range\Subnet[]|null return NULL if $from and/or $to are invalid addresses, or if both are NULL or empty strings, or if they are addresses of different types
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function getRangesFromBoundaries($from, $to, $flags = 0)
@@ -267,7 +267,7 @@ class Factory
     /**
      * @param string|\IPLib\Address\AddressInterface $from
      * @param string|\IPLib\Address\AddressInterface $to
-     * @param int $flags
+     * @param int                                    $flags
      *
      * @return \IPLib\Address\AddressInterface[]|null[]|false[]
      */

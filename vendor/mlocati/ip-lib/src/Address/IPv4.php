@@ -88,13 +88,13 @@ class IPv4 implements AddressInterface
      * - if $mayIncludePort is true, use the ParseStringFlag::MAY_INCLUDE_PORT flag
      * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
      *
-     * @param string|mixed $address the address to parse
-     * @param bool $mayIncludePort
-     * @param bool $supportNonDecimalIPv4
+     * @param string|mixed $address               the address to parse
+     * @param bool         $mayIncludePort
+     * @param bool         $supportNonDecimalIPv4
      *
      * @return static|null
      *
-     * @see \IPLib\Address\IPv4::parseString()
+     * @see   \IPLib\Address\IPv4::parseString()
      * @since 1.1.0 added the $mayIncludePort argument
      * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
@@ -107,11 +107,11 @@ class IPv4 implements AddressInterface
      * Parse a string and returns an IPv4 instance if the string is valid, or null otherwise.
      *
      * @param string|mixed $address the address to parse
-     * @param int $flags A combination or zero or more flags
+     * @param int          $flags   A combination or zero or more flags
      *
      * @return static|null
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function parseString($address, $flags = 0)

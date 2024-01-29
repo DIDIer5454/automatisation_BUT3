@@ -117,36 +117,36 @@ class Type
     public static function getName($type)
     {
         switch ($type) {
-            case static::T_UNSPECIFIED:
-                return 'Unspecified/unknown address';
-            case static::T_RESERVED:
-                 return 'Reserved/internal use only';
-            case static::T_THISNETWORK:
-                 return 'Refer to source hosts on "this" network';
-            case static::T_LOOPBACK:
-                 return 'Internet host loopback address';
-            case static::T_ANYCASTRELAY:
-                 return 'Relay anycast address';
-            case static::T_LIMITEDBROADCAST:
-                 return '"Limited broadcast" destination address';
-            case static::T_MULTICAST:
-                 return 'Multicast address assignments - Indentify a group of interfaces';
-            case static::T_LINKLOCAL:
-                 return '"Link local" address, allocated for communication between hosts on a single link';
-            case static::T_LINKLOCAL_UNICAST:
-                return 'Link local unicast / Linked-scoped unicast';
-            case static::T_DISCARDONLY:
-                 return 'Discard only';
-            case static::T_DISCARD:
-                 return 'Discard';
-            case static::T_PRIVATENETWORK:
-                 return 'For use in private networks';
-            case static::T_PUBLIC:
-                 return 'Public address';
-            case static::T_CGNAT:
-                return 'Carrier-grade NAT';
-            default:
-                return $type === null ? 'Unknown type' : sprintf('Unknown type (%s)', $type);
+        case static::T_UNSPECIFIED:
+            return 'Unspecified/unknown address';
+        case static::T_RESERVED:
+            return 'Reserved/internal use only';
+        case static::T_THISNETWORK:
+            return 'Refer to source hosts on "this" network';
+        case static::T_LOOPBACK:
+            return 'Internet host loopback address';
+        case static::T_ANYCASTRELAY:
+            return 'Relay anycast address';
+        case static::T_LIMITEDBROADCAST:
+            return '"Limited broadcast" destination address';
+        case static::T_MULTICAST:
+            return 'Multicast address assignments - Indentify a group of interfaces';
+        case static::T_LINKLOCAL:
+            return '"Link local" address, allocated for communication between hosts on a single link';
+        case static::T_LINKLOCAL_UNICAST:
+            return 'Link local unicast / Linked-scoped unicast';
+        case static::T_DISCARDONLY:
+            return 'Discard only';
+        case static::T_DISCARD:
+            return 'Discard';
+        case static::T_PRIVATENETWORK:
+            return 'For use in private networks';
+        case static::T_PUBLIC:
+            return 'Public address';
+        case static::T_CGNAT:
+            return 'Carrier-grade NAT';
+        default:
+            return $type === null ? 'Unknown type' : sprintf('Unknown type (%s)', $type);
         }
     }
 }

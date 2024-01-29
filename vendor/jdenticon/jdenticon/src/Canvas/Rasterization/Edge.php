@@ -22,8 +22,8 @@ class Edge
     public $windingRule;
  
     public function __construct(
-        $polygonId, $x0, $y0, $x1, $y1, $color, $windingRule = null) 
-    {
+        $polygonId, $x0, $y0, $x1, $y1, $color, $windingRule = null
+    ) { 
         $this->polygonId = $polygonId;
         $this->x0 = $x0;
         $this->x1 = $x1;

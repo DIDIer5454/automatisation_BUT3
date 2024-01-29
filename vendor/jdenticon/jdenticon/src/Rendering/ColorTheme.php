@@ -27,9 +27,9 @@ class ColorTheme
     /**
      * Creates a new ColorTheme.
      *
-     * @param float $hue The hue of the colored shapes in the range [0, 1].
+     * @param float                     $hue   The hue of the colored shapes in the range [0, 1].
      * @param \Jdenticon\IdenticonStyle $style The style that specifies the 
-     *      lightness and saturation of the icon.
+     *                                         lightness and saturation of the icon.
      */
     public function __construct($hue, \Jdenticon\IdenticonStyle $style)
     {
@@ -45,30 +45,40 @@ class ColorTheme
         }
         
         $this->darkGray = Color::fromHslCompensated(
-            $hue, $style->getGrayscaleSaturation(), $grayscaleLightness[0]);
+            $hue, $style->getGrayscaleSaturation(), $grayscaleLightness[0]
+        );
         $this->midColor = Color::fromHslCompensated(
-            $hue, $style->getColorSaturation(), ($colorLightness[0] + $colorLightness[1]) / 2);
+            $hue, $style->getColorSaturation(), ($colorLightness[0] + $colorLightness[1]) / 2
+        );
         $this->lightGray = Color::fromHslCompensated(
-            $hue, $style->getGrayscaleSaturation(), $grayscaleLightness[1]);
+            $hue, $style->getGrayscaleSaturation(), $grayscaleLightness[1]
+        );
         $this->lightColor = Color::fromHslCompensated(
-            $hue, $style->getColorSaturation(), $colorLightness[1]);
+            $hue, $style->getColorSaturation(), $colorLightness[1]
+        );
         $this->darkColor = Color::fromHslCompensated(
-            $hue, $style->getColorSaturation(), $colorLightness[0]);
+            $hue, $style->getColorSaturation(), $colorLightness[0]
+        );
     }
 
     /**
      * Gets a color from this color theme by index.
      *
-     * @param int $index Color index in the range [0, getCount()).
+     * @param  int $index Color index in the range [0, getCount()).
      * @return Jdenticon\Color
      */
     public function getByIndex($index)
     {
-        if ($index === 0) return $this->darkGray;
-        if ($index === 1) return $this->midColor;
-        if ($index === 2) return $this->lightGray;
-        if ($index === 3) return $this->lightColor;
-        if ($index === 4) return $this->darkColor;
+        if ($index === 0) { return $this->darkGray;
+        }
+        if ($index === 1) { return $this->midColor;
+        }
+        if ($index === 2) { return $this->lightGray;
+        }
+        if ($index === 3) { return $this->lightColor;
+        }
+        if ($index === 4) { return $this->darkColor;
+        }
         return null;
     }
     

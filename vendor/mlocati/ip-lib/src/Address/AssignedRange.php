@@ -35,8 +35,8 @@ class AssignedRange
     /**
      * Initialize the instance.
      *
-     * @param \IPLib\Range\RangeInterface $range the range definition
-     * @param int $type The range type (one of the \IPLib\Range\Type::T_ constants)
+     * @param \IPLib\Range\RangeInterface    $range      the range definition
+     * @param int                            $type       The range type (one of the \IPLib\Range\Type::T_ constants)
      * @param \IPLib\Address\AssignedRange[] $exceptions the list of exceptions for this range type
      */
     public function __construct(RangeInterface $range, $type, array $exceptions = array())

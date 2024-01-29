@@ -7,7 +7,7 @@ spl_autoload_register(
         }
         $file = __DIR__ . DIRECTORY_SEPARATOR . 'src' . str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen('IPLib'))) . '.php';
         if (is_file($file)) {
-            require_once $file;
+            include_once $file;
         }
     }
 );

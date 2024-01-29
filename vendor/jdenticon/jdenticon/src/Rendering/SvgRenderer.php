@@ -24,7 +24,7 @@ class SvgRenderer extends AbstractRenderer
     /**
      * Creates a new SvgRenderer.
      *
-     * @param int $width The width of the icon in pixels.
+     * @param int $width  The width of the icon in pixels.
      * @param int $height The height of the icon in pixels.
      */
     public function __construct($width, $height)
@@ -46,13 +46,13 @@ class SvgRenderer extends AbstractRenderer
     /**
      * Adds a circle without translating its coordinates.
      *
-     * @param float $x The x-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $y The y-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $size The size of the bounding rectangle.
-     * @param bool $counterClockwise If true the circle will be drawn 
-     *      counter clockwise.
+     * @param float $x                The x-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $y                The y-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $size             The size of the bounding rectangle.
+     * @param bool  $counterClockwise If true the circle will be drawn 
+     *                                counter clockwise.
      */
     protected function addCircleNoTransform($x, $y, $size, $counterClockwise)
     {
@@ -97,7 +97,7 @@ class SvgRenderer extends AbstractRenderer
      * Generates an SVG string of the renderer output.
      *
      * @param bool $fragment If true an SVG string without the root svg element 
-     *      will be rendered.
+     *                       will be rendered.
      */
     public function getData($fragment = false)
     {

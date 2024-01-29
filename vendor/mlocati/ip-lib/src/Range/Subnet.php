@@ -58,7 +58,7 @@ class Subnet extends AbstractRange
      *
      * @param \IPLib\Address\AddressInterface $fromAddress
      * @param \IPLib\Address\AddressInterface $toAddress
-     * @param int $networkPrefix
+     * @param int                             $networkPrefix
      *
      * @internal
      */
@@ -85,11 +85,11 @@ class Subnet extends AbstractRange
      * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
      *
      * @param string|mixed $range
-     * @param bool $supportNonDecimalIPv4
+     * @param bool         $supportNonDecimalIPv4
      *
      * @return static|null
      *
-     * @see \IPLib\Range\Subnet::parseString()
+     * @see   \IPLib\Range\Subnet::parseString()
      * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
     public static function fromString($range, $supportNonDecimalIPv4 = false)
@@ -101,11 +101,11 @@ class Subnet extends AbstractRange
      * Try get the range instance starting from its string representation.
      *
      * @param string|mixed $range
-     * @param int $flags A combination or zero or more flags
+     * @param int          $flags A combination or zero or more flags
      *
      * @return static|null
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function parseString($range, $flags = 0)
@@ -229,7 +229,7 @@ class Subnet extends AbstractRange
     /**
      * {@inheritdoc}
      *
-     * @see \IPLib\Range\RangeInterface::asPattern()
+     * @see   \IPLib\Range\RangeInterface::asPattern()
      * @since 1.8.0
      */
     public function asPattern()
@@ -237,10 +237,10 @@ class Subnet extends AbstractRange
         $address = $this->getStartAddress();
         $networkPrefix = $this->getNetworkPrefix();
         switch ($address->getAddressType()) {
-            case AddressType::T_IPv4:
-                return $networkPrefix % 8 === 0 ? new Pattern($address, $address, 4 - $networkPrefix / 8) : null;
-            case AddressType::T_IPv6:
-                return $networkPrefix % 16 === 0 ? new Pattern($address, $address, 8 - $networkPrefix / 16) : null;
+        case AddressType::T_IPv4:
+            return $networkPrefix % 8 === 0 ? new Pattern($address, $address, 4 - $networkPrefix / 8) : null;
+        case AddressType::T_IPv6:
+            return $networkPrefix % 16 === 0 ? new Pattern($address, $address, 8 - $networkPrefix / 16) : null;
         }
     }
 
@@ -304,18 +304,18 @@ class Subnet extends AbstractRange
     public function getReverseDNSLookupName()
     {
         switch ($this->getAddressType()) {
-            case AddressType::T_IPv4:
-                $unitSize = 8; // bytes
-                $maxUnits = 4;
-                $isHex = false;
-                $rxUnit = '\d+';
-                break;
-            case AddressType::T_IPv6:
-                $unitSize = 4; // nibbles
-                $maxUnits = 32;
-                $isHex = true;
-                $rxUnit = '[0-9A-Fa-f]';
-                break;
+        case AddressType::T_IPv4:
+            $unitSize = 8; // bytes
+            $maxUnits = 4;
+            $isHex = false;
+            $rxUnit = '\d+';
+            break;
+        case AddressType::T_IPv6:
+            $unitSize = 4; // nibbles
+            $maxUnits = 32;
+            $isHex = true;
+            $rxUnit = '[0-9A-Fa-f]';
+            break;
         }
         $totBits = $unitSize * $maxUnits;
         $prefixUnits = (int) ($this->networkPrefix / $unitSize);

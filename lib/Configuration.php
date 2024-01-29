@@ -138,11 +138,10 @@ class Configuration
                 continue;
             }
             // provide different defaults for database model
-            elseif (
-                $section == 'model_options' && in_array(
-                    $this->_configuration['model']['class'],
-                    array('Database', 'privatebin_db', 'zerobin_db')
-                )
+            elseif ($section == 'model_options' && in_array(
+                $this->_configuration['model']['class'],
+                array('Database', 'privatebin_db', 'zerobin_db')
+            )
             ) {
                 $values = array(
                     'dsn' => 'sqlite:' . PATH . 'data' . DIRECTORY_SEPARATOR . 'db.sq3',
@@ -151,22 +150,20 @@ class Configuration
                     'pwd' => null,
                     'opt' => array(PDO::ATTR_PERSISTENT => true),
                 );
-            } elseif (
-                $section == 'model_options' && in_array(
-                    $this->_configuration['model']['class'],
-                    array('GoogleCloudStorage')
-                )
+            } elseif ($section == 'model_options' && in_array(
+                $this->_configuration['model']['class'],
+                array('GoogleCloudStorage')
+            )
             ) {
                 $values = array(
                     'bucket'     => getenv('PRIVATEBIN_GCS_BUCKET') ? getenv('PRIVATEBIN_GCS_BUCKET') : null,
                     'prefix'     => 'pastes',
                     'uniformacl' => false,
                 );
-            } elseif (
-                $section == 'model_options' && in_array(
-                    $this->_configuration['model']['class'],
-                    array('S3Storage')
-                )
+            } elseif ($section == 'model_options' && in_array(
+                $this->_configuration['model']['class'],
+                array('S3Storage')
+            )
             ) {
                 $values = array(
                     'region'                  => null,
@@ -181,10 +178,9 @@ class Configuration
             }
 
             // "*_options" sections don't require all defaults to be set
-            if (
-                $section !== 'model_options' &&
-                ($from = strlen($section) - strlen($opts)) >= 0 &&
-                strpos($section, $opts, $from) !== false
+            if ($section !== 'model_options' 
+                && ($from = strlen($section) - strlen($opts)) >= 0 
+                && strpos($section, $opts, $from) !== false
             ) {
                 if (is_int(current($values))) {
                     $config[$section] = array_map('intval', $config[$section]);
@@ -239,9 +235,8 @@ class Configuration
         }
 
         // ensure the basepath ends in a slash, if one is set
-        if (
-            strlen($this->_configuration['main']['basepath']) &&
-            substr_compare($this->_configuration['main']['basepath'], '/', -1) !== 0
+        if (strlen($this->_configuration['main']['basepath']) 
+            && substr_compare($this->_configuration['main']['basepath'], '/', -1) !== 0
         ) {
             $this->_configuration['main']['basepath'] .= '/';
         }
@@ -270,8 +265,8 @@ class Configuration
     /**
      * get a key from the configuration, typically the main section or all keys
      *
-     * @param string $key
-     * @param string $section defaults to main
+     * @param  string $key
+     * @param  string $section defaults to main
      * @throws Exception
      * @return mixed
      */
@@ -287,7 +282,7 @@ class Configuration
     /**
      * get a section from the configuration, must exist
      *
-     * @param string $section
+     * @param  string $section
      * @throws Exception
      * @return mixed
      */

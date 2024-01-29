@@ -29,7 +29,7 @@ class Comment extends AbstractModel
      * Instance's parent.
      *
      * @access private
-     * @var Paste
+     * @var    Paste
      */
     private $_paste;
 
@@ -60,13 +60,12 @@ class Comment extends AbstractModel
         $this->_data['meta']['created'] = time();
 
         // store comment
-        if (
-            $this->_store->createComment(
-                $pasteid,
-                $this->getParentId(),
-                $this->getId(),
-                $this->_data
-            ) === false
+        if ($this->_store->createComment(
+            $pasteid,
+            $this->getParentId(),
+            $this->getId(),
+            $this->_data
+        ) === false
         ) {
             throw new Exception('Error saving comment. Sorry.', 70);
         }
@@ -102,7 +101,7 @@ class Comment extends AbstractModel
      * Set paste.
      *
      * @access public
-     * @param Paste $paste
+     * @param  Paste $paste
      * @throws Exception
      */
     public function setPaste(Paste $paste)
@@ -126,7 +125,7 @@ class Comment extends AbstractModel
      * Set parent ID.
      *
      * @access public
-     * @param string $id
+     * @param  string $id
      * @throws Exception
      */
     public function setParentId($id)
@@ -169,14 +168,16 @@ class Comment extends AbstractModel
                 $identicon = new Identicon();
                 $pngdata   = $identicon->getImageDataUri($hmac, 16);
             } elseif ($icon == 'jdenticon') {
-                $jdenticon = new Jdenticon(array(
+                $jdenticon = new Jdenticon(
+                    array(
                     'hash'  => $hmac,
                     'size'  => 16,
                     'style' => array(
                         'backgroundColor'   => '#fff0', // fully transparent, for dark mode
                         'padding'           => 0,
                     ),
-                ));
+                    )
+                );
                 $pngdata   = $jdenticon->getImageDataUri('png');
             } elseif ($icon == 'vizhash') {
                 $vh      = new Vizhash16x16();

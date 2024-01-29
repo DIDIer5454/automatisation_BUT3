@@ -127,7 +127,7 @@ interface AddressInterface
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\Address\AddressInterface::getAddressAtOffset()
+     * @see   \IPLib\Address\AddressInterface::getAddressAtOffset()
      * @since 1.4.0
      */
     public function getNextAddress();
@@ -137,7 +137,7 @@ interface AddressInterface
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\Address\AddressInterface::getAddressAtOffset()
+     * @see   \IPLib\Address\AddressInterface::getAddressAtOffset()
      * @since 1.4.0
      */
     public function getPreviousAddress();

@@ -99,12 +99,12 @@ class IPv6 implements AddressInterface
      * - if $mayIncludeZoneID is true, use the ParseStringFlag::MAY_INCLUDE_ZONEID flag
      *
      * @param string|mixed $address
-     * @param bool $mayIncludePort
-     * @param bool $mayIncludeZoneID
+     * @param bool         $mayIncludePort
+     * @param bool         $mayIncludeZoneID
      *
      * @return static|null
      *
-     * @see \IPLib\Address\IPv6::parseString()
+     * @see   \IPLib\Address\IPv6::parseString()
      * @since 1.1.0 added the $mayIncludePort argument
      * @since 1.3.0 added the $mayIncludeZoneID argument
      */
@@ -117,11 +117,11 @@ class IPv6 implements AddressInterface
      * Parse a string and returns an IPv6 instance if the string is valid, or null otherwise.
      *
      * @param string|mixed $address the address to parse
-     * @param int $flags A combination or zero or more flags
+     * @param int          $flags   A combination or zero or more flags
      *
      * @return static|null
      *
-     * @see \IPLib\ParseStringFlag
+     * @see   \IPLib\ParseStringFlag
      * @since 1.17.0
      */
     public static function parseString($address, $flags = 0)
@@ -508,7 +508,7 @@ class IPv6 implements AddressInterface
      * @example '::013.001.068.003' when $ipV4Long is true
      * @example '0000:0000:0000:0000:0000:0000:013.001.068.003' when $ipV6Long and $ipV4Long are true
      *
-     * @see https://tools.ietf.org/html/rfc4291#section-2.2 point 3.
+     * @see   https://tools.ietf.org/html/rfc4291#section-2.2 point 3.
      * @since 1.9.0
      */
     public function toMixedIPv6IPv4String($ipV6Long = false, $ipV4Long = false)

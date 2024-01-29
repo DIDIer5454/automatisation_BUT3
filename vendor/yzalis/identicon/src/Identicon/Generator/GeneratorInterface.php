@@ -33,11 +33,11 @@ interface GeneratorInterface
      * @return string
      */
     public function getMimeType();
-	
-	/**
-	 * Return the color of the created identicon.
-	 * 
-	 * @return array
-	 */
-	public function getColor();
+    
+    /**
+     * Return the color of the created identicon.
+     * 
+     * @return array
+     */
+    public function getColor();
 }

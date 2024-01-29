@@ -34,10 +34,10 @@ class PngEncoder
     /**
      * Writes an IHDR chunk to the png data stream.
      *
-     * @param int $width Image width in pixels.
-     * @param int $height Image height in pixels.
+     * @param int $width     Image width in pixels.
+     * @param int $height    Image height in pixels.
      * @param int $colorType Color depth, speocfy one of the constants in 
-     *      PngEncoder.
+     *                       PngEncoder.
      */
     public function writeImageHeader($width, $height, $colorType) 
     {
@@ -68,13 +68,13 @@ class PngEncoder
      * Writes an IDAT chunk of truecolor encoded image data.
      *
      * @param array $colorRanges Image data on the format 
-     *      array(count0, color0, count1, color1, ...)
-     * @param int $width Image width in pixels.
-     * @param int $height Image height in pixels.
+     *                           array(count0, color0, count1, color1, ...)
+     * @param int   $width       Image width in pixels.
+     * @param int   $height      Image height in pixels.
      */
     public function writeTrueColorWithAlpha(
-        array & $colorRanges, $width, $height) 
-    {
+        array & $colorRanges, $width, $height
+    ) { 
         $this->buffer->startChunk("IDAT");
 
         $uncompressed = '';
@@ -110,18 +110,19 @@ class PngEncoder
     /**
      * Writes an IDAT chunk of indexed image data.
      *
-     * @param array $colorRanges Image data on the format 
-     *      array(count0, color0, count1, color1, ...)
-     * @param \Jdenticon\Canvas\Png\PngPalette $palette Palette containing the 
-     *      indexed colors.
-     * @param int $width Image width in pixels.
-     * @param int $height Image height in pixels.
+     * @param array                            $colorRanges Image data on the format 
+     *                                                      array(count0, color0,
+     *                                                      count1, color1, ...)
+     * @param \Jdenticon\Canvas\Png\PngPalette $palette     Palette containing the 
+     *                                                      indexed colors.
+     * @param int                              $width       Image width in pixels.
+     * @param int                              $height      Image height in pixels.
      */
     public function writeIndexed(
         array & $colorRanges, 
         PngPalette $palette, 
-        $width, $height) 
-    {
+        $width, $height
+    ) { 
         $this->buffer->startChunk("IDAT");
 
         $uncompressed = '';
@@ -160,7 +161,7 @@ class PngEncoder
      * Writes a PLTE chunk containing the indexed colors.
      *
      * @param \Jdenticon\Canvas\Png\PngPalette $palette Palette containing the 
-     *      indexed colors.
+     *                                                  indexed colors.
      */
     public function writePalette(PngPalette $palette) 
     {
@@ -171,7 +172,8 @@ class PngEncoder
                 $this->buffer->writeString(
                     pack('C', ($color >> 24) & 0xff) .
                     pack('C', ($color >> 16) & 0xff) .
-                    pack('C', ($color >> 8) & 0xff));
+                    pack('C', ($color >> 8) & 0xff)
+                );
             }
 
             $this->buffer->endChunk();
@@ -182,7 +184,7 @@ class PngEncoder
      * Writes a tRNS chunk containing the alpha values of indexed colors.
      *
      * @param \Jdenticon\Canvas\Png\PngPalette $palette Palette containing the 
-     *      indexed colors.
+     *                                                  indexed colors.
      */
     public function writeTransparency(PngPalette $palette) 
     {
@@ -204,8 +206,9 @@ class PngEncoder
     /**
      * Writes a tEXt chunk containing the specified strings.
      *
-     * @param string $key Key, one of 
-     *      {@link https://www.w3.org/TR/2003/REC-PNG-20031110/#11keywords}
+     * @param string $key   Key, one of 
+     *                      {@link
+     *                      https://www.w3.org/TR/2003/REC-PNG-20031110/#11keywords}
      * @param string $value Value.
      */
     public function writeTextualData($key, $value) 

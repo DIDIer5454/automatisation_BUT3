@@ -49,9 +49,8 @@ class Paste extends AbstractModel
         }
 
         // check if non-expired burn after reading paste needs to be deleted
-        if (
-            (array_key_exists('adata', $data) && $data['adata'][3] === 1) ||
-            (array_key_exists('burnafterreading', $data['meta']) && $data['meta']['burnafterreading'])
+        if ((array_key_exists('adata', $data) && $data['adata'][3] === 1) 
+            || (array_key_exists('burnafterreading', $data['meta']) && $data['meta']['burnafterreading'])
         ) {
             $this->delete();
         }
@@ -96,11 +95,10 @@ class Paste extends AbstractModel
         $this->_data['meta']['salt']    = ServerSalt::generate();
 
         // store paste
-        if (
-            $this->_store->create(
-                $this->getId(),
-                $this->_data
-            ) === false
+        if ($this->_store->create(
+            $this->getId(),
+            $this->_data
+        ) === false
         ) {
             throw new Exception('Error saving paste. Sorry.', 76);
         }
@@ -132,8 +130,8 @@ class Paste extends AbstractModel
      * Get a comment, optionally a specific instance.
      *
      * @access public
-     * @param string $parentId
-     * @param string $commentId
+     * @param  string $parentId
+     * @param  string $commentId
      * @throws Exception
      * @return Comment
      */
@@ -240,12 +238,11 @@ class Paste extends AbstractModel
         }
 
         // discussion requested, but disabled in config or burn after reading requested as well, or invalid integer
-        if (
-            ($data['adata'][2] === 1 && ( // open discussion flag
-                !$this->_conf->getKey('discussion') ||
-                $data['adata'][3] === 1  // burn after reading flag
-            )) ||
-            ($data['adata'][2] !== 0 && $data['adata'][2] !== 1)
+        if (($data['adata'][2] === 1 && ( // open discussion flag
+            !$this->_conf->getKey('discussion') 
+            || $data['adata'][3] === 1  // burn after reading flag
+            )) 
+            || ($data['adata'][2] !== 0 && $data['adata'][2] !== 1)
         ) {
             throw new Exception('Invalid data.', 74);
         }

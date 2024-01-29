@@ -22,7 +22,7 @@ class PngPalette
      * Creates a PNG color palette for the specified bitmap data.
      *
      * @param array(integer) $colorRanges Array of interleaved values on the 
-     *      format array(count0, color0, count1, color1, ...).
+     *                                    format array(count0, color0, count1, color1, ...).
      */
     function __construct(& $colorRanges) 
     {

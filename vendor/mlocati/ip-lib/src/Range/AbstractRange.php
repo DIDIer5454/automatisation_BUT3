@@ -26,16 +26,16 @@ abstract class AbstractRange implements RangeInterface
                 $this->rangeType = Factory::getRangeFromBoundaries($this->fromAddress->toIPv4(), $this->toAddress->toIPv4())->getRangeType();
             } else {
                 switch ($addressType) {
-                    case AddressType::T_IPv4:
-                        $defaultType = IPv4::getDefaultReservedRangeType();
-                        $reservedRanges = IPv4::getReservedRanges();
-                        break;
-                    case AddressType::T_IPv6:
-                        $defaultType = IPv6::getDefaultReservedRangeType();
-                        $reservedRanges = IPv6::getReservedRanges();
-                        break;
-                    default:
-                        throw new \Exception('@todo'); // @codeCoverageIgnore
+                case AddressType::T_IPv4:
+                    $defaultType = IPv4::getDefaultReservedRangeType();
+                    $reservedRanges = IPv4::getReservedRanges();
+                    break;
+                case AddressType::T_IPv6:
+                    $defaultType = IPv6::getDefaultReservedRangeType();
+                    $reservedRanges = IPv6::getReservedRanges();
+                    break;
+                default:
+                    throw new \Exception('@todo'); // @codeCoverageIgnore
                 }
                 $rangeType = null;
                 foreach ($reservedRanges as $reservedRange) {

@@ -27,7 +27,7 @@ class Canvas
      * Creates a new canvas with the specified dimensions given in pixels.
      *
      * @param integer $width  Canvas width in pixels.
-     * @param integer $height  Canvas height in pixels.
+     * @param integer $height Canvas height in pixels.
      */
     public function __construct($width, $height) 
     {
@@ -74,8 +74,8 @@ class Canvas
     /**
      * Renders the canvas as a PNG data stream.
      *
-     * @param array $keywords  Keywords to be written to the PNG stream. 
-     *       See https://www.w3.org/TR/PNG/#11keywords.
+     * @param   array $keywords Keywords to be written to the PNG stream. 
+     *                          See https://www.w3.org/TR/PNG/#11keywords.
      * @returns string
      */
     public function toPng($keywords = array()) 
@@ -84,7 +84,8 @@ class Canvas
         
         Rasterizer::rasterize(
             $colorRanges, $this->edges, 
-            $this->width, $this->height);
+            $this->width, $this->height
+        );
         
         $backColor = ColorUtils::parse($this->backColor);
         if (ColorUtils::alpha($backColor) > 0) {
@@ -105,8 +106,10 @@ class Canvas
         $palette = new PngPalette($colorRanges);
         $png = new PngEncoder();
 
-        $png->writeImageHeader($this->width, $this->height, $palette->isValid ?
-            PngEncoder::INDEXED_COLOR : PngEncoder::TRUE_COLOR_WITH_ALPHA);
+        $png->writeImageHeader(
+            $this->width, $this->height, $palette->isValid ?
+            PngEncoder::INDEXED_COLOR : PngEncoder::TRUE_COLOR_WITH_ALPHA
+        );
 
         $png->writeImageGamma();
         
@@ -117,11 +120,15 @@ class Canvas
         if ($palette && $palette->isValid) {
             $png->writePalette($palette);
             $png->writeTransparency($palette);
-            $png->writeIndexed($colorRanges, $palette, 
-                $this->width, $this->height);
+            $png->writeIndexed(
+                $colorRanges, $palette, 
+                $this->width, $this->height
+            );
         } else {
-            $png->writeTrueColorWithAlpha($colorRanges, 
-                $this->width, $this->height);
+            $png->writeTrueColorWithAlpha(
+                $colorRanges, 
+                $this->width, $this->height
+            );
         }
 
         $png->writeImageEnd();

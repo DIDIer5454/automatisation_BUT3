@@ -29,7 +29,7 @@ class CanvasContext
      * Creates a new canvas with the specified dimensions given in pixels.
      *
      * @param \Jdenticon\Canvas\Canvas $canvas The owner canvas.
-     * @param array $edges The owner canvas' edge buffer.
+     * @param array                    $edges  The owner canvas' edge buffer.
      */
     public function __construct($canvas, &$edges) 
     {
@@ -55,10 +55,12 @@ class CanvasContext
      */
     public function save() 
     {
-        array_push($this->savedStates, array(
+        array_push(
+            $this->savedStates, array(
             'transform' => $this->transform,
             'fillStyle' => $this->fillStyle
-        ));
+            )
+        );
     }
 
     /**
@@ -67,7 +69,7 @@ class CanvasContext
     public function restore() 
     {
         $state = array_pop($this->savedStates);
-        if ($state != NULL) {
+        if ($state != null) {
             $this->transform = $state['transform'];
             $this->fillStyle = $state['fillStyle'];
         }
@@ -86,12 +88,12 @@ class CanvasContext
      */
     public function transform($a, $b, $c, $d, $e, $f) 
     {
-        if (gettype($a) != 'integer' ||
-            gettype($b) != 'integer' ||
-            gettype($c) != 'integer' ||
-            gettype($d) != 'integer' ||
-            gettype($e) != 'integer' ||
-            gettype($f) != 'integer'
+        if (gettype($a) != 'integer' 
+            || gettype($b) != 'integer' 
+            || gettype($c) != 'integer' 
+            || gettype($d) != 'integer' 
+            || gettype($e) != 'integer' 
+            || gettype($f) != 'integer'
         ) {
             return;
         }
@@ -104,12 +106,12 @@ class CanvasContext
      */
     public function setTransform($a, $b, $c, $d, $e, $f) 
     {
-        if (gettype($a) != 'integer' ||
-            gettype($b) != 'integer' ||
-            gettype($c) != 'integer' ||
-            gettype($d) != 'integer' ||
-            gettype($e) != 'integer' ||
-            gettype($f) != 'integer'
+        if (gettype($a) != 'integer' 
+            || gettype($b) != 'integer' 
+            || gettype($c) != 'integer' 
+            || gettype($d) != 'integer' 
+            || gettype($e) != 'integer' 
+            || gettype($f) != 'integer'
         ) {
             return;
         }
@@ -142,8 +144,8 @@ class CanvasContext
     /**
      * Applies a rotation transformation to the canvas around its current origo.
      *
-     * @param float $angle  Angle in radians measured clockwise from the 
-     *      positive x axis.
+     * @param float $angle Angle in radians measured clockwise from the 
+     *                     positive x axis.
      */
     public function rotate($angle) 
     {
@@ -171,8 +173,8 @@ class CanvasContext
             
             if ($pathCount > 2) {
                 // Close path
-                if ($path[0] != $path[$pathCount - 2] ||
-                    $path[1] != $path[$pathCount - 1]
+                if ($path[0] != $path[$pathCount - 2] 
+                    || $path[1] != $path[$pathCount - 1]
                 ) {
                     $path[] = $path[0];
                     $path[] = $path[1];
@@ -187,8 +189,8 @@ class CanvasContext
     /**
      * Begins a new subpath by moving the cursor to the specified position.
      *
-     * @param float $x  X coordinate.
-     * @param float $y  Y coordinate.
+     * @param float $x X coordinate.
+     * @param float $y Y coordinate.
      */
     public function moveTo($x, $y) 
     {
@@ -199,8 +201,8 @@ class CanvasContext
     /**
      * Inserts an edge between the last and specified position.
      *
-     * @param float $x  Target X coordinate.
-     * @param float $y  Target Y coordinate.
+     * @param  float $x Target X coordinate.
+     * @param  float $y Target Y coordinate.
      * @public
      */
     public function lineTo($x, $y) 
@@ -220,15 +222,16 @@ class CanvasContext
     /**
      * Adds an arc to the current path.
      *
-     * @param float $x  X coordinate of the center of the arc.
-     * @param float $y  Y coordinate of the center of the arc.
-     * @param float $radius  Radius of the arc.
-     * @param float $startAngle  The angle in radians at which the arc starts, 
-     *       measured clockwise from the positive x axis.
-     * @param float $endAngle  The angle in radians at which the arc end, 
-     *       measured clockwise from the positive x axis.
-     * @param boolean $anticlockwise  Specifies whether the arc will be drawn 
-     *       counter clockwise. Default is clockwise.
+     * @param float   $x             X coordinate of the center of the arc.
+     * @param float   $y             Y coordinate of the center of the arc.
+     * @param float   $radius        Radius of the arc.
+     * @param float   $startAngle    The angle in radians at which the arc starts, 
+     *                               measured clockwise from the positive x axis.
+     * @param float   $endAngle      The angle in radians at which the arc end, 
+     *                               measured clockwise from the positive x
+     *                               axis.
+     * @param boolean $anticlockwise Specifies whether the arc will be drawn 
+     *                               counter clockwise. Default is clockwise.
      */
     public function arc($x, $y, $radius, $startAngle, $endAngle, $anticlockwise) 
     {
@@ -254,8 +257,10 @@ class CanvasContext
                 // Normalize end angle so that the sweep angle is in the range 
                 // (0, -2PI]
                 $endAngle += 
-                    M_PI * 2 * ceil(($startAngle - $endAngle) / 
-                    (M_PI * 2) - 1);
+                    M_PI * 2 * ceil(
+                        ($startAngle - $endAngle) / 
+                        (M_PI * 2) - 1
+                    );
             }
         } else {
             if ($endAngle - $startAngle >= M_PI * 2) {
@@ -264,8 +269,10 @@ class CanvasContext
                 // Normalize end angle so that the sweep angle is in the range 
                 // (0, 2PI]
                 $endAngle -= 
-                    M_PI * 2 * ceil(($endAngle - $startAngle) / 
-                    (M_PI * 2) - 1);
+                    M_PI * 2 * ceil(
+                        ($endAngle - $startAngle) / 
+                        (M_PI * 2) - 1
+                    );
             }
         }
         
@@ -291,9 +298,9 @@ class CanvasContext
      * Fills the specified rectangle with fully transparent black without 
      * affecting the current paths.
      *
-     * @param float $x X coordinate of the left side of the rectangle.
-     * @param float $y Y coordinate of the top of the rectangle.
-     * @param float $width Width of the rectangle.
+     * @param float $x      X coordinate of the left side of the rectangle.
+     * @param float $y      Y coordinate of the top of the rectangle.
+     * @param float $width  Width of the rectangle.
      * @param float $height Height of the rectangle.
      */
     public function clearRect($x, $y, $width, $height) 
@@ -305,9 +312,10 @@ class CanvasContext
             $topLeft = $this->transform->multiplyPoint($x, $y);
             if ($topLeft->x <= 0 && $topLeft->y <= 0) {
                 $bottomRight = $this->transform->multiplyPoint(
-                    $x + $width, $y + $height);
-                if ($bottomRight->x >= $this->canvas->width &&
-                    $bottomRight->y >= $this->canvas->height
+                    $x + $width, $y + $height
+                );
+                if ($bottomRight->x >= $this->canvas->width 
+                    && $bottomRight->y >= $this->canvas->height
                 ) {
                     $fullCanvas = true;
                 }
@@ -317,17 +325,19 @@ class CanvasContext
         if ($fullCanvas) {
             $this->edges->clear();
         } else {
-            $this->_fillRect(ColorUtils::FORCE_TRANSPARENT, 
-                $x, $y, $width, $height);
+            $this->_fillRect(
+                ColorUtils::FORCE_TRANSPARENT, 
+                $x, $y, $width, $height
+            );
         }
     }
 
     /**
      * Fills the specified rectangle without affecting the current paths.
      *
-     * @param float $x X coordinate of the left side of the rectangle.
-     * @param float $y Y coordinate of the top of the rectangle.
-     * @param float $width Width of the rectangle.
+     * @param float $x      X coordinate of the left side of the rectangle.
+     * @param float $y      Y coordinate of the top of the rectangle.
+     * @param float $width  Width of the rectangle.
      * @param float $height Height of the rectangle.
      */
     public function fillRect($x, $y, $width, $height) 
@@ -350,22 +360,26 @@ class CanvasContext
 
         $pointsCount = count($points);
         for ($i = 1; $i < $pointsCount; $i++) {
-            $this->edges->add(new Edge(
-                $polygonId,
-                $points[$i - 1]->x,
-                $points[$i - 1]->y,
-                $points[$i]->x,
-                $points[$i]->y,
-                $fillColor));
+            $this->edges->add(
+                new Edge(
+                    $polygonId,
+                    $points[$i - 1]->x,
+                    $points[$i - 1]->y,
+                    $points[$i]->x,
+                    $points[$i]->y,
+                    $fillColor
+                )
+            );
         }
     }
 
     /**
      * Fills the defined paths.
      *
-     * @param string $windingRule  The winding rule to be used for determining
-     *      which areas are covered by the current path. Valid values are 
-     *      "evenodd" and "nonzero". Default is "nonzero".
+     * @param string $windingRule The winding rule to be used for determining
+     *                            which areas are covered by the current
+     *                            path. Valid values are  "evenodd" and
+     *                            "nonzero". Default is "nonzero".
      */
     public function fill($windingRule = "nonzero") 
     {
@@ -380,28 +394,34 @@ class CanvasContext
             }
 
             for ($i = 2; $i < $pointsCount; $i += 2) {
-                $this->edges->add(new Edge(
-                    $polygonId,
-                    $points[$i - 2],
-                    $points[$i - 1],
-                    $points[$i],
-                    $points[$i + 1],
-                    $fillColor,
-                    $windingRule));
+                $this->edges->add(
+                    new Edge(
+                        $polygonId,
+                        $points[$i - 2],
+                        $points[$i - 1],
+                        $points[$i],
+                        $points[$i + 1],
+                        $fillColor,
+                        $windingRule
+                    )
+                );
             }
             
             // Close path
-            if ($points[0] != $points[$pointsCount - 2] ||
-                $points[1] != $points[$pointsCount - 1]
+            if ($points[0] != $points[$pointsCount - 2] 
+                || $points[1] != $points[$pointsCount - 1]
             ) {
-                $this->edges->add(new Edge(
-                    $polygonId,
-                    $points[$pointsCount - 2],
-                    $points[$pointsCount - 1],
-                    $points[0],
-                    $points[1],
-                    $fillColor,
-                    $windingRule));
+                $this->edges->add(
+                    new Edge(
+                        $polygonId,
+                        $points[$pointsCount - 2],
+                        $points[$pointsCount - 1],
+                        $points[0],
+                        $points[1],
+                        $fillColor,
+                        $windingRule
+                    )
+                );
             }
         }
     }

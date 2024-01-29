@@ -22,7 +22,7 @@ class EdgeTable
      * Keeps a list of edges per scanline.
      *
      * @param integer $width  Clipping width.
-     * @param integer $height  Clipping height.
+     * @param integer $height Clipping height.
      */
     public function __construct($width, $height) 
     {
@@ -125,7 +125,8 @@ class EdgeTable
                     }
                     
                     $this->scanlines[$y][] = new EdgeIntersection(
-                        $fromX, $width, $edge);
+                        $fromX, $width, $edge
+                    );
                 }
 
                 $x1 = $x2;
@@ -151,8 +152,10 @@ class EdgeTable
     public function sort() 
     {
         foreach ($this->scanlines as $i => &$scanline) {
-            usort($scanline, array(
-                'Jdenticon\\Canvas\\Rasterization\\EdgeTable', 'edge_cmp'));
+            usort(
+                $scanline, array(
+                'Jdenticon\\Canvas\\Rasterization\\EdgeTable', 'edge_cmp')
+            );
         }
     }
 }

@@ -100,7 +100,7 @@ abstract class AbstractData
      *
      * @access public
      * @param  string $namespace
-     * @param  int $time
+     * @param  int    $time
      * @return void
      */
     public function purgeValues($namespace, $time)
@@ -175,7 +175,7 @@ abstract class AbstractData
      * Get next free slot for comment from postdate.
      *
      * @access protected
-     * @param  array $comments
+     * @param  array      $comments
      * @param  int|string $postdate
      * @return int|string
      */

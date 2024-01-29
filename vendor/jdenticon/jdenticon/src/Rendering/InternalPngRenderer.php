@@ -25,7 +25,7 @@ class InternalPngRenderer extends AbstractRenderer
      * Creates an instance of the class ImagickRenderer.
      *
      * @param int $width  The width of the icon in pixels.
-     * @param int $height  The height of the icon in pixels.
+     * @param int $height The height of the icon in pixels.
      */
     public function __construct($width, $height)
     {
@@ -47,13 +47,13 @@ class InternalPngRenderer extends AbstractRenderer
     /**
      * Adds a circle without translating its coordinates.
      *
-     * @param float $x  The x-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $y  The y-coordinate of the bounding rectangle 
-     *      upper-left corner.
-     * @param float $size  The size of the bounding rectangle.
-     * @param bool $counterClockwise  If true the circle will be drawn 
-     *      counter clockwise.
+     * @param float $x                The x-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $y                The y-coordinate of the bounding rectangle 
+     *                                upper-left corner.
+     * @param float $size             The size of the bounding rectangle.
+     * @param bool  $counterClockwise If true the circle will be drawn 
+     *                                counter clockwise.
      */
     protected function addCircleNoTransform($x, $y, $size, $counterClockwise)
     {
@@ -62,14 +62,15 @@ class InternalPngRenderer extends AbstractRenderer
         $this->ctx->arc(
             $x + $radius, $y + $radius, 
             $radius, 0, M_PI * 2, 
-            $counterClockwise);
+            $counterClockwise
+        );
         $this->ctx->closePath();
     }
 
     /**
      * Adds a polygon without translating its coordinates.
      *
-     * @param array $points  An array of the points that the polygon consists of.
+     * @param array $points An array of the points that the polygon consists of.
      */
     protected function addPolygonNoTransform($points)
     {
@@ -84,7 +85,7 @@ class InternalPngRenderer extends AbstractRenderer
     /**
      * Sets the background color of the icon.
      *
-     * @param \Jdenticon\Color $color  The background color.
+     * @param \Jdenticon\Color $color The background color.
      */
     public function setBackgroundColor(\Jdenticon\Color $color)
     {
@@ -95,7 +96,7 @@ class InternalPngRenderer extends AbstractRenderer
     /**
      * Begins a new shape. The shape should be ended with a call to endShape.
      *
-     * @param \Jdenticon\Color $color  The color of the shape.
+     * @param \Jdenticon\Color $color The color of the shape.
      */
     public function beginShape(\Jdenticon\Color $color)
     {

@@ -32,12 +32,14 @@ class Rectangle
     
     /**
      * The width of the rectangle.
+     *
      * @var float
      */
     public $width;
     
     /**
      * The height of the rectangle.
+     *
      * @var float
      */
     public $height;
@@ -45,9 +47,9 @@ class Rectangle
     /**
      * Creates a new Rectangle.
      *
-     * @param float $x The X coordinate of the left edge of the rectangle.
-     * @param float $y The Y coordinate of the top edge of the rectangle.
-     * @param float $width The width of the rectangle.
+     * @param float $x      The X coordinate of the left edge of the rectangle.
+     * @param float $y      The Y coordinate of the top edge of the rectangle.
+     * @param float $width  The width of the rectangle.
      * @param float $height The height of the rectangle.
      */
     public function __construct($x, $y, $width, $height)

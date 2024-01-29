@@ -59,8 +59,8 @@ class ShapeCategory
     public $positions;
     
     public function __construct(
-        $colorIndex, array $shapes, $shapeIndex, $rotationIndex, array $positions)
-    {
+        $colorIndex, array $shapes, $shapeIndex, $rotationIndex, array $positions
+    ) {
         $this->colorIndex = $colorIndex;
         $this->shapes = $shapes;
         $this->shapeIndex = $shapeIndex;

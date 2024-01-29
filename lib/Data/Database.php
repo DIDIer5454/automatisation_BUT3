@@ -29,7 +29,7 @@ class Database extends AbstractData
      * instance of database connection
      *
      * @access private
-     * @var PDO
+     * @var    PDO
      */
     private $_db;
 
@@ -37,7 +37,7 @@ class Database extends AbstractData
      * table prefix
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_prefix = '';
 
@@ -45,7 +45,7 @@ class Database extends AbstractData
      * database type
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_type = '';
 
@@ -65,11 +65,10 @@ class Database extends AbstractData
         }
 
         // initialize the db connection with new options
-        if (
-            array_key_exists('dsn', $options) &&
-            array_key_exists('usr', $options) &&
-            array_key_exists('pwd', $options) &&
-            array_key_exists('opt', $options)
+        if (array_key_exists('dsn', $options) 
+            && array_key_exists('usr', $options) 
+            && array_key_exists('pwd', $options) 
+            && array_key_exists('opt', $options)
         ) {
             // set default options
             $options['opt'][PDO::ATTR_ERRMODE]          = PDO::ERRMODE_EXCEPTION;
@@ -510,7 +509,7 @@ class Database extends AbstractData
      *
      * @access private
      * @param  string $sql
-     * @param  array $params
+     * @param  array  $params
      * @throws PDOException
      * @return bool
      */
@@ -537,8 +536,8 @@ class Database extends AbstractData
      *
      * @access private
      * @param  string $sql
-     * @param  array $params
-     * @param  bool $firstOnly if only the first row should be returned
+     * @param  array  $params
+     * @param  bool   $firstOnly if only the first row should be returned
      * @throws PDOException
      * @return array|false
      */
@@ -593,46 +592,46 @@ class Database extends AbstractData
     private function _getTableQuery($type)
     {
         switch ($type) {
-            case 'ibm':
-                $sql = 'SELECT "tabname" FROM "SYSCAT"."TABLES"';
-                break;
-            case 'informix':
-                $sql = 'SELECT "tabname" FROM "systables"';
-                break;
-            case 'mssql':
-                // U: tables created by the user
-                $sql = 'SELECT "name" FROM "sysobjects" '
-                     . 'WHERE "type" = \'U\' ORDER BY "name"';
-                break;
-            case 'mysql':
-                $sql = 'SHOW TABLES';
-                break;
-            case 'oci':
-                $sql = 'SELECT table_name FROM all_tables';
-                break;
-            case 'pgsql':
-                $sql = 'SELECT c."relname" AS "table_name" '
-                     . 'FROM "pg_class" c, "pg_user" u '
-                     . 'WHERE c."relowner" = u."usesysid" AND c."relkind" = \'r\' '
-                     . 'AND NOT EXISTS (SELECT 1 FROM "pg_views" WHERE "viewname" = c."relname") '
-                     . "AND c.\"relname\" !~ '^(pg_|sql_)' "
-                     . 'UNION '
-                     . 'SELECT c."relname" AS "table_name" '
-                     . 'FROM "pg_class" c '
-                     . "WHERE c.\"relkind\" = 'r' "
-                     . 'AND NOT EXISTS (SELECT 1 FROM "pg_views" WHERE "viewname" = c."relname") '
-                     . 'AND NOT EXISTS (SELECT 1 FROM "pg_user" WHERE "usesysid" = c."relowner") '
-                     . "AND c.\"relname\" !~ '^pg_'";
-                break;
-            case 'sqlite':
-                $sql = 'SELECT "name" FROM "sqlite_master" WHERE "type"=\'table\' '
-                     . 'UNION ALL SELECT "name" FROM "sqlite_temp_master" '
-                     . 'WHERE "type"=\'table\' ORDER BY "name"';
-                break;
-            default:
-                throw new Exception(
-                    "PDO type $type is currently not supported.", 5
-                );
+        case 'ibm':
+            $sql = 'SELECT "tabname" FROM "SYSCAT"."TABLES"';
+            break;
+        case 'informix':
+            $sql = 'SELECT "tabname" FROM "systables"';
+            break;
+        case 'mssql':
+            // U: tables created by the user
+            $sql = 'SELECT "name" FROM "sysobjects" '
+                 . 'WHERE "type" = \'U\' ORDER BY "name"';
+            break;
+        case 'mysql':
+            $sql = 'SHOW TABLES';
+            break;
+        case 'oci':
+            $sql = 'SELECT table_name FROM all_tables';
+            break;
+        case 'pgsql':
+            $sql = 'SELECT c."relname" AS "table_name" '
+                 . 'FROM "pg_class" c, "pg_user" u '
+                 . 'WHERE c."relowner" = u."usesysid" AND c."relkind" = \'r\' '
+                 . 'AND NOT EXISTS (SELECT 1 FROM "pg_views" WHERE "viewname" = c."relname") '
+                 . "AND c.\"relname\" !~ '^(pg_|sql_)' "
+                 . 'UNION '
+                 . 'SELECT c."relname" AS "table_name" '
+                 . 'FROM "pg_class" c '
+                 . "WHERE c.\"relkind\" = 'r' "
+                 . 'AND NOT EXISTS (SELECT 1 FROM "pg_views" WHERE "viewname" = c."relname") '
+                 . 'AND NOT EXISTS (SELECT 1 FROM "pg_user" WHERE "usesysid" = c."relowner") '
+                 . "AND c.\"relname\" !~ '^pg_'";
+            break;
+        case 'sqlite':
+            $sql = 'SELECT "name" FROM "sqlite_master" WHERE "type"=\'table\' '
+                 . 'UNION ALL SELECT "name" FROM "sqlite_temp_master" '
+                 . 'WHERE "type"=\'table\' ORDER BY "name"';
+            break;
+        default:
+            throw new Exception(
+                "PDO type $type is currently not supported.", 5
+            );
         }
         return $sql;
     }
@@ -668,13 +667,13 @@ class Database extends AbstractData
     {
         $main_key = $after_key = '';
         switch ($this->_type) {
-            case 'mysql':
-            case 'oci':
-                $after_key = ", PRIMARY KEY (\"$key\")";
-                break;
-            default:
-                $main_key = ' PRIMARY KEY';
-                break;
+        case 'mysql':
+        case 'oci':
+            $after_key = ", PRIMARY KEY (\"$key\")";
+            break;
+        default:
+            $main_key = ' PRIMARY KEY';
+            break;
         }
         return array($main_key, $after_key);
     }
@@ -690,12 +689,12 @@ class Database extends AbstractData
     private function _getDataType()
     {
         switch ($this->_type) {
-            case 'oci':
-                return 'CLOB';
-            case 'pgsql':
-                return 'TEXT';
-            default:
-                return 'BLOB';
+        case 'oci':
+            return 'CLOB';
+        case 'pgsql':
+            return 'TEXT';
+        default:
+            return 'BLOB';
         }
     }
 
@@ -710,12 +709,12 @@ class Database extends AbstractData
     private function _getAttachmentType()
     {
         switch ($this->_type) {
-            case 'oci':
-                return 'CLOB';
-            case 'pgsql':
-                return 'TEXT';
-            default:
-                return 'MEDIUMBLOB';
+        case 'oci':
+            return 'CLOB';
+        case 'pgsql':
+            return 'TEXT';
+        default:
+            return 'MEDIUMBLOB';
         }
     }
 
@@ -730,10 +729,10 @@ class Database extends AbstractData
     private function _getMetaType()
     {
         switch ($this->_type) {
-            case 'oci':
-                return 'VARCHAR2(4000)';
-            default:
-                return 'TEXT';
+        case 'oci':
+            return 'VARCHAR2(4000)';
+        default:
+            return 'TEXT';
         }
     }
 
@@ -867,72 +866,72 @@ class Database extends AbstractData
         $dataType       = $this->_getDataType();
         $attachmentType = $this->_getAttachmentType();
         switch ($oldversion) {
-            case '0.21':
-                // create the meta column if necessary (pre 0.21 change)
-                try {
-                    $this->_db->exec(
-                        'SELECT "meta" FROM "' . $this->_sanitizeIdentifier('paste') . '" ' .
-                        ($this->_type === 'oci' ? 'FETCH NEXT 1 ROWS ONLY' : 'LIMIT 1')
-                    );
-                } catch (PDOException $e) {
-                    $this->_db->exec('ALTER TABLE "' . $this->_sanitizeIdentifier('paste') . '" ADD COLUMN "meta" TEXT');
-                }
-                // SQLite only allows one ALTER statement at a time...
+        case '0.21':
+            // create the meta column if necessary (pre 0.21 change)
+            try {
+                $this->_db->exec(
+                    'SELECT "meta" FROM "' . $this->_sanitizeIdentifier('paste') . '" ' .
+                    ($this->_type === 'oci' ? 'FETCH NEXT 1 ROWS ONLY' : 'LIMIT 1')
+                );
+            } catch (PDOException $e) {
+                $this->_db->exec('ALTER TABLE "' . $this->_sanitizeIdentifier('paste') . '" ADD COLUMN "meta" TEXT');
+            }
+            // SQLite only allows one ALTER statement at a time...
+            $this->_db->exec(
+                'ALTER TABLE "' . $this->_sanitizeIdentifier('paste') .
+                "\" ADD COLUMN \"attachment\" $attachmentType"
+            );
+            $this->_db->exec(
+                'ALTER TABLE "' . $this->_sanitizeIdentifier('paste') . "\" ADD COLUMN \"attachmentname\" $dataType"
+            );
+            // SQLite doesn't support MODIFY, but it allows TEXT of similar
+            // size as BLOB, so there is no need to change it there
+            if ($this->_type !== 'sqlite') {
                 $this->_db->exec(
                     'ALTER TABLE "' . $this->_sanitizeIdentifier('paste') .
-                    "\" ADD COLUMN \"attachment\" $attachmentType"
+                    "\" ADD PRIMARY KEY (\"dataid\"), MODIFY COLUMN \"data\" $dataType"
                 );
                 $this->_db->exec(
-                    'ALTER TABLE "' . $this->_sanitizeIdentifier('paste') . "\" ADD COLUMN \"attachmentname\" $dataType"
+                    'ALTER TABLE "' . $this->_sanitizeIdentifier('comment') .
+                    "\" ADD PRIMARY KEY (\"dataid\"), MODIFY COLUMN \"data\" $dataType, " .
+                    "MODIFY COLUMN \"nickname\" $dataType, MODIFY COLUMN \"vizhash\" $dataType"
                 );
-                // SQLite doesn't support MODIFY, but it allows TEXT of similar
-                // size as BLOB, so there is no need to change it there
-                if ($this->_type !== 'sqlite') {
-                    $this->_db->exec(
-                        'ALTER TABLE "' . $this->_sanitizeIdentifier('paste') .
-                        "\" ADD PRIMARY KEY (\"dataid\"), MODIFY COLUMN \"data\" $dataType"
-                    );
-                    $this->_db->exec(
-                        'ALTER TABLE "' . $this->_sanitizeIdentifier('comment') .
-                        "\" ADD PRIMARY KEY (\"dataid\"), MODIFY COLUMN \"data\" $dataType, " .
-                        "MODIFY COLUMN \"nickname\" $dataType, MODIFY COLUMN \"vizhash\" $dataType"
-                    );
-                } else {
-                    $this->_db->exec(
-                        'CREATE UNIQUE INDEX IF NOT EXISTS "' .
-                        $this->_sanitizeIdentifier('paste_dataid') . '" ON "' .
-                        $this->_sanitizeIdentifier('paste') . '" ("dataid")'
-                    );
-                    $this->_db->exec(
-                        'CREATE UNIQUE INDEX IF NOT EXISTS "' .
-                        $this->_sanitizeIdentifier('comment_dataid') . '" ON "' .
-                        $this->_sanitizeIdentifier('comment') . '" ("dataid")'
-                    );
-                }
-                // CREATE INDEX IF NOT EXISTS not supported as of Oracle MySQL <= 8.0
+            } else {
                 $this->_db->exec(
-                    'CREATE INDEX "' .
-                    $this->_sanitizeIdentifier('comment_parent') . '" ON "' .
-                    $this->_sanitizeIdentifier('comment') . '" ("pasteid")'
+                    'CREATE UNIQUE INDEX IF NOT EXISTS "' .
+                    $this->_sanitizeIdentifier('paste_dataid') . '" ON "' .
+                    $this->_sanitizeIdentifier('paste') . '" ("dataid")'
                 );
-                // no break, continue with updates for 0.22 and later
-            case '1.3':
-                // SQLite doesn't support MODIFY, but it allows TEXT of similar
-                // size as BLOB and PostgreSQL uses TEXT, so there is no need
-                // to change it there
-                if ($this->_type !== 'sqlite' && $this->_type !== 'pgsql') {
-                    $this->_db->exec(
-                        'ALTER TABLE "' . $this->_sanitizeIdentifier('paste') .
-                        "\" MODIFY COLUMN \"data\" $attachmentType"
-                    );
-                }
-                // no break, continue with updates for all newer versions
-            default:
-                $this->_exec(
-                    'UPDATE "' . $this->_sanitizeIdentifier('config') .
-                    '" SET "value" = ? WHERE "id" = ?',
-                    array(Controller::VERSION, 'VERSION')
+                $this->_db->exec(
+                    'CREATE UNIQUE INDEX IF NOT EXISTS "' .
+                    $this->_sanitizeIdentifier('comment_dataid') . '" ON "' .
+                    $this->_sanitizeIdentifier('comment') . '" ("dataid")'
                 );
+            }
+            // CREATE INDEX IF NOT EXISTS not supported as of Oracle MySQL <= 8.0
+            $this->_db->exec(
+                'CREATE INDEX "' .
+                $this->_sanitizeIdentifier('comment_parent') . '" ON "' .
+                $this->_sanitizeIdentifier('comment') . '" ("pasteid")'
+            );
+            // no break, continue with updates for 0.22 and later
+        case '1.3':
+            // SQLite doesn't support MODIFY, but it allows TEXT of similar
+            // size as BLOB and PostgreSQL uses TEXT, so there is no need
+            // to change it there
+            if ($this->_type !== 'sqlite' && $this->_type !== 'pgsql') {
+                $this->_db->exec(
+                    'ALTER TABLE "' . $this->_sanitizeIdentifier('paste') .
+                    "\" MODIFY COLUMN \"data\" $attachmentType"
+                );
+            }
+            // no break, continue with updates for all newer versions
+        default:
+            $this->_exec(
+                'UPDATE "' . $this->_sanitizeIdentifier('config') .
+                '" SET "value" = ? WHERE "id" = ?',
+                array(Controller::VERSION, 'VERSION')
+            );
         }
     }
 }

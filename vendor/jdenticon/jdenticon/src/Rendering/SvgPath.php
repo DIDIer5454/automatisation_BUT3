@@ -26,12 +26,13 @@ class SvgPath
     /**
      * Adds a circle to the SVG.
      *
-     * @param float $x X coordinate of the left side of the containing rectangle.
-     * @param float $y Y coordinate of the top side of the containing rectangle.
-     * @param float $size The diameter of the circle.
-     * @param bool $counterClockwise If true the circle will be drawn counter 
-     *      clockwise. This affects the rendering since the evenodd filling rule 
-     *      is used by Jdenticon.
+     * @param float $x                X coordinate of the left side of the containing rectangle.
+     * @param float $y                Y coordinate of the top side of the containing rectangle.
+     * @param float $size             The diameter of the circle.
+     * @param bool  $counterClockwise If true the circle will be drawn counter 
+     *                                clockwise. This affects the rendering
+     *                                since the evenodd filling rule  is used
+     *                                by Jdenticon.
      */
     public function addCircle($x, $y, $size, $counterClockwise)
     {
@@ -51,7 +52,7 @@ class SvgPath
      * Adds a polygon to the SVG.
      *
      * @param array(\Jdenticon\Rendering\Point) $points The corners of the 
-     *      polygon.
+     *                                                  polygon.
      */
     public function addPolygon($points)
     {

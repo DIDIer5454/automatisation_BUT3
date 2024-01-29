@@ -19,7 +19,7 @@ class PngBuffer
     /**
      * Writes a string to the buffer.
      *
-     * @param string $str  String to write.
+     * @param string $str String to write.
      */
     public function writeString($str) 
     {
@@ -29,7 +29,7 @@ class PngBuffer
     /**
      * Writes a 32 bit unsigned int to the buffer in Big Endian format.
      *
-     * @param integer $value  Value to write.
+     * @param integer $value Value to write.
      */
     public function writeUInt32BE($value) 
     {
@@ -39,7 +39,7 @@ class PngBuffer
     /**
      * Writes an 8 bit unsigned int to the buffer.
      *
-     * @param integer $value  Value to write.
+     * @param integer $value Value to write.
      */
     public function writeUInt8($value) 
     {
@@ -49,8 +49,8 @@ class PngBuffer
     /**
      * Starts a new PNG chunk.
      *
-     * @param string $type  Name of the chunk. Must contain exactly 4 
-     *      ASCII characters.
+     * @param string $type Name of the chunk. Must contain exactly 4 
+     *                     ASCII characters.
      */
     public function startChunk($type) 
     {

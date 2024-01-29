@@ -27,7 +27,7 @@ abstract class AbstractModel
      * Instance ID.
      *
      * @access protected
-     * @var string
+     * @var    string
      */
     protected $_id = '';
 
@@ -35,7 +35,7 @@ abstract class AbstractModel
      * Instance data.
      *
      * @access protected
-     * @var array
+     * @var    array
      */
     protected $_data = array('meta' => array());
 
@@ -43,7 +43,7 @@ abstract class AbstractModel
      * Configuration.
      *
      * @access protected
-     * @var Configuration
+     * @var    Configuration
      */
     protected $_conf;
 
@@ -51,7 +51,7 @@ abstract class AbstractModel
      * Data storage.
      *
      * @access protected
-     * @var AbstractData
+     * @var    AbstractData
      */
     protected $_store;
 
@@ -60,7 +60,7 @@ abstract class AbstractModel
      *
      * @access public
      * @param  Configuration $configuration
-     * @param  AbstractData $storage
+     * @param  AbstractData  $storage
      */
     public function __construct(Configuration $configuration, AbstractData $storage)
     {
@@ -83,7 +83,7 @@ abstract class AbstractModel
      * Set ID.
      *
      * @access public
-     * @param string $id
+     * @param  string $id
      * @throws Exception
      */
     public function setId($id)

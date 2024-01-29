@@ -25,6 +25,7 @@ class LayerManager
 
     /**
      * The current visible color.
+     *
      * @var integer
      */
     public $color;
@@ -38,7 +39,7 @@ class LayerManager
      * Copies all layers in this manager to another LayerManager.
      *
      * @param \Jdenticon\Canvas\Rasterization\LayerManager $other The 
-     *      LayerManager to copy all layers to.
+     *                                                            LayerManager to copy all layers to.
      */
     public function copyTo(LayerManager $other) 
     {
@@ -53,7 +54,7 @@ class LayerManager
                 $layer->color,
                 $layer->winding,
                 $layer->windingRule
-                );
+            );
             
             if ($previousCopy === null) {
                 $other->topLayer = $copy;

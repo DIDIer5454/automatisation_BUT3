@@ -1,19 +1,23 @@
 'use strict';
 
-(function() {
+(function () {
     let ret;
 
-    async function initialize() {
-        if (ret) return ret;
+    async function initialize()
+    {
+        if (ret) { return ret;
+        }
 
         const COMPRESSION_LEVEL = 7;
         const NO_ZLIB_HEADER = -1;
         const CHUNK_SIZE = 32 * 1024;
         const map = {};
-        const memory = new WebAssembly.Memory({
-            initial: 1,
-            maximum: 1024, // 64MB
-        });
+        const memory = new WebAssembly.Memory(
+            {
+                initial: 1,
+                maximum: 1024, // 64MB
+            }
+        );
         const env = {
             memory,
             writeToJs(ptr, size) {
@@ -38,20 +42,23 @@
         const dstPtr = ins.exports._malloc(CHUNK_SIZE);
 
         class RawDef {
-            constructor() {
+            constructor()
+            {
                 this.zstreamPtr = ins.exports._createDeflateContext(COMPRESSION_LEVEL, NO_ZLIB_HEADER);
                 map[this.zstreamPtr] = this;
                 this.offset = 0;
                 this.buff = new Uint8Array(CHUNK_SIZE);
             }
 
-            deflate(chunk, flush) {
+            deflate(chunk, flush)
+            {
                 const src = new Uint8Array(memory.buffer, srcPtr, chunk.length);
                 src.set(chunk);
                 ins.exports._deflate(this.zstreamPtr, srcPtr, dstPtr, chunk.length, CHUNK_SIZE, flush);
             }
 
-            onData(chunk) {
+            onData(chunk)
+            {
                 if (this.buff.length < this.offset + chunk.length) {
                     const buff = this.buff;
                     this.buff = new Uint8Array(this.buff.length * 2);
@@ -61,13 +68,15 @@
                 this.offset += chunk.length;
             }
 
-            destroy() {
+            destroy()
+            {
                 ins.exports._freeDeflateContext(this.zstreamPtr);
                 delete map[this.zstreamPtr];
                 this.buff = null;
             }
 
-            getBuffer() {
+            getBuffer()
+            {
                 const res = new Uint8Array(this.offset);
                 for (let i = 0; i < this.offset; ++i) {
                     res[i] = this.buff[i];
@@ -77,20 +86,23 @@
         }
 
         class RawInf {
-            constructor() {
+            constructor()
+            {
                 this.zstreamPtr = ins.exports._createInflateContext(NO_ZLIB_HEADER);
                 map[this.zstreamPtr] = this;
                 this.offset = 0;
                 this.buff = new Uint8Array(CHUNK_SIZE);
             }
 
-            inflate(chunk) {
+            inflate(chunk)
+            {
                 const src = new Uint8Array(memory.buffer, srcPtr, chunk.length);
                 src.set(chunk);
                 ins.exports._inflate(this.zstreamPtr, srcPtr, dstPtr, chunk.length, CHUNK_SIZE);
             }
 
-            onData(chunk) {
+            onData(chunk)
+            {
                 if (this.buff.length < this.offset + chunk.length) {
                     const buff = this.buff;
                     this.buff = new Uint8Array(this.buff.length * 2);
@@ -100,13 +112,15 @@
                 this.offset += chunk.length;
             }
 
-            destroy() {
+            destroy()
+            {
                 ins.exports._freeInflateContext(this.zstreamPtr);
                 delete map[this.zstreamPtr];
                 this.buff = null;
             }
 
-            getBuffer() {
+            getBuffer()
+            {
                 const res = new Uint8Array(this.offset);
                 for (let i = 0; i < this.offset; ++i) {
                     res[i] = this.buff[i];
@@ -126,7 +140,7 @@
                     const ret = rawInf.getBuffer();
                     rawInf.destroy();
                     return ret;
-                },
+            },
                 deflate(rawInflateBuffer) {
                     const rawDef = new RawDef();
                     for (let offset = 0; offset < rawInflateBuffer.length; offset += CHUNK_SIZE) {
@@ -137,7 +151,7 @@
                     const ret = rawDef.getBuffer();
                     rawDef.destroy();
                     return ret;
-                },
+            },
         }
 
         return ret;

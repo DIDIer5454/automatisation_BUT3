@@ -67,7 +67,7 @@ class TrafficLimiter extends AbstractPersistence
      *
      * @access public
      * @static
-     * @param Configuration $conf
+     * @param  Configuration $conf
      */
     public static function setConfiguration(Configuration $conf)
     {
@@ -88,7 +88,7 @@ class TrafficLimiter extends AbstractPersistence
      *
      * @access public
      * @static
-     * @param string $creators
+     * @param  string $creators
      */
     public static function setCreators($creators)
     {
@@ -100,7 +100,7 @@ class TrafficLimiter extends AbstractPersistence
      *
      * @access public
      * @static
-     * @param string $exempted
+     * @param  string $exempted
      */
     public static function setExempted($exempted)
     {
@@ -217,9 +217,11 @@ class TrafficLimiter extends AbstractPersistence
         if ($result) {
             return true;
         }
-        throw new Exception(I18n::_(
-            'Please wait %d seconds between each post.',
-            self::$_limit
-        ));
+        throw new Exception(
+            I18n::_(
+                'Please wait %d seconds between each post.',
+                self::$_limit
+            )
+        );
     }
 }

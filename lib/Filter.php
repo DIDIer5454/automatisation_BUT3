@@ -38,14 +38,14 @@ class Filter
             throw new Exception("Error parsing time format '$time'", 30);
         }
         switch ($matches[2]) {
-            case 'sec':
-                $unit = 'second';
-                break;
-            case 'min':
-                $unit = 'minute';
-                break;
-            default:
-                $unit = rtrim($matches[2], 's');
+        case 'sec':
+            $unit = 'second';
+            break;
+        case 'min':
+            $unit = 'minute';
+            break;
+        default:
+            $unit = rtrim($matches[2], 's');
         }
         return I18n::_(array('%d ' . $unit, '%d ' . $unit . 's'), (int) $matches[1]);
     }

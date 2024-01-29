@@ -43,7 +43,8 @@ class Rasterizer
         $edgeTable->sort();
 
         $superSampleBuffer = new SuperSampleBuffer(
-            $width, self::SAMPLES_PER_PIXEL_X);
+            $width, self::SAMPLES_PER_PIXEL_X
+        );
 
         $layers = array();
         $color = 0;
@@ -91,10 +92,9 @@ class Rasterizer
                 // If there is exactly one edge in the supersample range, and it
                 // is crossing the entire scanline, we can perform the 
                 // antialiasing by integrating the edge function.
-                if (!isset($superSampleRange->edges[1]) && (
-                        $edge->y0 <= $ey     && $edge->y1 >= $ey + 1 ||
-                        $edge->y0 >= $ey + 1 && $edge->y1 <= $ey
-                    )) {
+                if (!isset($superSampleRange->edges[1]) && (                    $edge->y0 <= $ey     && $edge->y1 >= $ey + 1 
+                    || $edge->y0 >= $ey + 1 && $edge->y1 <= $ey)
+                ) {
                     // Determine the lower and upper x value where the edge 
                     // intersects the scanline.
                     $xey = $edge->intersection($ey);
@@ -159,13 +159,15 @@ class Rasterizer
                             (int)($fromColorA / $usedLayers),
                             (int)($fromColorR / $fromColorA),
                             (int)($fromColorG / $fromColorA),
-                            (int)($fromColorB / $fromColorA));
+                            (int)($fromColorB / $fromColorA)
+                        );
                             
                         $toColor = $toColorA === 0 ? 0 : ColorUtils::from(
                             (int)($toColorA / $usedLayers),
                             (int)($toColorR / $toColorA),
                             (int)($toColorG / $toColorA),
-                            (int)($toColorB / $toColorA));
+                            (int)($toColorB / $toColorA)
+                        );
                     }
                     
                     // Render pixels
@@ -210,7 +212,8 @@ class Rasterizer
                         
                         $colorData[] = 1;
                         $colorData[] = ColorUtils::mix(
-                            $fromColor, $toColor, $coverage);
+                            $fromColor, $toColor, $coverage
+                        );
                     }
                     
                     $color = $toColor;
@@ -230,17 +233,21 @@ class Rasterizer
                         $color = $subScanlineLayers->color;
 
                         $intersections = self::getIntersections(
-                            $superSampleRange->edges, $y);
+                            $superSampleRange->edges, $y
+                        );
 
                         foreach ($intersections as $intersection) {
-                            $superSampleBuffer->add($color, 
-                                $intersection->x - $superSampleRange->fromX);
+                            $superSampleBuffer->add(
+                                $color, 
+                                $intersection->x - $superSampleRange->fromX
+                            );
                             $subScanlineLayers->add($intersection->edge);
                             $color = $subScanlineLayers->color;
                         }
 
                         $superSampleBuffer->add(
-                            $color, $superSampleRange->width + 1);
+                            $color, $superSampleRange->width + 1
+                        );
                         $superSampleBuffer->rewind();
 
                         $y += self::SAMPLE_HEIGHT;
@@ -248,9 +255,11 @@ class Rasterizer
 
                     // Blend subpixels
                     $color = $superSampleBuffer->colorAt(
-                        $superSampleRange->width);
+                        $superSampleRange->width
+                    );
                     $superSampleBuffer->emptyTo(
-                        $colorData, $superSampleRange->width);
+                        $colorData, $superSampleRange->width
+                    );
                     
                     //$color = end($colorData);
                 } // /super sampling
@@ -296,8 +305,8 @@ class Rasterizer
      * y coordinate. For each intersecting edge the intersecting x coordinate is 
      * returned.
      *
-     * @param array $edges Array of edges in the current scanline.
-     * @param int $y Y coordinate of the current scanline.
+     * @param  array $edges Array of edges in the current scanline.
+     * @param  int   $y     Y coordinate of the current scanline.
      * @return array Array containing EdgeSuperSampleIntersection. Objects
      * are sorted ascending by x coordinate.
      */
@@ -306,8 +315,8 @@ class Rasterizer
         $intersections = array();
 
         foreach ($edges as $edge) {
-            if ($edge->y0 < $y && $edge->y1 >= $y ||
-                $edge->y0 >= $y && $edge->y1 < $y
+            if ($edge->y0 < $y && $edge->y1 >= $y 
+                || $edge->y0 >= $y && $edge->y1 < $y
             ) {
                 $x = $edge->x0 +
                     ($edge->x1 - $edge->x0) * ($y - $edge->y0) /
@@ -317,9 +326,11 @@ class Rasterizer
             }
         }
 
-        usort($intersections, array(
+        usort(
+            $intersections, array(
             'Jdenticon\\Canvas\\Rasterization\\Rasterizer', 
-            'intersection_cmp'));
+            'intersection_cmp')
+        );
         
         return $intersections;
     }
@@ -327,7 +338,7 @@ class Rasterizer
     /**
      * Determines what ranges of a scanline that needs to be supersampled.
      *
-     * @param array $scanline  Array of edges in the current scanline.
+     * @param  array $scanline Array of edges in the current scanline.
      * @return array  Array of SuperSampleRange.
      */
     private static function getSuperSampleRanges(&$scanline, $width) 
@@ -358,7 +369,8 @@ class Rasterizer
                 if ($range->fromX < $superSampleRange->toXExcl) {
                     $superSampleRange->toXExcl = max(
                         $superSampleRange->toXExcl, 
-                        $range->fromX + $range->width);
+                        $range->fromX + $range->width
+                    );
                     $superSampleRange->edges[] = $range->edge;
                     $rangeIndex++;
                 } else {

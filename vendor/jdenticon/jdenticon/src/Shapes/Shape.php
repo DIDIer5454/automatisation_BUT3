@@ -52,8 +52,8 @@ class Shape
         $definition, 
         \Jdenticon\Color $color, 
         array $positions, 
-        $startRotationIndex)
-    {
+        $startRotationIndex
+    ) {
         $this->definition = $definition;
         $this->color = $color;
         $this->positions = $positions;

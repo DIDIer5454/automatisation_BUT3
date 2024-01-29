@@ -123,24 +123,24 @@ class Controller
         $this->_init();
 
         switch ($this->_request->getOperation()) {
-            case 'create':
-                $this->_create();
-                break;
-            case 'delete':
-                $this->_delete(
-                    $this->_request->getParam('pasteid'),
-                    $this->_request->getParam('deletetoken')
-                );
-                break;
-            case 'read':
-                $this->_read($this->_request->getParam('pasteid'));
-                break;
-            case 'jsonld':
-                $this->_jsonld($this->_request->getParam('jsonld'));
-                return;
-            case 'yourlsproxy':
-                $this->_yourlsproxy($this->_request->getParam('link'));
-                break;
+        case 'create':
+            $this->_create();
+            break;
+        case 'delete':
+            $this->_delete(
+                $this->_request->getParam('pasteid'),
+                $this->_request->getParam('deletetoken')
+            );
+            break;
+        case 'read':
+            $this->_read($this->_request->getParam('pasteid'));
+            break;
+        case 'jsonld':
+            $this->_jsonld($this->_request->getParam('jsonld'));
+            return;
+        case 'yourlsproxy':
+            $this->_yourlsproxy($this->_request->getParam('link'));
+            break;
         }
 
         // output JSON or HTML
@@ -255,10 +255,12 @@ class Controller
             try {
                 $this->_model->purge();
             } catch (Exception $e) {
-                error_log('Error purging pastes: ' . $e->getMessage() . PHP_EOL .
+                error_log(
+                    'Error purging pastes: ' . $e->getMessage() . PHP_EOL .
                     'Use the administration scripts statistics to find ' .
                     'damaged paste IDs and either delete them or restore them ' .
-                    'from backup.');
+                    'from backup.'
+                );
             }
             $paste = $this->_model->getPaste();
             try {
@@ -431,17 +433,20 @@ class Controller
      * outputs requested JSON-LD context
      *
      * @access private
-     * @param string $type
+     * @param  string $type
      */
     private function _jsonld($type)
     {
-        if (!in_array($type, array(
+        if (!in_array(
+            $type, array(
             'comment',
             'commentmeta',
             'paste',
             'pastemeta',
             'types',
-        ))) {
+            )
+        )
+        ) {
             $type = '';
         }
         $content = '{}';
@@ -471,7 +476,7 @@ class Controller
      * proxies link to YOURLS, updates status or error with response
      *
      * @access private
-     * @param string $link
+     * @param  string $link
      */
     private function _yourlsproxy($link)
     {
@@ -487,9 +492,9 @@ class Controller
      * prepares JSON encoded status message
      *
      * @access private
-     * @param  int $status
+     * @param  int    $status
      * @param  string $message
-     * @param  array $other
+     * @param  array  $other
      */
     private function _return_message($status, $message, $other = array())
     {

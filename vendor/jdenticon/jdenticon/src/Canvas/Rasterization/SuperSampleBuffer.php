@@ -34,8 +34,8 @@ class SuperSampleBuffer
      * Creates a color buffer keeping an average color out of several
      * color samples per pixel.
      *
-     * @param integer $width  Width of the buffer in pixels.
-     * @param integer $samplesPerPixel  Number of samples to keep per pixel.
+     * @param integer $width           Width of the buffer in pixels.
+     * @param integer $samplesPerPixel Number of samples to keep per pixel.
      */
     public function __construct($width, $samplesPerPixel) 
     {
@@ -71,9 +71,9 @@ class SuperSampleBuffer
     /**
      * Writes the average color of each pixel to a specified color array.
      *
-     * @param array $colorData The average colors will be written to this 
-     *      color array.
-     * @param integer $count  Number of pixels to write.
+     * @param array   $colorData The average colors will be written to this 
+     *                           color array.
+     * @param integer $count     Number of pixels to write.
      */
     public function emptyTo(& $colorData, $count) 
     {
@@ -100,7 +100,7 @@ class SuperSampleBuffer
     /**
      * Gets the average color of the pixel at a specified index.
      *
-     * @param integer $index The index of the pixel.
+     * @param  integer $index The index of the pixel.
      * @return integer
      */
     public function colorAt($index) 
@@ -120,7 +120,7 @@ class SuperSampleBuffer
      * Adds a color to the current pixel in the buffer.
      *
      * @param integer $count Number of samples of the color to be added to 
-     *      the buffer.
+     *                       the buffer.
      */
     private function _add($count, $a, $r, $g, $b) 
     {
@@ -147,9 +147,9 @@ class SuperSampleBuffer
     /**
      * Adds a color to the buffer up until the specified x index.
      *
-     * @param integer $color Color to write.
-     * @param float $untilX Samples of the color will be added the buffer until 
-     *      the cursor reaches this coordinate.
+     * @param integer $color  Color to write.
+     * @param float   $untilX Samples of the color will be added the buffer until 
+     *                        the cursor reaches this coordinate.
      */
     public function add($color, $untilX) 
     {
