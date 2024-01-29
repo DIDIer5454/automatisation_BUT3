@@ -41,7 +41,11 @@ jobs:
     - name: hey2
       run: cat test2
       working-directory: tst
-
+    - name: installation de codesniffe
+      run: composer require --dev squizlabs/php_codesniffer
+    - name: test sniffer
+      run: ./vendor/bin/phpcs
+      working-directory: tst
 
 
           # composer installation
