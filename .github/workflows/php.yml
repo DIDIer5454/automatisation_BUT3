@@ -46,7 +46,8 @@ jobs:
     - name: test sniffer
       run: ../vendor/bin/phpcs .
       working-directory: tst
-
+    - name: rectification erreur
+      run: ../vendor/bin/phpcbf .
 
           # composer installation
 
