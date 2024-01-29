@@ -48,7 +48,7 @@ jobs:
       working-directory: tst
     - name: rectification erreur
       run: ../vendor/bin/phpcbf .
-
+      working-directory: tst
           # composer installation
 
     # - name: Run test suite
