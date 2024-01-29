@@ -118,9 +118,13 @@ class JsonApiTest extends TestCase
         $this->assertTrue($this->_model->exists(Helper::getPasteId()), 'paste exists before deleting data');
         $paste = $this->_model->read(Helper::getPasteId());
         $file  = tempnam(sys_get_temp_dir(), 'FOO');
-        file_put_contents($file, json_encode(array(
-            'deletetoken' => hash_hmac('sha256', Helper::getPasteId(), $paste['meta']['salt']),
-        )));
+        file_put_contents(
+            $file, json_encode(
+                array(
+                'deletetoken' => hash_hmac('sha256', Helper::getPasteId(), $paste['meta']['salt']),
+                )
+            )
+        );
         Request::setInputStream($file);
         $_SERVER['QUERY_STRING']          = Helper::getPasteId();
         $_GET[Helper::getPasteId()]       = '';
@@ -145,10 +149,14 @@ class JsonApiTest extends TestCase
         $this->assertTrue($this->_model->exists(Helper::getPasteId()), 'paste exists before deleting data');
         $paste = $this->_model->read(Helper::getPasteId());
         $file  = tempnam(sys_get_temp_dir(), 'FOO');
-        file_put_contents($file, json_encode(array(
-            'pasteid'     => Helper::getPasteId(),
-            'deletetoken' => hash_hmac('sha256', Helper::getPasteId(), $paste['meta']['salt']),
-        )));
+        file_put_contents(
+            $file, json_encode(
+                array(
+                'pasteid'     => Helper::getPasteId(),
+                'deletetoken' => hash_hmac('sha256', Helper::getPasteId(), $paste['meta']['salt']),
+                )
+            )
+        );
         Request::setInputStream($file);
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'JSONHttpRequest';
         $_SERVER['REQUEST_METHOD']        = 'POST';
@@ -195,11 +203,13 @@ class JsonApiTest extends TestCase
         new Controller;
         $content = ob_get_contents();
         ob_end_clean();
-        $this->assertEquals(str_replace(
-            '?jsonld=',
-            '/?jsonld=',
-            file_get_contents(PUBLIC_PATH . '/js/paste.jsonld')
-        ), $content, 'outputs data correctly');
+        $this->assertEquals(
+            str_replace(
+                '?jsonld=',
+                '/?jsonld=',
+                file_get_contents(PUBLIC_PATH . '/js/paste.jsonld')
+            ), $content, 'outputs data correctly'
+        );
     }
 
     /**
@@ -212,11 +222,13 @@ class JsonApiTest extends TestCase
         new Controller;
         $content = ob_get_contents();
         ob_end_clean();
-        $this->assertEquals(str_replace(
-            '?jsonld=',
-            '/?jsonld=',
-            file_get_contents(PUBLIC_PATH . '/js/comment.jsonld')
-        ), $content, 'outputs data correctly');
+        $this->assertEquals(
+            str_replace(
+                '?jsonld=',
+                '/?jsonld=',
+                file_get_contents(PUBLIC_PATH . '/js/comment.jsonld')
+            ), $content, 'outputs data correctly'
+        );
     }
 
     /**
@@ -229,11 +241,13 @@ class JsonApiTest extends TestCase
         new Controller;
         $content = ob_get_contents();
         ob_end_clean();
-        $this->assertEquals(str_replace(
-            '?jsonld=',
-            '/?jsonld=',
-            file_get_contents(PUBLIC_PATH . '/js/pastemeta.jsonld')
-        ), $content, 'outputs data correctly');
+        $this->assertEquals(
+            str_replace(
+                '?jsonld=',
+                '/?jsonld=',
+                file_get_contents(PUBLIC_PATH . '/js/pastemeta.jsonld')
+            ), $content, 'outputs data correctly'
+        );
     }
 
     /**
@@ -246,11 +260,13 @@ class JsonApiTest extends TestCase
         new Controller;
         $content = ob_get_contents();
         ob_end_clean();
-        $this->assertEquals(str_replace(
-            '?jsonld=',
-            '/?jsonld=',
-            file_get_contents(PUBLIC_PATH . '/js/commentmeta.jsonld')
-        ), $content, 'outputs data correctly');
+        $this->assertEquals(
+            str_replace(
+                '?jsonld=',
+                '/?jsonld=',
+                file_get_contents(PUBLIC_PATH . '/js/commentmeta.jsonld')
+            ), $content, 'outputs data correctly'
+        );
     }
 
     /**
@@ -263,11 +279,13 @@ class JsonApiTest extends TestCase
         new Controller;
         $content = ob_get_contents();
         ob_end_clean();
-        $this->assertEquals(str_replace(
-            '?jsonld=',
-            '/?jsonld=',
-            file_get_contents(PUBLIC_PATH . '/js/types.jsonld')
-        ), $content, 'outputs data correctly');
+        $this->assertEquals(
+            str_replace(
+                '?jsonld=',
+                '/?jsonld=',
+                file_get_contents(PUBLIC_PATH . '/js/types.jsonld')
+            ), $content, 'outputs data correctly'
+        );
     }
 
     /**

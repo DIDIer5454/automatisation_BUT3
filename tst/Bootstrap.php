@@ -399,7 +399,7 @@ class StorageObjectStub extends StorageObject
 
     public function info(array $options = array())
     {
-        return key_exists('metadata',$this->_info) ? $this->_info['metadata'] : array();
+        return key_exists('metadata', $this->_info) ? $this->_info['metadata'] : array();
     }
 
     public function reload(array $options = array())
@@ -702,7 +702,7 @@ class Helper
     /**
      * get example paste, as stored on server
      *
-     * @param  int $version
+     * @param  int   $version
      * @param  array $meta
      * @return array
      */
@@ -719,7 +719,7 @@ class Helper
     /**
      * get example paste with attachment, as stored on server
      *
-     * @param  int $version
+     * @param  int   $version
      * @param  array $meta
      * @return array
      */
@@ -734,7 +734,7 @@ class Helper
     /**
      * get example paste, as decoded from POST by the request object
      *
-     * @param  int $version
+     * @param  int   $version
      * @param  array $meta
      * @return array
      */
@@ -752,7 +752,7 @@ class Helper
     /**
      * get example paste, as received via POST by the user
      *
-     * @param  int $version
+     * @param  int   $version
      * @param  array $meta
      * @return array
      */
@@ -774,7 +774,7 @@ class Helper
     /**
      * get example comment, as stored on server
      *
-     * @param  int $version
+     * @param  int   $version
      * @param  array $meta
      * @return array
      */
@@ -819,7 +819,7 @@ class Helper
     /**
      * delete directory and all its contents recursively
      *
-     * @param string $path
+     * @param  string $path
      * @throws Exception
      */
     public static function rmDir($path)
@@ -879,7 +879,7 @@ class Helper
      * create ini file
      *
      * @param string $pathToFile
-     * @param array $values
+     * @param array  $values
      */
     public static function createIniFile($pathToFile, array $values)
     {
@@ -920,8 +920,8 @@ class Helper
      * a var_export that returns arrays without line breaks
      * by linus@flowingcreativity.net via php.net
      *
-     * @param mixed $var
-     * @param bool $return
+     * @param  mixed $var
+     * @param  bool  $return
      * @return void|string
      */
     public static function varExportMin($var, $return = false)
@@ -953,9 +953,11 @@ class Helper
         while (false !== ($file = $dir->read())) {
             if (substr($file, -3) === '.js') {
                 self::$hashes[$file] = base64_encode(
-                    hash('sha512', file_get_contents(
-                        PATH . 'js' . DIRECTORY_SEPARATOR . $file
-                    ), true)
+                    hash(
+                        'sha512', file_get_contents(
+                            PATH . 'js' . DIRECTORY_SEPARATOR . $file
+                        ), true
+                    )
                 );
             }
         }

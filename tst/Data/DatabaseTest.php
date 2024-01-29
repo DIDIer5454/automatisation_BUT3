@@ -140,64 +140,78 @@ class DatabaseTest extends TestCase
     public function testGetIbmInstance()
     {
         $this->expectException(PDOException::class);
-        new Database(array(
+        new Database(
+            array(
             'dsn' => 'ibm:', 'usr' => null, 'pwd' => null,
             'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        ));
+            )
+        );
     }
 
     public function testGetInformixInstance()
     {
         $this->expectException(PDOException::class);
-        new Database(array(
+        new Database(
+            array(
             'dsn' => 'informix:', 'usr' => null, 'pwd' => null,
             'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        ));
+            )
+        );
     }
 
     public function testGetMssqlInstance()
     {
         $this->expectException(PDOException::class);
-        new Database(array(
+        new Database(
+            array(
             'dsn' => 'mssql:', 'usr' => null, 'pwd' => null,
             'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        ));
+            )
+        );
     }
 
     public function testGetMysqlInstance()
     {
         $this->expectException(PDOException::class);
-        new Database(array(
+        new Database(
+            array(
             'dsn' => 'mysql:', 'usr' => null, 'pwd' => null,
             'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        ));
+            )
+        );
     }
 
     public function testGetOciInstance()
     {
         $this->expectException(PDOException::class);
-        new Database(array(
+        new Database(
+            array(
             'dsn' => 'oci:', 'usr' => null, 'pwd' => null,
             'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        ));
+            )
+        );
     }
 
     public function testGetPgsqlInstance()
     {
         $this->expectException(PDOException::class);
-        new Database(array(
+        new Database(
+            array(
             'dsn' => 'pgsql:', 'usr' => null, 'pwd' => null,
             'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        ));
+            )
+        );
     }
 
     public function testGetFooInstance()
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(5);
-        new Database(array(
+        new Database(
+            array(
             'dsn' => 'foo:', 'usr' => null, 'pwd' => null, 'opt' => null,
-        ));
+            )
+        );
     }
 
     public function testMissingDsn()

@@ -136,7 +136,7 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException     Exception
      * @expectedExceptionCode 2
      */
     public function testConf()
@@ -886,9 +886,13 @@ class ControllerTest extends TestCase
         $this->_data->create(Helper::getPasteId(), Helper::getPaste());
         $this->assertTrue($this->_data->exists(Helper::getPasteId()), 'paste exists before deleting data');
         $file  = tempnam(sys_get_temp_dir(), 'FOO');
-        file_put_contents($file, json_encode(array(
-            'deletetoken' => 'burnafterreading',
-        )));
+        file_put_contents(
+            $file, json_encode(
+                array(
+                'deletetoken' => 'burnafterreading',
+                )
+            )
+        );
         Request::setInputStream($file);
         $_SERVER['QUERY_STRING']          = Helper::getPasteId();
         $_GET[Helper::getPasteId()]       = '';
