@@ -44,7 +44,7 @@ jobs:
     - name: installation de codesniffe
       run: composer require --dev squizlabs/php_codesniffer
     - name: test sniffer
-      run: ../vendor/bin/phpcs
+      run: ../vendor/bin/phpcs .
       working-directory: tst
 
 
