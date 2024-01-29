@@ -78,10 +78,12 @@ class SymfonyStyle extends OutputStyle
     public function title(string $message)
     {
         $this->autoPrependBlock();
-        $this->writeln([
+        $this->writeln(
+            [
             sprintf('<comment>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
             sprintf('<comment>%s</>', str_repeat('=', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)))),
-        ]);
+            ]
+        );
         $this->newLine();
     }
 
@@ -91,10 +93,12 @@ class SymfonyStyle extends OutputStyle
     public function section(string $message)
     {
         $this->autoPrependBlock();
-        $this->writeln([
+        $this->writeln(
+            [
             sprintf('<comment>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
             sprintf('<comment>%s</>', str_repeat('-', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)))),
-        ]);
+            ]
+        );
         $this->newLine();
     }
 
@@ -191,8 +195,7 @@ class SymfonyStyle extends OutputStyle
         $this->createTable()
             ->setHeaders($headers)
             ->setRows($rows)
-            ->render()
-        ;
+            ->render();
 
         $this->newLine();
     }
@@ -208,8 +211,7 @@ class SymfonyStyle extends OutputStyle
             ->setHorizontal(true)
             ->setHeaders($headers)
             ->setRows($rows)
-            ->render()
-        ;
+            ->render();
 
         $this->newLine();
     }
@@ -477,11 +479,13 @@ class SymfonyStyle extends OutputStyle
 
             $lines = array_merge(
                 $lines,
-                explode(\PHP_EOL, $outputWrapper->wrap(
-                    $message,
-                    $this->lineLength - $prefixLength - $indentLength,
-                    \PHP_EOL
-                ))
+                explode(
+                    \PHP_EOL, $outputWrapper->wrap(
+                        $message,
+                        $this->lineLength - $prefixLength - $indentLength,
+                        \PHP_EOL
+                    )
+                )
             );
 
             if (\count($messages) > 1 && $key < \count($messages) - 1) {

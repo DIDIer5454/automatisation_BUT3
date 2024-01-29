@@ -86,7 +86,8 @@ $object->method1()
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(
                 'strategy',
                 'Forbid multi-line whitespace or move the semicolon to the new line for chained calls.'
@@ -94,7 +95,8 @@ $object->method1()
                 ->setAllowedValues([self::STRATEGY_NO_MULTI_LINE, self::STRATEGY_NEW_LINE_FOR_CHAINED_CALLS])
                 ->setDefault(self::STRATEGY_NO_MULTI_LINE)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void

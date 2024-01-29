@@ -259,7 +259,9 @@ final class NativeTypeDeclarationCasingFixer extends AbstractFixer
         }
     }
 
-    /** @return iterable<int> */
+    /**
+     * @return iterable<int> 
+     */
     private function getNativeTypeHintCandidatesForConstant(Tokens $tokens, int $index): iterable
     {
         $constNameIndex = $this->getConstNameIndex($tokens, $index);
@@ -292,7 +294,9 @@ final class NativeTypeDeclarationCasingFixer extends AbstractFixer
         );
     }
 
-    /** @return iterable<int> */
+    /**
+     * @return iterable<int> 
+     */
     private function getNativeTypeHintCandidatesForProperty(Tokens $tokens, int $index): iterable
     {
         $propertyNameIndex = $index;

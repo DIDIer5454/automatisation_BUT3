@@ -54,15 +54,17 @@ final class DoctrineAnnotationBracesFixer extends AbstractDoctrineAnnotationFixe
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver(array_merge(
-            parent::createConfigurationDefinition()->getOptions(),
-            [
+        return new FixerConfigurationResolver(
+            array_merge(
+                parent::createConfigurationDefinition()->getOptions(),
+                [
                 (new FixerOptionBuilder('syntax', 'Whether to add or remove braces.'))
                     ->setAllowedValues(['with_braces', 'without_braces'])
                     ->setDefault('without_braces')
                     ->getOption(),
-            ]
-        ));
+                ]
+            )
+        );
     }
 
     /**

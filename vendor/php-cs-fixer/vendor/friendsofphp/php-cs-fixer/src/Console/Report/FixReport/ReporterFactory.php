@@ -23,12 +23,16 @@ use Symfony\Component\Finder\Finder as SymfonyFinder;
  */
 final class ReporterFactory
 {
-    /** @var array<string, ReporterInterface> */
+    /**
+     * @var array<string, ReporterInterface> 
+     */
     private array $reporters = [];
 
     public function registerBuiltInReporters(): self
     {
-        /** @var null|list<string> $builtInReporters */
+        /**
+         * @var null|list<string> $builtInReporters 
+         */
         static $builtInReporters;
 
         if (null === $builtInReporters) {

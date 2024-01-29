@@ -38,7 +38,9 @@ class VersionParser
      */
     private static $modifierRegex = '[._-]?(?:(stable|beta|b|RC|alpha|a|patch|pl|p)((?:[.-]?\d+)*+)?)?([.-]?dev)?';
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private static $stabilitiesRegex = 'stable|RC|beta|alpha|dev';
 
     /**
@@ -46,7 +48,7 @@ class VersionParser
      *
      * @param string $version
      *
-     * @return string
+     * @return         string
      * @phpstan-return 'stable'|'RC'|'beta'|'alpha'|'dev'
      */
     public static function parseStability($version)
@@ -93,7 +95,7 @@ class VersionParser
     /**
      * Normalizes a version string to be able to perform comparisons on it.
      *
-     * @param string $version
+     * @param string  $version
      * @param ?string $fullVersion optional complete version string to give more context
      *
      * @throws \UnexpectedValueException
@@ -140,7 +142,7 @@ class VersionParser
                 . (!empty($matches[3]) ? $matches[3] : '.0')
                 . (!empty($matches[4]) ? $matches[4] : '.0');
             $index = 5;
-        // match date(time) based versioning
+            // match date(time) based versioning
         } elseif (preg_match('{^v?(\d{4}(?:[.:-]?\d{2}){1,6}(?:[.:-]?\d{1,3}){0,2})' . self::$modifierRegex . '$}i', $version, $matches)) {
             $version = (string) preg_replace('{\D}', '.', $matches[1]);
             $index = 2;
@@ -570,17 +572,17 @@ class VersionParser
         $stability = strtolower($stability);
 
         switch ($stability) {
-            case 'a':
-                return 'alpha';
-            case 'b':
-                return 'beta';
-            case 'p':
-            case 'pl':
-                return 'patch';
-            case 'rc':
-                return 'RC';
-            default:
-                return $stability;
+        case 'a':
+            return 'alpha';
+        case 'b':
+            return 'beta';
+        case 'p':
+        case 'pl':
+            return 'patch';
+        case 'rc':
+            return 'RC';
+        default:
+            return $stability;
         }
     }
 }

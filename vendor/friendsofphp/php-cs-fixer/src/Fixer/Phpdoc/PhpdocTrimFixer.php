@@ -34,7 +34,8 @@ final class PhpdocTrimFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'PHPDoc should start and end with content, excluding the very first and last line of the docblocks.',
-            [new CodeSample('<?php
+            [new CodeSample(
+                '<?php
 /**
  *
  * Foo must be final class.
@@ -42,7 +43,8 @@ final class PhpdocTrimFixer extends AbstractFixer
  *
  */
 final class Foo {}
-')]
+'
+            )]
         );
     }
 

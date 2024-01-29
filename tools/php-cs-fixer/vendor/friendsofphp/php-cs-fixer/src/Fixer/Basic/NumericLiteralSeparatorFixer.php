@@ -93,7 +93,8 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(
                 'override_existing',
                 'Whether literals already containing underscores should be reformatted.'
@@ -108,7 +109,8 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
                 ->setAllowedValues([self::STRATEGY_USE_SEPARATOR, self::STRATEGY_NO_SEPARATOR])
                 ->setDefault(self::STRATEGY_USE_SEPARATOR)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -168,7 +170,9 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
 
         // All other types
 
-        /** If its a negative value we need an offset */
+        /**
+ * If its a negative value we need an offset 
+*/
         $negativeOffset = static fn ($v) => str_contains($v, '-') ? 1 : 0;
 
         Preg::matchAll('/([0-9-_]+)?((\.)([0-9_]+))?((e)([0-9-_]+))?/i', $value, $result);

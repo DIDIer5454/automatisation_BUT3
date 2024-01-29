@@ -303,13 +303,15 @@ switch($a) {
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('tokens', 'List of tokens to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(self::$availableTokens)])
                 ->setDefault(['extra'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixByToken(Token $token, int $index): void
@@ -414,8 +416,7 @@ switch($a) {
         // find the line break
         $tokenCount = \count($this->tokens);
         for ($end = $index; $end < $tokenCount; ++$end) {
-            if (
-                $this->tokens[$end]->equals('}')
+            if ($this->tokens[$end]->equals('}')
                 || str_contains($this->tokens[$end]->getContent(), "\n")
             ) {
                 break;

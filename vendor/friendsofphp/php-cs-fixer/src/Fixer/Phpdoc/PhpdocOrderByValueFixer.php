@@ -108,8 +108,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
                     $type
                 );
 
-                if (
-                    !$tokens[$index]->isGivenKind(T_DOC_COMMENT)
+                if (!$tokens[$index]->isGivenKind(T_DOC_COMMENT)
                     || 0 === Preg::match($findPattern, $tokens[$index]->getContent())
                 ) {
                     continue;
@@ -194,29 +193,39 @@ final class MyTest extends \PHPUnit_Framework_TestCase
             'uses',
         ];
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('annotations', 'List of annotations to order, e.g. `["covers"]`.'))
-                ->setAllowedTypes([
+                ->setAllowedTypes(
+                    [
                     'array',
-                ])
-                ->setAllowedValues([
+                    ]
+                )
+                ->setAllowedValues(
+                    [
                     new AllowedValueSubset($allowedValues),
-                ])
-                ->setNormalizer(static function (Options $options, $value): array {
-                    $normalized = [];
+                    ]
+                )
+                ->setNormalizer(
+                    static function (Options $options, $value): array {
+                        $normalized = [];
 
-                    foreach ($value as $annotation) {
-                        // since we will be using "strtolower" on the input annotations when building the sorting
-                        // map we must match the type in lower case as well
-                        $normalized[$annotation] = strtolower($annotation);
+                        foreach ($value as $annotation) {
+                            // since we will be using "strtolower" on the input annotations when building the sorting
+                            // map we must match the type in lower case as well
+                            $normalized[$annotation] = strtolower($annotation);
+                        }
+
+                        return $normalized;
                     }
-
-                    return $normalized;
-                })
-                ->setDefault([
+                )
+                ->setDefault(
+                    [
                     'covers',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

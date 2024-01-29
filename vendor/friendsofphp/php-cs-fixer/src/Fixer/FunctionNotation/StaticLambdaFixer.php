@@ -116,14 +116,18 @@ final class StaticLambdaFixer extends AbstractFixer
         $nextIndex = $tokens->getNextMeaningfulToken($index);
 
         while (null !== $nextIndex) {
-            /** @var Token $nextToken */
+            /**
+ * @var Token $nextToken 
+*/
             $nextToken = $tokens[$nextIndex];
 
             if ($nextToken->equalsAny([',', ';', [T_CLOSE_TAG]])) {
                 break;
             }
 
-            /** @var null|array{isStart: bool, type: int} $blockType */
+            /**
+ * @var null|array{isStart: bool, type: int} $blockType 
+*/
             $blockType = Tokens::detectBlockType($nextToken);
 
             if (null !== $blockType && $blockType['isStart']) {
@@ -147,14 +151,17 @@ final class StaticLambdaFixer extends AbstractFixer
                 return true; // directly accessing '$this'
             }
 
-            if ($tokens[$i]->isGivenKind([
+            if ($tokens[$i]->isGivenKind(
+                [
                 T_INCLUDE,                    // loading additional symbols we cannot analyze here
                 T_INCLUDE_ONCE,               // "
                 T_REQUIRE,                    // "
                 T_REQUIRE_ONCE,               // "
                 CT::T_DYNAMIC_VAR_BRACE_OPEN, // "$h = ${$g};" case
                 T_EVAL,                       // "$c = eval('return $this;');" case
-            ])) {
+                ]
+            )
+            ) {
                 return true;
             }
 

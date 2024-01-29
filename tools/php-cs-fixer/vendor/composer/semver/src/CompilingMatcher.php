@@ -20,17 +20,19 @@ use Composer\Semver\Constraint\ConstraintInterface;
 class CompilingMatcher
 {
     /**
-     * @var array
+     * @var         array
      * @phpstan-var array<string, callable>
      */
     private static $compiledCheckerCache = array();
     /**
-     * @var array
+     * @var         array
      * @phpstan-var array<string, bool>
      */
     private static $resultCache = array();
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private static $enabled;
 
     /**
@@ -59,10 +61,10 @@ class CompilingMatcher
     /**
      * Evaluates the expression: $constraint match $operator $version
      *
-     * @param ConstraintInterface $constraint
-     * @param int                 $operator
+     * @param         ConstraintInterface $constraint
+     * @param         int                 $operator
      * @phpstan-param Constraint::OP_*  $operator
-     * @param string              $version
+     * @param         string              $version
      *
      * @return mixed
      */

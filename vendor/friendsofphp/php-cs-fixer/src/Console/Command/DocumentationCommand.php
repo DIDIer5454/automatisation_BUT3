@@ -41,8 +41,7 @@ final class DocumentationCommand extends Command
     {
         $this
             ->setAliases(['doc'])
-            ->setDescription('Dumps the documentation of the project into its "/doc" directory.')
-        ;
+            ->setDescription('Dumps the documentation of the project into its "/doc" directory.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -74,7 +73,9 @@ final class DocumentationCommand extends Command
             );
         }
 
-        /** @var SplFileInfo $file */
+        /**
+ * @var SplFileInfo $file 
+*/
         foreach (
             (new Finder())->files()
                 ->in($locator->getFixersDocumentationDirectoryPath())
@@ -92,7 +93,9 @@ final class DocumentationCommand extends Command
 
         // RuleSet docs.
 
-        /** @var SplFileInfo $file */
+        /**
+ * @var SplFileInfo $file 
+*/
         foreach ((new Finder())->files()->in($locator->getRuleSetsDocumentationDirectoryPath()) as $file) {
             $filesystem->remove($file->getPathname());
         }

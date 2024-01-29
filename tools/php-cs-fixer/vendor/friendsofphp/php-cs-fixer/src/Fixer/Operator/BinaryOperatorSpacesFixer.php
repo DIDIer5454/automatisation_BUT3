@@ -352,45 +352,51 @@ $array = [
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('default', 'Default fix strategy.'))
                 ->setDefault(self::SINGLE_SPACE)
                 ->setAllowedValues(self::$allowedValues)
                 ->getOption(),
             (new FixerOptionBuilder('operators', 'Dictionary of `binary operator` => `fix strategy` values that differ from the default strategy. Supported are: '.Utils::naturalLanguageJoinWithBackticks(self::SUPPORTED_OPERATORS).'.'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([static function (array $option): bool {
-                    foreach ($option as $operator => $value) {
-                        if (!\in_array($operator, self::SUPPORTED_OPERATORS, true)) {
-                            throw new InvalidOptionsException(
-                                sprintf(
-                                    'Unexpected "operators" key, expected any of %s, got "%s".',
-                                    Utils::naturalLanguageJoin(self::SUPPORTED_OPERATORS),
-                                    \gettype($operator).'#'.$operator
-                                )
-                            );
+                ->setAllowedValues(
+                    [static function (array $option): bool {
+                        foreach ($option as $operator => $value) {
+                            if (!\in_array($operator, self::SUPPORTED_OPERATORS, true)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unexpected "operators" key, expected any of %s, got "%s".',
+                                        Utils::naturalLanguageJoin(self::SUPPORTED_OPERATORS),
+                                        \gettype($operator).'#'.$operator
+                                    )
+                                );
+                            }
+
+                            if (!\in_array($value, self::$allowedValues, true)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unexpected value for operator "%s", expected any of %s, got "%s".',
+                                        $operator,
+                                        Utils::naturalLanguageJoin(
+                                            array_map(
+                                                static fn ($value): string => Utils::toString($value),
+                                                self::$allowedValues
+                                            )
+                                        ),
+                                        \is_object($value) ? \get_class($value) : (null === $value ? 'null' : \gettype($value).'#'.$value)
+                                    )
+                                );
+                            }
                         }
 
-                        if (!\in_array($value, self::$allowedValues, true)) {
-                            throw new InvalidOptionsException(
-                                sprintf(
-                                    'Unexpected value for operator "%s", expected any of %s, got "%s".',
-                                    $operator,
-                                    Utils::naturalLanguageJoin(array_map(
-                                        static fn ($value): string => Utils::toString($value),
-                                        self::$allowedValues
-                                    )),
-                                    \is_object($value) ? \get_class($value) : (null === $value ? 'null' : \gettype($value).'#'.$value)
-                                )
-                            );
-                        }
-                    }
-
-                    return true;
-                }])
+                        return true;
+                    }]
+                )
                 ->setDefault([])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixWhiteSpaceAroundOperator(Tokens $tokens, int $index): void
@@ -422,8 +428,7 @@ $array = [
         // schedule for alignment
         $this->alignOperatorTokens[$tokenContent] = $this->operators[$tokenContent];
 
-        if (
-            self::ALIGN === $this->operators[$tokenContent]
+        if (self::ALIGN === $this->operators[$tokenContent]
             || self::ALIGN_BY_SCOPE === $this->operators[$tokenContent]
         ) {
             return;
@@ -431,8 +436,7 @@ $array = [
 
         // fix white space after operator
         if ($tokens[$index + 1]->isWhitespace()) {
-            if (
-                self::ALIGN_SINGLE_SPACE_MINIMAL === $this->operators[$tokenContent]
+            if (self::ALIGN_SINGLE_SPACE_MINIMAL === $this->operators[$tokenContent]
                 || self::ALIGN_SINGLE_SPACE_MINIMAL_BY_SCOPE === $this->operators[$tokenContent]
             ) {
                 $tokens[$index + 1] = new Token([T_WHITESPACE, ' ']);
@@ -568,8 +572,7 @@ $array = [
             }
 
             // for all tokens that should be aligned but do not have anything to align with, fix spacing if needed
-            if (
-                self::ALIGN_SINGLE_SPACE === $alignStrategy
+            if (self::ALIGN_SINGLE_SPACE === $alignStrategy
                 || self::ALIGN_SINGLE_SPACE_MINIMAL === $alignStrategy
                 || self::ALIGN_SINGLE_SPACE_BY_SCOPE === $alignStrategy
                 || self::ALIGN_SINGLE_SPACE_MINIMAL_BY_SCOPE === $alignStrategy
@@ -612,8 +615,7 @@ $array = [
                 $newLineFoundSinceLastPlaceholder = true;
             }
 
-            if (
-                strtolower($content) === $tokenContent
+            if (strtolower($content) === $tokenContent
                 && $this->tokensAnalyzer->isBinaryOperator($index)
                 && ('=' !== $content || !$this->isEqualPartOfDeclareStatement($tokens, $index))
                 && $newLineFoundSinceLastPlaceholder
@@ -700,7 +702,9 @@ $array = [
         $yieldFoundSinceLastPlaceholder = false;
 
         for ($index = $startAt; $index < $endAt; ++$index) {
-            /** @var Token $token */
+            /**
+ * @var Token $token 
+*/
             $token = $tokens[$index];
             $content = $token->getContent();
 
@@ -837,8 +841,7 @@ $array = [
             return;
         }
 
-        if (
-            self::ALIGN_SINGLE_SPACE_MINIMAL !== $alignStrategy && self::ALIGN_SINGLE_SPACE_MINIMAL_BY_SCOPE !== $alignStrategy
+        if (self::ALIGN_SINGLE_SPACE_MINIMAL !== $alignStrategy && self::ALIGN_SINGLE_SPACE_MINIMAL_BY_SCOPE !== $alignStrategy
             || $tokens[$tokens->getPrevNonWhitespace($index - 1)]->isComment()
         ) {
             return;
@@ -872,8 +875,7 @@ $array = [
             foreach ($lines as $index => $line) {
                 if (substr_count($line, $placeholder) > 0) {
                     $groups[$groupIndex][] = $index;
-                } elseif (
-                    self::ALIGN_BY_SCOPE !== $alignStrategy
+                } elseif (self::ALIGN_BY_SCOPE !== $alignStrategy
                     && self::ALIGN_SINGLE_SPACE_BY_SCOPE !== $alignStrategy
                     && self::ALIGN_SINGLE_SPACE_MINIMAL_BY_SCOPE !== $alignStrategy
                 ) {
@@ -893,15 +895,13 @@ $array = [
                         $currentPosition = strpos($lines[$index], $placeholder);
                         $before = substr($lines[$index], 0, $currentPosition);
 
-                        if (
-                            self::ALIGN_SINGLE_SPACE === $alignStrategy
+                        if (self::ALIGN_SINGLE_SPACE === $alignStrategy
                             || self::ALIGN_SINGLE_SPACE_BY_SCOPE === $alignStrategy
                         ) {
                             if (!str_ends_with($before, ' ')) { // if last char of before-content is not ' '; add it
                                 $before .= ' ';
                             }
-                        } elseif (
-                            self::ALIGN_SINGLE_SPACE_MINIMAL === $alignStrategy
+                        } elseif (self::ALIGN_SINGLE_SPACE_MINIMAL === $alignStrategy
                             || self::ALIGN_SINGLE_SPACE_MINIMAL_BY_SCOPE === $alignStrategy
                         ) {
                             if (!Preg::match('/^\h+$/', $before)) { // if indent; do not move, leave to other fixer

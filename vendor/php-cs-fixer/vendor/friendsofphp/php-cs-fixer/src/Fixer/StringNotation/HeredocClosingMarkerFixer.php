@@ -92,7 +92,8 @@ final class HeredocClosingMarkerFixer extends AbstractFixer implements Configura
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(
                 'closing_marker',
                 'Preferred closing marker.'
@@ -114,7 +115,8 @@ final class HeredocClosingMarkerFixer extends AbstractFixer implements Configura
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -177,12 +179,16 @@ final class HeredocClosingMarkerFixer extends AbstractFixer implements Configura
             ? '\''
             : (true === $this->configuration['explicit_heredoc_style'] ? '"' : '');
 
-        return [new Token([
+        return [new Token(
+            [
             $startToken->getId(),
             Preg::replace('/<<<\h*\K["\']?[^\s"\']+["\']?/', $markerQuote.$newClosingMarker.$markerQuote, $startToken->getContent()),
-        ]), new Token([
-            $endToken->getId(),
-            Preg::replace('/\S+/', $newClosingMarker, $endToken->getContent()),
-        ])];
+            ]
+        ), new Token(
+            [
+                $endToken->getId(),
+                Preg::replace('/\S+/', $newClosingMarker, $endToken->getContent()),
+                ]
+        )];
     }
 }

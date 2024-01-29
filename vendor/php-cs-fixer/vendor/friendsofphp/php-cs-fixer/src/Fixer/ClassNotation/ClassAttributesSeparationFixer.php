@@ -189,48 +189,54 @@ class Sample
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('elements', 'Dictionary of `const|method|property|trait_import|case` => `none|one|only_if_meta` values.'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([static function (array $option): bool {
-                    foreach ($option as $type => $spacing) {
-                        $supportedTypes = ['const', 'method', 'property', 'trait_import', 'case'];
+                ->setAllowedValues(
+                    [static function (array $option): bool {
+                        foreach ($option as $type => $spacing) {
+                            $supportedTypes = ['const', 'method', 'property', 'trait_import', 'case'];
 
-                        if (!\in_array($type, $supportedTypes, true)) {
-                            throw new InvalidOptionsException(
-                                sprintf(
-                                    'Unexpected element type, expected any of %s, got "%s".',
-                                    Utils::naturalLanguageJoin($supportedTypes),
-                                    \gettype($type).'#'.$type
-                                )
-                            );
+                            if (!\in_array($type, $supportedTypes, true)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unexpected element type, expected any of %s, got "%s".',
+                                        Utils::naturalLanguageJoin($supportedTypes),
+                                        \gettype($type).'#'.$type
+                                    )
+                                );
+                            }
+
+                            $supportedSpacings = [self::SPACING_NONE, self::SPACING_ONE, self::SPACING_ONLY_IF_META];
+
+                            if (!\in_array($spacing, $supportedSpacings, true)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unexpected spacing for element type "%s", expected any of %s, got "%s".',
+                                        $spacing,
+                                        Utils::naturalLanguageJoin($supportedSpacings),
+                                        \is_object($spacing) ? \get_class($spacing) : (null === $spacing ? 'null' : \gettype($spacing).'#'.$spacing)
+                                    )
+                                );
+                            }
                         }
 
-                        $supportedSpacings = [self::SPACING_NONE, self::SPACING_ONE, self::SPACING_ONLY_IF_META];
-
-                        if (!\in_array($spacing, $supportedSpacings, true)) {
-                            throw new InvalidOptionsException(
-                                sprintf(
-                                    'Unexpected spacing for element type "%s", expected any of %s, got "%s".',
-                                    $spacing,
-                                    Utils::naturalLanguageJoin($supportedSpacings),
-                                    \is_object($spacing) ? \get_class($spacing) : (null === $spacing ? 'null' : \gettype($spacing).'#'.$spacing)
-                                )
-                            );
-                        }
-                    }
-
-                    return true;
-                }])
-                ->setDefault([
+                        return true;
+                    }]
+                )
+                ->setDefault(
+                    [
                     'const' => self::SPACING_ONE,
                     'method' => self::SPACING_ONE,
                     'property' => self::SPACING_ONE,
                     'trait_import' => self::SPACING_NONE,
                     'case' => self::SPACING_NONE,
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -276,8 +282,7 @@ class Sample
             }
 
             // there are 2 cases:
-            if (
-                1 === $element['start'] - $nonWhiteAbove
+            if (1 === $element['start'] - $nonWhiteAbove
                 || $tokens[$nonWhiteAbove - 1]->isWhitespace() && substr_count($tokens[$nonWhiteAbove - 1]->getContent(), "\n") > 0
                 || $tokens[$nonWhiteAbove + 1]->isWhitespace() && substr_count($tokens[$nonWhiteAbove + 1]->getContent(), "\n") > 0
             ) {
@@ -387,20 +392,24 @@ class Sample
         }
 
         if ($lineBreakCount < $reqLineCount) {
-            $tokens[$startIndex] = new Token([
+            $tokens[$startIndex] = new Token(
+                [
                 T_WHITESPACE,
                 str_repeat($lineEnding, $reqLineCount - $lineBreakCount).$tokens[$startIndex]->getContent(),
-            ]);
+                ]
+            );
 
             return;
         }
 
         // $lineCount = > $reqLineCount : check the one Token case first since this one will be true most of the time
         if (1 === $numbOfWhiteTokens) {
-            $tokens[$startIndex] = new Token([
+            $tokens[$startIndex] = new Token(
+                [
                 T_WHITESPACE,
                 Preg::replace('/\r\n|\n/', '', $tokens[$startIndex]->getContent(), $lineBreakCount - $reqLineCount),
-            ]);
+                ]
+            );
 
             return;
         }
@@ -412,10 +421,12 @@ class Sample
             $tokenLineCount = substr_count($tokens[$i]->getContent(), "\n");
 
             if ($tokenLineCount > 0) {
-                $tokens[$i] = new Token([
+                $tokens[$i] = new Token(
+                    [
                     T_WHITESPACE,
                     Preg::replace('/\r\n|\n/', '', $tokens[$i]->getContent(), min($toReplaceCount, $tokenLineCount)),
-                ]);
+                    ]
+                );
                 $toReplaceCount -= $tokenLineCount;
             }
         }

@@ -12,8 +12,8 @@ use UnitEnum;
 use function in_array;
 
 /**
- * @template T of UnitEnum|string|int
- * @template V of string|int
+ * @template   T of UnitEnum|string|int
+ * @template   V of string|int
  * @implements ArrayAccess<string,mixed>
  */
 final class Token implements ArrayAccess
@@ -22,7 +22,7 @@ final class Token implements ArrayAccess
      * The string value of the token in the input string
      *
      * @readonly
-     * @var V
+     * @var      V
      */
     public $value;
 
@@ -30,7 +30,7 @@ final class Token implements ArrayAccess
      * The type of the token (identifier, numeric, string, input parameter, none)
      *
      * @readonly
-     * @var T|null
+     * @var      T|null
      */
     public $type;
 
@@ -38,7 +38,7 @@ final class Token implements ArrayAccess
      * The position of the token in the input string
      *
      * @readonly
-     * @var int
+     * @var      int
      */
     public $position;
 
@@ -53,7 +53,9 @@ final class Token implements ArrayAccess
         $this->position = $position;
     }
 
-    /** @param T ...$types */
+    /**
+     * @param T ...$types 
+     */
     public function isA(...$types): bool
     {
         return in_array($this->type, $types, true);
@@ -81,7 +83,7 @@ final class Token implements ArrayAccess
      *
      * @param O $offset
      *
-     * @return mixed
+     * @return       mixed
      * @psalm-return (
      *     O is 'value'
      *     ? V

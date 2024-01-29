@@ -82,12 +82,14 @@ final class IncrementStyleFixer extends AbstractIncrementOperatorFixer implement
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('style', 'Whether to use pre- or post-increment and decrement operators.'))
                 ->setAllowedValues([self::STYLE_PRE, self::STYLE_POST])
                 ->setDefault(self::STYLE_PRE)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -141,7 +143,8 @@ final class IncrementStyleFixer extends AbstractIncrementOperatorFixer implement
         $nextIndex = $tokens->getNextMeaningfulToken($index);
         $nextToken = $tokens[$nextIndex];
 
-        while ($nextToken->equalsAny([
+        while ($nextToken->equalsAny(
+            [
             '$',
             '(',
             '[',
@@ -152,7 +155,8 @@ final class IncrementStyleFixer extends AbstractIncrementOperatorFixer implement
             [T_STATIC],
             [T_STRING],
             [T_VARIABLE],
-        ])) {
+            ]
+        )) {
             $blockType = Tokens::detectBlockType($nextToken);
 
             if (null !== $blockType) {

@@ -9,7 +9,7 @@ namespace Psr\EventDispatcher;
 interface ListenerProviderInterface
 {
     /**
-     * @param object $event
+     * @param  object $event
      *   An event for which to return the relevant listeners.
      * @return iterable[callable]
      *   An iterable (array, iterator, or generator) of callables.  Each

@@ -17,4 +17,6 @@ namespace PhpCsFixer\Fixer;
 /**
  * @internal
  */
-interface ExperimentalFixerInterface extends FixerInterface {}
+interface ExperimentalFixerInterface extends FixerInterface
+{
+}

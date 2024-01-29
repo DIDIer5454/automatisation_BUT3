@@ -38,11 +38,17 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
     public string $maxMemoryUsage = 'n/a';
     public InputInterface $input;
     public OutputInterface $output;
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed> 
+     */
     public array $arguments;
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed> 
+     */
     public array $options;
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed> 
+     */
     public array $interactiveInputs = [];
     public array $handledSignals = [];
 
@@ -62,9 +68,11 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
         parent::__construct($command->getName());
 
         // init below enables calling {@see parent::run()}
-        [$code, $processTitle, $ignoreValidationErrors] = \Closure::bind(function () {
-            return [$this->code, $this->processTitle, $this->ignoreValidationErrors];
-        }, $command, Command::class)();
+        [$code, $processTitle, $ignoreValidationErrors] = \Closure::bind(
+            function () {
+                return [$this->code, $this->processTitle, $this->ignoreValidationErrors];
+            }, $command, Command::class
+        )();
 
         if (\is_callable($code)) {
             $this->setCode($code);
@@ -173,15 +181,17 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
     {
         $this->command->setCode($code);
 
-        return parent::setCode(function (InputInterface $input, OutputInterface $output) use ($code): int {
-            $event = $this->stopwatch->start($this->getName().'.code');
+        return parent::setCode(
+            function (InputInterface $input, OutputInterface $output) use ($code): int {
+                $event = $this->stopwatch->start($this->getName().'.code');
 
-            $this->exitCode = $code($input, $output);
+                $this->exitCode = $code($input, $output);
 
-            $event->stop();
+                $event->stop();
 
-            return $this->exitCode;
-        });
+                return $this->exitCode;
+            }
+        );
     }
 
     /**

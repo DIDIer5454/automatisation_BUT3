@@ -220,7 +220,8 @@ final class TypeExpression
             return $aliases[$type];
         }
 
-        if (\in_array($type, [
+        if (\in_array(
+            $type, [
             'array',
             'bool',
             'callable',
@@ -234,7 +235,9 @@ final class TypeExpression
             'resource',
             'string',
             'void',
-        ], true)) {
+            ], true
+        )
+        ) {
             return $type;
         }
 

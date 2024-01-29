@@ -74,8 +74,7 @@ trait Indentation
     {
         $token = $tokens[$index];
 
-        if (
-            $token->isGivenKind(T_OPEN_TAG)
+        if ($token->isGivenKind(T_OPEN_TAG)
             && isset($tokens[$index + 1])
             && !$tokens[$index + 1]->isWhitespace()
             && Preg::match('/\R/', $token->getContent())

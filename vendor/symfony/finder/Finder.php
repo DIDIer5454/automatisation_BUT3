@@ -626,9 +626,15 @@ class Finder implements \IteratorAggregate, \Countable
 
         $iterator = new \AppendIterator();
         foreach ($this->dirs as $dir) {
-            $iterator->append(new \IteratorIterator(new LazyIterator(function () use ($dir) {
-                return $this->searchInDirectory($dir);
-            })));
+            $iterator->append(
+                new \IteratorIterator(
+                    new LazyIterator(
+                        function () use ($dir) {
+                            return $this->searchInDirectory($dir);
+                        }
+                    )
+                )
+            );
         }
 
         foreach ($this->iterators as $it) {
@@ -714,20 +720,20 @@ class Finder implements \IteratorAggregate, \Countable
 
         foreach ($this->depths as $comparator) {
             switch ($comparator->getOperator()) {
-                case '>':
-                    $minDepth = $comparator->getTarget() + 1;
-                    break;
-                case '>=':
-                    $minDepth = $comparator->getTarget();
-                    break;
-                case '<':
-                    $maxDepth = $comparator->getTarget() - 1;
-                    break;
-                case '<=':
-                    $maxDepth = $comparator->getTarget();
-                    break;
-                default:
-                    $minDepth = $maxDepth = $comparator->getTarget();
+            case '>':
+                $minDepth = $comparator->getTarget() + 1;
+                break;
+            case '>=':
+                $minDepth = $comparator->getTarget();
+                break;
+            case '<':
+                $maxDepth = $comparator->getTarget() - 1;
+                break;
+            case '<=':
+                $maxDepth = $comparator->getTarget();
+                break;
+            default:
+                $minDepth = $maxDepth = $comparator->getTarget();
             }
         }
 

@@ -27,7 +27,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 #[\Attribute(\Attribute::TARGET_METHOD)]
 final class SubscribedService
 {
-    /** @var object[] */
+    /**
+     * @var object[] 
+     */
     public array $attributes;
 
     /**

@@ -143,7 +143,8 @@ function fnc($foo) {}
     private function removeExtraBlankLine(Line $current, Line $next): void
     {
         if (!$current->isTheEnd() && !$current->containsUsefulContent()
-            && !$next->isTheEnd() && !$next->containsUsefulContent()) {
+            && !$next->isTheEnd() && !$next->containsUsefulContent()
+        ) {
             $current->remove();
         }
     }

@@ -55,7 +55,8 @@ final class DumpCompletionCommand extends Command
         $supportedShells = implode(', ', $this->getSupportedShells());
 
         $this
-            ->setHelp(<<<EOH
+            ->setHelp(
+                <<<EOH
 The <info>%command.name%</> command dumps the shell completion script required
 to use shell autocompletion (currently, {$supportedShells} completion are supported).
 
@@ -85,8 +86,7 @@ Add this to the end of your shell configuration file (e.g. <info>"{$rcFile}"</>)
 EOH
             )
             ->addArgument('shell', InputArgument::OPTIONAL, 'The shell type (e.g. "bash"), the value of the "$SHELL" env var will be used if this is not given', null, $this->getSupportedShells(...))
-            ->addOption('debug', null, InputOption::VALUE_NONE, 'Tail the completion debug log')
-        ;
+            ->addOption('debug', null, InputOption::VALUE_NONE, 'Tail the completion debug log');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -133,9 +133,11 @@ EOH
             touch($debugFile);
         }
         $process = new Process(['tail', '-f', $debugFile], null, null, null, 0);
-        $process->run(function (string $type, string $line) use ($output): void {
-            $output->write($line);
-        });
+        $process->run(
+            function (string $type, string $line) use ($output): void {
+                $output->write($line);
+            }
+        );
     }
 
     /**

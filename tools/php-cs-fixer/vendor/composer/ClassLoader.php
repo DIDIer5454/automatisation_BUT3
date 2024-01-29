@@ -42,57 +42,65 @@ namespace Composer\Autoload;
  */
 class ClassLoader
 {
-    /** @var ?string */
+    /**
+     * @var ?string 
+     */
     private $vendorDir;
 
     // PSR-4
     /**
-     * @var array[]
+     * @var       array[]
      * @psalm-var array<string, array<string, int>>
      */
     private $prefixLengthsPsr4 = array();
     /**
-     * @var array[]
+     * @var       array[]
      * @psalm-var array<string, array<int, string>>
      */
     private $prefixDirsPsr4 = array();
     /**
-     * @var array[]
+     * @var       array[]
      * @psalm-var array<string, string>
      */
     private $fallbackDirsPsr4 = array();
 
     // PSR-0
     /**
-     * @var array[]
+     * @var       array[]
      * @psalm-var array<string, array<string, string[]>>
      */
     private $prefixesPsr0 = array();
     /**
-     * @var array[]
+     * @var       array[]
      * @psalm-var array<string, string>
      */
     private $fallbackDirsPsr0 = array();
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $useIncludePath = false;
 
     /**
-     * @var string[]
+     * @var       string[]
      * @psalm-var array<string, string>
      */
     private $classMap = array();
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $classMapAuthoritative = false;
 
     /**
-     * @var bool[]
+     * @var       bool[]
      * @psalm-var array<string, bool>
      */
     private $missingClasses = array();
 
-    /** @var ?string */
+    /**
+     * @var ?string 
+     */
     private $apcuPrefix;
 
     /**
@@ -121,7 +129,7 @@ class ClassLoader
     }
 
     /**
-     * @return array[]
+     * @return       array[]
      * @psalm-return array<string, array<int, string>>
      */
     public function getPrefixesPsr4()
@@ -130,7 +138,7 @@ class ClassLoader
     }
 
     /**
-     * @return array[]
+     * @return       array[]
      * @psalm-return array<string, string>
      */
     public function getFallbackDirs()
@@ -139,7 +147,7 @@ class ClassLoader
     }
 
     /**
-     * @return array[]
+     * @return       array[]
      * @psalm-return array<string, string>
      */
     public function getFallbackDirsPsr4()
@@ -148,7 +156,7 @@ class ClassLoader
     }
 
     /**
-     * @return string[] Array of classname => path
+     * @return       string[] Array of classname => path
      * @psalm-return array<string, string>
      */
     public function getClassMap()
@@ -157,7 +165,7 @@ class ClassLoader
     }
 
     /**
-     * @param string[] $classMap Class to filename map
+     * @param       string[] $classMap Class to filename map
      * @psalm-param array<string, string> $classMap
      *
      * @return void
@@ -419,7 +427,7 @@ class ClassLoader
     /**
      * Loads the given class or interface.
      *
-     * @param  string    $class The name of the class
+     * @param  string $class The name of the class
      * @return true|null True if loaded, null otherwise
      */
     public function loadClass($class)
@@ -486,8 +494,8 @@ class ClassLoader
     }
 
     /**
-     * @param  string       $class
-     * @param  string       $ext
+     * @param  string $class
+     * @param  string $ext
      * @return string|false
      */
     private function findFileWithExtension($class, $ext)
@@ -562,8 +570,8 @@ class ClassLoader
  *
  * Prevents access to $this/self from included files.
  *
- * @param  string $file
- * @return void
+ * @param   string $file
+ * @return  void
  * @private
  */
 function includeFile($file)

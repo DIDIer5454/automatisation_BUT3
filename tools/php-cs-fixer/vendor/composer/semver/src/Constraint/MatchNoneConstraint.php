@@ -16,7 +16,9 @@ namespace Composer\Semver\Constraint;
  */
 class MatchNoneConstraint implements ConstraintInterface
 {
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     protected $prettyString;
 
     /**

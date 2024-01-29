@@ -46,20 +46,22 @@ final class HelpCommand extends BaseHelpCommand
         if (null !== $allowed) {
             $allowed = array_filter($allowed, static fn ($value): bool => !$value instanceof \Closure);
 
-            usort($allowed, static function ($valueA, $valueB): int {
-                if ($valueA instanceof AllowedValueSubset) {
-                    return -1;
-                }
+            usort(
+                $allowed, static function ($valueA, $valueB): int {
+                    if ($valueA instanceof AllowedValueSubset) {
+                        return -1;
+                    }
 
-                if ($valueB instanceof AllowedValueSubset) {
-                    return 1;
-                }
+                    if ($valueB instanceof AllowedValueSubset) {
+                        return 1;
+                    }
 
-                return strcasecmp(
-                    Utils::toString($valueA),
-                    Utils::toString($valueB)
-                );
-            });
+                    return strcasecmp(
+                        Utils::toString($valueA),
+                        Utils::toString($valueB)
+                    );
+                }
+            );
 
             if (0 === \count($allowed)) {
                 $allowed = null;

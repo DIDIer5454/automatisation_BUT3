@@ -16,7 +16,9 @@ use ReflectionProperty;
  */
 class SimpleAnnotationReader implements Reader
 {
-    /** @var DocParser */
+    /**
+     * @var DocParser 
+     */
     private $parser;
 
     /**

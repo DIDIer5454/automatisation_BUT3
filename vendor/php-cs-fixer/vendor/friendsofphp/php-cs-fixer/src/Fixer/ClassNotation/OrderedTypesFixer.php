@@ -112,7 +112,8 @@ interface Bar
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('sort_algorithm', 'Whether the types should be sorted alphabetically, or not sorted.'))
                 ->setAllowedValues(['alpha', 'none'])
                 ->setDefault('alpha')
@@ -125,7 +126,8 @@ interface Bar
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -174,8 +176,7 @@ interface Bar
                 continue;
             }
 
-            if (
-                $token->isGivenKind(T_FN)
+            if ($token->isGivenKind(T_FN)
                 || ($token->isGivenKind(T_FUNCTION) && !isset($elements[$index]))
             ) {
                 $elements[$index] = 'method';
@@ -277,13 +278,15 @@ interface Bar
         // If the $types array is coming from a DNF type, then we have parts
         // which are also array. If so, we sort those sub-types first before
         // running the sorting algorithm to the entire $types array.
-        $sortedTypes = array_map(function ($subType) {
-            if (\is_array($subType)) {
-                return $this->runTypesThroughSortingAlgorithm($subType);
-            }
+        $sortedTypes = array_map(
+            function ($subType) {
+                if (\is_array($subType)) {
+                    return $this->runTypesThroughSortingAlgorithm($subType);
+                }
 
-            return $subType;
-        }, $originalTypes);
+                return $subType;
+            }, $originalTypes
+        );
 
         $sortedTypes = $this->runTypesThroughSortingAlgorithm($sortedTypes);
 
@@ -308,13 +311,15 @@ interface Bar
      */
     private function collectDisjunctiveNormalFormTypes(string $type): array
     {
-        $types = array_map(static function (string $subType) {
-            if (str_starts_with($subType, '(')) {
-                return explode('&', trim($subType, '()'));
-            }
+        $types = array_map(
+            static function (string $subType) {
+                if (str_starts_with($subType, '(')) {
+                    return explode('&', trim($subType, '()'));
+                }
 
-            return $subType;
-        }, explode('|', $type));
+                return $subType;
+            }, explode('|', $type)
+        );
 
         return [$types, '|'];
     }
@@ -344,36 +349,38 @@ interface Bar
     {
         $normalizeType = static fn (string $type): string => Preg::replace('/^\\\\?/', '', $type);
 
-        usort($types, function ($a, $b) use ($normalizeType): int {
-            if (\is_array($a)) {
-                $a = implode('&', $a);
-            }
-
-            if (\is_array($b)) {
-                $b = implode('&', $b);
-            }
-
-            $a = $normalizeType($a);
-            $b = $normalizeType($b);
-            $lowerCaseA = strtolower($a);
-            $lowerCaseB = strtolower($b);
-
-            if ('none' !== $this->configuration['null_adjustment']) {
-                if ('null' === $lowerCaseA && 'null' !== $lowerCaseB) {
-                    return 'always_last' === $this->configuration['null_adjustment'] ? 1 : -1;
+        usort(
+            $types, function ($a, $b) use ($normalizeType): int {
+                if (\is_array($a)) {
+                    $a = implode('&', $a);
                 }
 
-                if ('null' !== $lowerCaseA && 'null' === $lowerCaseB) {
-                    return 'always_last' === $this->configuration['null_adjustment'] ? -1 : 1;
+                if (\is_array($b)) {
+                    $b = implode('&', $b);
                 }
-            }
 
-            if ('alpha' === $this->configuration['sort_algorithm']) {
-                return true === $this->configuration['case_sensitive'] ? $a <=> $b : strcasecmp($a, $b);
-            }
+                $a = $normalizeType($a);
+                $b = $normalizeType($b);
+                $lowerCaseA = strtolower($a);
+                $lowerCaseB = strtolower($b);
 
-            return 0;
-        });
+                if ('none' !== $this->configuration['null_adjustment']) {
+                    if ('null' === $lowerCaseA && 'null' !== $lowerCaseB) {
+                        return 'always_last' === $this->configuration['null_adjustment'] ? 1 : -1;
+                    }
+
+                    if ('null' !== $lowerCaseA && 'null' === $lowerCaseB) {
+                        return 'always_last' === $this->configuration['null_adjustment'] ? -1 : 1;
+                    }
+                }
+
+                if ('alpha' === $this->configuration['sort_algorithm']) {
+                    return true === $this->configuration['case_sensitive'] ? $a <=> $b : strcasecmp($a, $b);
+                }
+
+                return 0;
+            }
+        );
 
         return $types;
     }

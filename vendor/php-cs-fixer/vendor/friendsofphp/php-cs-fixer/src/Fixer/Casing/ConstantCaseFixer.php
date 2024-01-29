@@ -71,12 +71,14 @@ final class ConstantCaseFixer extends AbstractFixer implements ConfigurableFixer
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('case', 'Whether to use the `upper` or `lower` case syntax.'))
                 ->setAllowedValues(['upper', 'lower'])
                 ->setDefault('lower')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -88,8 +90,7 @@ final class ConstantCaseFixer extends AbstractFixer implements ConfigurableFixer
                 continue;
             }
 
-            if (
-                $this->isNeighbourAccepted($tokens, $tokens->getPrevMeaningfulToken($index))
+            if ($this->isNeighbourAccepted($tokens, $tokens->getPrevMeaningfulToken($index))
                 && $this->isNeighbourAccepted($tokens, $tokens->getNextMeaningfulToken($index))
                 && !$this->isEnumCaseName($tokens, $index)
             ) {

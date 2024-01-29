@@ -94,7 +94,8 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(self::OPTION_MUTE_DEPRECATION_ERROR, 'Whether to add `@` in deprecation notices.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
@@ -107,7 +108,8 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
                 ->setAllowedTypes(['array'])
                 ->setDefault([])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -116,9 +118,11 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
-        $excludedFunctions = array_map(static function (string $function): string {
-            return strtolower($function);
-        }, $this->configuration[self::OPTION_NOISE_REMAINING_USAGES_EXCLUDE]);
+        $excludedFunctions = array_map(
+            static function (string $function): string {
+                return strtolower($function);
+            }, $this->configuration[self::OPTION_NOISE_REMAINING_USAGES_EXCLUDE]
+        );
 
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
             $token = $tokens[$index];

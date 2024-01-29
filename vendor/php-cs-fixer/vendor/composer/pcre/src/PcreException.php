@@ -14,7 +14,7 @@ namespace Composer\Pcre;
 class PcreException extends \RuntimeException
 {
     /**
-     * @param  string $function
+     * @param  string          $function
      * @param  string|string[] $pattern
      * @return self
      */

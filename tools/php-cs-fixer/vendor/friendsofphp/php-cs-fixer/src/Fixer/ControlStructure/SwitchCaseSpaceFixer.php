@@ -55,7 +55,9 @@ final class SwitchCaseSpaceFixer extends AbstractFixer
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
-        /** @var SwitchAnalysis $analysis */
+        /**
+ * @var SwitchAnalysis $analysis 
+*/
         foreach (ControlCaseStructuresAnalyzer::findControlStructures($tokens, [T_SWITCH]) as $analysis) {
             $default = $analysis->getDefaultAnalysis();
 

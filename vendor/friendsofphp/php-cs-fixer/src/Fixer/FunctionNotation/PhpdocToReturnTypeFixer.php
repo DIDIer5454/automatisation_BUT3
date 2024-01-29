@@ -143,8 +143,7 @@ final class Foo {
         }
 
         for ($index = $tokens->count() - 1; 0 < $index; --$index) {
-            if (
-                !$tokens[$index]->isGivenKind(T_FUNCTION)
+            if (!$tokens[$index]->isGivenKind(T_FUNCTION)
                 && (\PHP_VERSION_ID < 70400 || !$tokens[$index]->isGivenKind(T_FN))
             ) {
                 continue;

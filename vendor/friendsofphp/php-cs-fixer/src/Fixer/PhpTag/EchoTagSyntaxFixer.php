@@ -30,25 +30,39 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const OPTION_FORMAT = 'format';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const OPTION_SHORTEN_SIMPLE_STATEMENTS_ONLY = 'shorten_simple_statements_only';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const OPTION_LONG_FUNCTION = 'long_function';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const FORMAT_SHORT = 'short';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const FORMAT_LONG = 'long';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const LONG_FUNCTION_ECHO = 'echo';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const LONG_FUNCTION_PRINT = 'print';
 
     private const SUPPORTED_FORMAT_OPTIONS = [
@@ -115,7 +129,8 @@ EOT
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(self::OPTION_FORMAT, 'The desired language construct.'))
                 ->setAllowedValues(self::SUPPORTED_FORMAT_OPTIONS)
                 ->setDefault(self::FORMAT_LONG)
@@ -128,7 +143,8 @@ EOT
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

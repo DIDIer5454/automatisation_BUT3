@@ -61,7 +61,8 @@ final class CombineConsecutiveIssetsFixer extends AbstractFixer
 
         for ($index = 1; $index < $tokenCount; ++$index) {
             if (!$tokens[$index]->isGivenKind(T_ISSET)
-                || !$tokens[$tokens->getPrevMeaningfulToken($index)]->equalsAny(['(', '{', ';', '=', [T_OPEN_TAG], [T_BOOLEAN_AND], [T_BOOLEAN_OR]])) {
+                || !$tokens[$tokens->getPrevMeaningfulToken($index)]->equalsAny(['(', '{', ';', '=', [T_OPEN_TAG], [T_BOOLEAN_AND], [T_BOOLEAN_OR]])
+            ) {
                 continue;
             }
 

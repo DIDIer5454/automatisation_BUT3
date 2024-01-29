@@ -73,8 +73,7 @@ EOT
         foreach ($tokens as $index => $token) {
             $originalContent = $token->getContent();
 
-            if (
-                !$token->isGivenKind(T_DOC_COMMENT)
+            if (!$token->isGivenKind(T_DOC_COMMENT)
                 && !($token->isGivenKind(T_COMMENT) && str_starts_with($originalContent, '/*'))
             ) {
                 continue;

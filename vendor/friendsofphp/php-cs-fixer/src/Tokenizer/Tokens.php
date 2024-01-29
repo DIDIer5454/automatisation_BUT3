@@ -453,9 +453,11 @@ class Tokens extends \SplFixedArray
             $elements[$kind] = [];
         }
 
-        $possibleKinds = array_filter($possibleKinds, function ($kind): bool {
-            return $this->isTokenKindFound($kind);
-        });
+        $possibleKinds = array_filter(
+            $possibleKinds, function ($kind): bool {
+                return $this->isTokenKindFound($kind);
+            }
+        );
 
         if (\count($possibleKinds) > 0) {
             for ($i = $start; $i < $end; ++$i) {
@@ -587,9 +589,11 @@ class Tokens extends \SplFixedArray
      */
     public function getTokenOfKindSibling(int $index, int $direction, array $tokens = [], bool $caseSensitive = true): ?int
     {
-        $tokens = array_filter($tokens, function ($token): bool {
-            return $this->isTokenKindFound($this->extractTokenKind($token));
-        });
+        $tokens = array_filter(
+            $tokens, function ($token): bool {
+                return $this->isTokenKindFound($this->extractTokenKind($token));
+            }
+        );
 
         if (0 === \count($tokens)) {
             return null;
@@ -1112,14 +1116,16 @@ class Tokens extends \SplFixedArray
 
     public function hasAlternativeSyntax(): bool
     {
-        return $this->isAnyTokenKindsFound([
+        return $this->isAnyTokenKindsFound(
+            [
             T_ENDDECLARE,
             T_ENDFOR,
             T_ENDFOREACH,
             T_ENDIF,
             T_ENDSWITCH,
             T_ENDWHILE,
-        ]);
+            ]
+        );
     }
 
     public function clearTokenAndMergeSurroundingWhitespace(int $index): void

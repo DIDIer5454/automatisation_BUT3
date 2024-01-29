@@ -68,12 +68,14 @@ final class NoWhitespaceBeforeCommaInArrayFixer extends AbstractFixer implements
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('after_heredoc', 'Whether the whitespace between heredoc end and comma should be removed.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -94,8 +96,7 @@ final class NoWhitespaceBeforeCommaInArrayFixer extends AbstractFixer implements
             $currentToken = $tokens[$i];
             $prevIndex = $tokens->getPrevNonWhitespace($i - 1);
 
-            if (
-                $currentToken->equals(',') && !$tokens[$prevIndex]->isComment()
+            if ($currentToken->equals(',') && !$tokens[$prevIndex]->isComment()
                 && (true === $this->configuration['after_heredoc'] || !$tokens[$prevIndex]->isGivenKind(T_END_HEREDOC))
             ) {
                 $tokens->removeLeadingWhitespace($i);

@@ -339,8 +339,7 @@ final class ReturnAssignmentFixer extends AbstractFixer
         ++$inserted;
 
         // use the original indent of the var assignment for the new return statement
-        if (
-            null !== $originalIndent
+        if (null !== $originalIndent
             && $tokens[$assignVarIndex - 1]->isWhitespace()
             && $originalIndent !== $tokens[$assignVarIndex - 1]->getContent()
         ) {

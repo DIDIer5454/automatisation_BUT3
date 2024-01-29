@@ -88,12 +88,14 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('use_nullable_type_declaration', 'Whether to add or remove `?` or `|null` to parameters with a default `null` value.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -129,8 +131,7 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
         }
 
         foreach (array_reverse($arguments) as $argumentInfo) {
-            if (
-                // Skip, if the parameter
+            if (// Skip, if the parameter
                 // - doesn't have a type declaration
                 !$argumentInfo->hasTypeAnalysis()
                 // - has a mixed or standalone null type
@@ -188,10 +189,12 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
                 $tokens->insertAt($endIndex, new Token([CT::T_DISJUNCTIVE_NORMAL_FORM_TYPE_PARENTHESIS_CLOSE, ')']));
             }
 
-            $tokens->insertAt($endIndex + 1, [
+            $tokens->insertAt(
+                $endIndex + 1, [
                 new Token([CT::T_TYPE_ALTERNATION, '|']),
                 new Token([T_STRING, 'null']),
-            ]);
+                ]
+            );
         } elseif ($argumentTypeInfo->isNullable()) {
             $startIndex = $argumentTypeInfo->getStartIndex();
 

@@ -126,7 +126,8 @@ $foo = new class(){};
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('multi_line_extends_each_single_line', 'Whether definitions should be multiline.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
@@ -147,7 +148,8 @@ $foo = new class(){};
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -449,10 +451,12 @@ $foo = new class(){};
 
             if (!$isOnOwnLine) {
                 if ($tokens[$breakAtIndex - 1]->isWhitespace()) {
-                    $tokens[$breakAtIndex - 1] = new Token([
+                    $tokens[$breakAtIndex - 1] = new Token(
+                        [
                         T_WHITESPACE,
                         $this->whitespacesConfig->getLineEnding().$this->whitespacesConfig->getIndent(),
-                    ]);
+                        ]
+                    );
                 } else {
                     $tokens->insertAt($breakAtIndex, new Token([T_WHITESPACE, $this->whitespacesConfig->getLineEnding().$this->whitespacesConfig->getIndent()]));
                 }
@@ -484,10 +488,14 @@ $foo = new class(){};
 
             $accessModifierIndex = $classDefInfo[$accessModifier];
 
-            /** @var Token $readonlyToken */
+            /**
+ * @var Token $readonlyToken 
+*/
             $readonlyToken = clone $tokens[$readonlyIndex];
 
-            /** @var Token $accessToken */
+            /**
+ * @var Token $accessToken 
+*/
             $accessToken = clone $tokens[$accessModifierIndex];
 
             $tokens[$readonlyIndex] = $accessToken;

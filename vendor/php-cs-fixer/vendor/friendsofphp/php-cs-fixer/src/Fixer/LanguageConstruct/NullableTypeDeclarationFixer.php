@@ -99,12 +99,14 @@ class ValueObject
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('syntax', 'Whether to use question mark (`?`) or explicit `null` union for nullable type.'))
                 ->setAllowedValues([self::OPTION_SYNTAX_UNION, self::OPTION_SYNTAX_QUESTION_MARK])
                 ->setDefault(self::OPTION_SYNTAX_QUESTION_MARK)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -141,8 +143,7 @@ class ValueObject
         );
 
         foreach ($tokens as $index => $token) {
-            if (
-                $token->isGivenKind(T_FN)
+            if ($token->isGivenKind(T_FN)
                 || ($token->isGivenKind(T_FUNCTION) && !isset($elements[$index]))
             ) {
                 $elements[$index] = 'function';

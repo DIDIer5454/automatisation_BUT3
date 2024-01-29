@@ -37,12 +37,14 @@ final class PhpdocAnnotationWithoutDotFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'PHPDoc annotation descriptions should not be a sentence.',
-            [new CodeSample('<?php
+            [new CodeSample(
+                '<?php
 /**
  * @param string $bar Some string.
  */
 function foo ($bar) {}
-')]
+'
+            )]
         );
     }
 
@@ -77,8 +79,7 @@ function foo ($bar) {}
             }
 
             foreach ($annotations as $annotation) {
-                if (
-                    !$annotation->getTag()->valid() || !\in_array($annotation->getTag()->getName(), $this->tags, true)
+                if (!$annotation->getTag()->valid() || !\in_array($annotation->getTag()->getName(), $this->tags, true)
                 ) {
                     continue;
                 }
@@ -94,8 +95,7 @@ function foo ($bar) {}
 
                 $content = $annotation->getContent();
 
-                if (
-                    !Preg::match('/[.。]\h*$/u', $content)
+                if (!Preg::match('/[.。]\h*$/u', $content)
                     || Preg::match('/[.。](?!\h*$)/u', $content, $matches)
                 ) {
                     continue;

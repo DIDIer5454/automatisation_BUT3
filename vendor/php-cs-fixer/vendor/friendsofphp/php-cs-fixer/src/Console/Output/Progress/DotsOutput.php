@@ -39,7 +39,9 @@ final class DotsOutput implements ProgressOutputInterface
         FixerFileProcessedEvent::STATUS_LINT => ['symbol' => 'E', 'format' => '<bg=red>%s</bg=red>', 'description' => 'error'],
     ];
 
-    /** @readonly */
+    /**
+     * @readonly 
+     */
     private OutputContext $context;
 
     private int $processedFiles = 0;
@@ -90,13 +92,15 @@ final class DotsOutput implements ProgressOutputInterface
         $isLast = $this->processedFiles === $this->context->getFilesCount();
 
         if (0 === $symbolsOnCurrentLine || $isLast) {
-            $this->getOutput()->write(sprintf(
-                '%s %'.\strlen((string) $this->context->getFilesCount()).'d / %d (%3d%%)',
-                $isLast && 0 !== $symbolsOnCurrentLine ? str_repeat(' ', $this->symbolsPerLine - $symbolsOnCurrentLine) : '',
-                $this->processedFiles,
-                $this->context->getFilesCount(),
-                round($this->processedFiles / $this->context->getFilesCount() * 100)
-            ));
+            $this->getOutput()->write(
+                sprintf(
+                    '%s %'.\strlen((string) $this->context->getFilesCount()).'d / %d (%3d%%)',
+                    $isLast && 0 !== $symbolsOnCurrentLine ? str_repeat(' ', $this->symbolsPerLine - $symbolsOnCurrentLine) : '',
+                    $this->processedFiles,
+                    $this->context->getFilesCount(),
+                    round($this->processedFiles / $this->context->getFilesCount() * 100)
+                )
+            );
 
             if (!$isLast) {
                 $this->getOutput()->writeln('');

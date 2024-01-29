@@ -24,18 +24,24 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 final class ReporterFactory
 {
-    /** @var ReporterInterface[] */
+    /**
+     * @var ReporterInterface[] 
+     */
     private $reporters = [];
 
     public function registerBuiltInReporters(): self
     {
-        /** @var null|string[] $builtInReporters */
+        /**
+         * @var null|string[] $builtInReporters 
+         */
         static $builtInReporters;
 
         if (null === $builtInReporters) {
             $builtInReporters = [];
 
-            /** @var SplFileInfo $file */
+            /**
+ * @var SplFileInfo $file 
+*/
             foreach (SymfonyFinder::create()->files()->name('*Reporter.php')->in(__DIR__) as $file) {
                 $relativeNamespace = $file->getRelativePath();
                 $builtInReporters[] = sprintf(

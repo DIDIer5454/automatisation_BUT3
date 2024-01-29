@@ -76,10 +76,12 @@ class SymfonyStyle extends OutputStyle
     public function title(string $message)
     {
         $this->autoPrependBlock();
-        $this->writeln([
+        $this->writeln(
+            [
             sprintf('<comment>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
             sprintf('<comment>%s</>', str_repeat('=', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)))),
-        ]);
+            ]
+        );
         $this->newLine();
     }
 
@@ -89,10 +91,12 @@ class SymfonyStyle extends OutputStyle
     public function section(string $message)
     {
         $this->autoPrependBlock();
-        $this->writeln([
+        $this->writeln(
+            [
             sprintf('<comment>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
             sprintf('<comment>%s</>', str_repeat('-', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)))),
-        ]);
+            ]
+        );
         $this->newLine();
     }
 
@@ -102,9 +106,11 @@ class SymfonyStyle extends OutputStyle
     public function listing(array $elements)
     {
         $this->autoPrependText();
-        $elements = array_map(function ($element) {
-            return sprintf(' * %s', $element);
-        }, $elements);
+        $elements = array_map(
+            function ($element) {
+                return sprintf(' * %s', $element);
+            }, $elements
+        );
 
         $this->writeln($elements);
         $this->newLine();
@@ -191,8 +197,7 @@ class SymfonyStyle extends OutputStyle
         $this->createTable()
             ->setHeaders($headers)
             ->setRows($rows)
-            ->render()
-        ;
+            ->render();
 
         $this->newLine();
     }
@@ -206,8 +211,7 @@ class SymfonyStyle extends OutputStyle
             ->setHorizontal(true)
             ->setHeaders($headers)
             ->setRows($rows)
-            ->render()
-        ;
+            ->render();
 
         $this->newLine();
     }

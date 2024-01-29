@@ -42,8 +42,7 @@ final class AttributeAnalyzer
      */
     public static function isAttribute(Tokens $tokens, int $index): bool
     {
-        if (
-            !\defined('T_ATTRIBUTE') // attributes not available, PHP version lower than 8.0
+        if (!\defined('T_ATTRIBUTE') // attributes not available, PHP version lower than 8.0
             || !$tokens[$index]->isGivenKind(T_STRING) // checked token is not a string
             || !$tokens->isAnyTokenKindsFound([T_ATTRIBUTE]) // no attributes in the tokens collection
         ) {

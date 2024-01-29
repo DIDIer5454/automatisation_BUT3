@@ -88,16 +88,20 @@ final class Example
     {
         parent::configure($configuration);
 
-        /** @var GeneralPhpdocTagRenameFixer $generalPhpdocTagRenameFixer */
+        /**
+ * @var GeneralPhpdocTagRenameFixer $generalPhpdocTagRenameFixer 
+*/
         $generalPhpdocTagRenameFixer = $this->proxyFixers['general_phpdoc_tag_rename'];
 
         try {
-            $generalPhpdocTagRenameFixer->configure([
+            $generalPhpdocTagRenameFixer->configure(
+                [
                 'fix_annotation' => true,
                 'fix_inline' => false,
                 'replacements' => $this->configuration['replacements'],
                 'case_sensitive' => true,
-            ]);
+                ]
+            );
         } catch (InvalidConfigurationException $exception) {
             throw new InvalidFixerConfigurationException(
                 $this->getName(),
@@ -112,17 +116,21 @@ final class Example
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('replacements', 'Mapping between replaced annotations with new ones.'))
                 ->setAllowedTypes(['array'])
-                ->setDefault([
+                ->setDefault(
+                    [
                     'property-read' => 'property',
                     'property-write' => 'property',
                     'type' => 'var',
                     'link' => 'see',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

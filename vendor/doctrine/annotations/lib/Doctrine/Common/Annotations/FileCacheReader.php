@@ -37,22 +37,34 @@ use function var_export;
  */
 class FileCacheReader implements Reader
 {
-    /** @var Reader */
+    /**
+     * @var Reader 
+     */
     private $reader;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $dir;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $debug;
 
-    /** @phpstan-var array<string, list<object>> */
+    /**
+     * @phpstan-var array<string, list<object>> 
+     */
     private $loadedAnnotations = [];
 
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string> 
+     */
     private $classNameHashes = [];
 
-    /** @var int */
+    /**
+     * @var int 
+     */
     private $umask;
 
     /**
@@ -65,20 +77,24 @@ class FileCacheReader implements Reader
     public function __construct(Reader $reader, $cacheDir, $debug = false, $umask = 0002)
     {
         if (! is_int($umask)) {
-            throw new InvalidArgumentException(sprintf(
-                'The parameter umask must be an integer, was: %s',
-                gettype($umask)
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The parameter umask must be an integer, was: %s',
+                    gettype($umask)
+                )
+            );
         }
 
         $this->reader = $reader;
         $this->umask  = $umask;
 
         if (! is_dir($cacheDir) && ! @mkdir($cacheDir, 0777 & (~$this->umask), true)) {
-            throw new InvalidArgumentException(sprintf(
-                'The directory "%s" does not exist and could not be created.',
-                $cacheDir
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The directory "%s" does not exist and could not be created.',
+                    $cacheDir
+                )
+            );
         }
 
         $this->dir   = rtrim($cacheDir, '\\/');
@@ -109,8 +125,7 @@ class FileCacheReader implements Reader
         }
 
         $filename = $class->getFilename();
-        if (
-            $this->debug
+        if ($this->debug
             && $filename !== false
             && filemtime($path) < filemtime($filename)
         ) {
@@ -150,8 +165,7 @@ class FileCacheReader implements Reader
         }
 
         $filename = $class->getFilename();
-        if (
-            $this->debug
+        if ($this->debug
             && $filename !== false
             && filemtime($path) < filemtime($filename)
         ) {
@@ -191,8 +205,7 @@ class FileCacheReader implements Reader
         }
 
         $filename = $class->getFilename();
-        if (
-            $this->debug
+        if ($this->debug
             && $filename !== false
             && filemtime($path) < filemtime($filename)
         ) {
@@ -218,15 +231,17 @@ class FileCacheReader implements Reader
     private function saveCacheFile($path, $data)
     {
         if (! is_writable($this->dir)) {
-            throw new InvalidArgumentException(sprintf(
-                <<<'EXCEPTION'
+            throw new InvalidArgumentException(
+                sprintf(
+                    <<<'EXCEPTION'
 The directory "%s" is not writable. Both the webserver and the console user need access.
 You can manage access rights for multiple users with "chmod +a".
 If your system does not support this, check out the acl package.,
-EXCEPTION
-                ,
-                $this->dir
-            ));
+    EXCEPTION
+                    ,
+                    $this->dir
+                )
+            );
         }
 
         $tempfile = tempnam($this->dir, uniqid('', true));

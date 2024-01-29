@@ -155,10 +155,12 @@ function bar($foo) {}
                     continue;
                 }
 
-                $tokens->insertAt($variableIndex, array_merge(
-                    $this->createTypeDeclarationTokens($paramType, $isNullable),
-                    [new Token([T_WHITESPACE, ' '])]
-                ));
+                $tokens->insertAt(
+                    $variableIndex, array_merge(
+                        $this->createTypeDeclarationTokens($paramType, $isNullable),
+                        [new Token([T_WHITESPACE, ' '])]
+                    )
+                );
             }
         }
     }

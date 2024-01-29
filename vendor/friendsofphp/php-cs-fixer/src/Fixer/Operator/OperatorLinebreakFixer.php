@@ -56,12 +56,14 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
         return new FixerDefinition(
             'Operators - when multiline - must always be at the beginning or at the end of the line.',
             [
-                new CodeSample('<?php
+                new CodeSample(
+                    '<?php
 function foo() {
     return $bar ||
         $baz;
 }
-'),
+'
+                ),
                 new CodeSample(
                     '<?php
 function foo() {
@@ -103,7 +105,8 @@ function foo() {
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('only_booleans', 'whether to limit operators to only boolean ones'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
@@ -112,7 +115,8 @@ function foo() {
                 ->setAllowedValues(['beginning', 'end'])
                 ->setDefault($this->position)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -152,7 +156,9 @@ function foo() {
 
             $operatorIndices = [$index];
             if ($tokens[$index]->equals(':')) {
-                /** @var int $prevIndex */
+                /**
+ * @var int $prevIndex 
+*/
                 $prevIndex = $tokens->getPrevMeaningfulToken($index);
                 if ($tokens[$prevIndex]->equals('?')) {
                     $operatorIndices = [$prevIndex, $index];
@@ -195,11 +201,15 @@ function foo() {
      */
     private function fixOperatorLinebreak(Tokens $tokens, array $operatorIndices): void
     {
-        /** @var int $prevIndex */
+        /**
+ * @var int $prevIndex 
+*/
         $prevIndex = $tokens->getPrevMeaningfulToken(min($operatorIndices));
         $indexStart = $prevIndex + 1;
 
-        /** @var int $nextIndex */
+        /**
+ * @var int $nextIndex 
+*/
         $nextIndex = $tokens->getNextMeaningfulToken(max($operatorIndices));
         $indexEnd = $nextIndex - 1;
 
@@ -227,10 +237,14 @@ function foo() {
      */
     private function fixMoveToTheBeginning(Tokens $tokens, array $operatorIndices): void
     {
-        /** @var int $prevIndex */
+        /**
+ * @var int $prevIndex 
+*/
         $prevIndex = $tokens->getNonEmptySibling(min($operatorIndices), -1);
 
-        /** @var int $nextIndex */
+        /**
+ * @var int $nextIndex 
+*/
         $nextIndex = $tokens->getNextMeaningfulToken(max($operatorIndices));
 
         for ($i = $nextIndex - 1; $i > max($operatorIndices); --$i) {
@@ -252,10 +266,14 @@ function foo() {
      */
     private function fixMoveToTheEnd(Tokens $tokens, array $operatorIndices): void
     {
-        /** @var int $prevIndex */
+        /**
+ * @var int $prevIndex 
+*/
         $prevIndex = $tokens->getPrevMeaningfulToken(min($operatorIndices));
 
-        /** @var int $nextIndex */
+        /**
+ * @var int $nextIndex 
+*/
         $nextIndex = $tokens->getNonEmptySibling(max($operatorIndices), 1);
 
         for ($i = $prevIndex + 1; $i < max($operatorIndices); ++$i) {
@@ -317,7 +335,11 @@ function foo() {
                 [T_POW_EQUAL], [T_SL], [T_SL_EQUAL], [T_SR], [T_SR_EQUAL], [T_XOR_EQUAL],
                 [T_COALESCE], [T_SPACESHIP],
             ],
-            array_map(static function ($id): array { return [$id]; }, Token::getObjectOperatorKinds())
+            array_map(
+                static function ($id): array {
+                    return [$id]; 
+                }, Token::getObjectOperatorKinds()
+            )
         );
     }
 }

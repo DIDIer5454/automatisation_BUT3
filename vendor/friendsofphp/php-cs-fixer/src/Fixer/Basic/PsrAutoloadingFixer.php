@@ -111,8 +111,7 @@ class InvalidName {}
             return false;
         }
 
-        if (
-            // ignore file with extension other than php
+        if (// ignore file with extension other than php
             ('php' !== $file->getExtension())
             // ignore file with name that cannot be a class name
             || 0 === Preg::match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $file->getBasename('.php'))
@@ -141,12 +140,14 @@ class InvalidName {}
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('dir', 'If provided, the directory where the project code is placed.'))
                 ->setAllowedTypes(['null', 'string'])
                 ->setDefault(null)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

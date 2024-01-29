@@ -156,7 +156,8 @@ class Foo
     {
         parent::configure($configuration);
 
-        $this->getCurlyBracesPositionFixer()->configure([
+        $this->getCurlyBracesPositionFixer()->configure(
+            [
             'control_structures_opening_brace' => $this->translatePositionOption($this->configuration['position_after_control_structures']),
             'functions_opening_brace' => $this->translatePositionOption($this->configuration['position_after_functions_and_oop_constructs']),
             'anonymous_functions_opening_brace' => $this->translatePositionOption($this->configuration['position_after_anonymous_constructs']),
@@ -164,18 +165,22 @@ class Foo
             'anonymous_classes_opening_brace' => $this->translatePositionOption($this->configuration['position_after_anonymous_constructs']),
             'allow_single_line_empty_anonymous_classes' => $this->configuration['allow_single_line_anonymous_class_with_empty_body'],
             'allow_single_line_anonymous_functions' => $this->configuration['allow_single_line_closure'],
-        ]);
+            ]
+        );
 
-        $this->getControlStructureContinuationPositionFixer()->configure([
+        $this->getControlStructureContinuationPositionFixer()->configure(
+            [
             'position' => self::LINE_NEXT === $this->configuration['position_after_control_structures']
                 ? ControlStructureContinuationPositionFixer::NEXT_LINE
                 : ControlStructureContinuationPositionFixer::SAME_LINE,
-        ]);
+            ]
+        );
     }
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('allow_single_line_anonymous_class_with_empty_body', 'Whether single line anonymous class with empty body notation should be allowed.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
@@ -196,22 +201,27 @@ class Foo
                 ->setAllowedValues([self::LINE_NEXT, self::LINE_SAME])
                 ->setDefault(self::LINE_SAME)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function createProxyFixers(): array
     {
         $singleSpaceAroundConstructFixer = new SingleSpaceAroundConstructFixer();
-        $singleSpaceAroundConstructFixer->configure([
+        $singleSpaceAroundConstructFixer->configure(
+            [
             'constructs_contain_a_single_space' => [],
             'constructs_followed_by_a_single_space' => ['elseif', 'for', 'foreach', 'if', 'match', 'while', 'use_lambda'],
             'constructs_preceded_by_a_single_space' => ['use_lambda'],
-        ]);
+            ]
+        );
 
         $noExtraBlankLinesFixer = new NoExtraBlankLinesFixer();
-        $noExtraBlankLinesFixer->configure([
+        $noExtraBlankLinesFixer->configure(
+            [
             'tokens' => ['curly_brace_block'],
-        ]);
+            ]
+        );
 
         return [
             $singleSpaceAroundConstructFixer,

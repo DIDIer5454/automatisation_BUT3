@@ -118,13 +118,15 @@ final class SingleSpaceAfterConstructFixer extends AbstractProxyFixer implements
     {
         parent::configure($configuration);
 
-        $this->singleSpaceAroundConstructFixer->configure([
+        $this->singleSpaceAroundConstructFixer->configure(
+            [
             'constructs_contain_a_single_space' => [
                 'yield_from',
             ],
             'constructs_preceded_by_a_single_space' => [],
             'constructs_followed_by_a_single_space' => $this->configuration['constructs'],
-        ]);
+            ]
+        );
     }
 
     public function getDefinition(): FixerDefinitionInterface
@@ -187,12 +189,14 @@ yield  from  baz();
 
         unset($defaults['type_colon']);
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('constructs', 'List of constructs which must be followed by a single space.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset($tokens)])
                 ->setDefault(array_keys($defaults))
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

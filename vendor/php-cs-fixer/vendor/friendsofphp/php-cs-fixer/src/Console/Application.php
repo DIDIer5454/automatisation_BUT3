@@ -58,11 +58,13 @@ final class Application extends BaseApplication
         $this->add(new FixCommand($this->toolInfo));
         $this->add(new ListFilesCommand($this->toolInfo));
         $this->add(new ListSetsCommand());
-        $this->add(new SelfUpdateCommand(
-            new NewVersionChecker(new GithubClient()),
-            $this->toolInfo,
-            new PharChecker()
-        ));
+        $this->add(
+            new SelfUpdateCommand(
+                new NewVersionChecker(new GithubClient()),
+                $this->toolInfo,
+                new PharChecker()
+            )
+        );
     }
 
     public static function getMajorVersion(): int
@@ -92,8 +94,7 @@ final class Application extends BaseApplication
 
         $result = parent::doRun($input, $output);
 
-        if (
-            null !== $stdErr
+        if (null !== $stdErr
             && $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE
         ) {
             $triggeredDeprecations = Utils::getTriggeredDeprecations();
@@ -120,16 +121,20 @@ final class Application extends BaseApplication
         $commit = '@git-commit@';
         $versionCommit = '';
 
-        if ('@'.'git-commit@' !== $commit) { /** @phpstan-ignore-line as `$commit` is replaced during phar building */
+        if ('@'.'git-commit@' !== $commit) { /**
+ * @phpstan-ignore-line as `$commit` is replaced during phar building 
+*/
             $versionCommit = substr($commit, 0, 7);
         }
 
-        $about = implode('', [
+        $about = implode(
+            '', [
             $longVersion,
             $versionCommit ? sprintf(' <info>(%s)</info>', $versionCommit) : '', // @phpstan-ignore-line to avoid `Ternary operator condition is always true|false.`
             self::VERSION_CODENAME ? sprintf(' <info>%s</info>', self::VERSION_CODENAME) : '', // @phpstan-ignore-line to avoid `Ternary operator condition is always true|false.`
             ' by <comment>Fabien Potencier</comment>, <comment>Dariusz Ruminski</comment> and <comment>contributors</comment>.',
-        ]);
+            ]
+        );
 
         if (false === $decorated) {
             return strip_tags($about);

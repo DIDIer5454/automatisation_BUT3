@@ -182,13 +182,17 @@ class ProgressIndicator
             return;
         }
 
-        $this->overwrite(preg_replace_callback("{%([a-z\-_]+)(?:\:([^%]+))?%}i", function ($matches) {
-            if ($formatter = self::getPlaceholderFormatterDefinition($matches[1])) {
-                return $formatter($this);
-            }
+        $this->overwrite(
+            preg_replace_callback(
+                "{%([a-z\-_]+)(?:\:([^%]+))?%}i", function ($matches) {
+                    if ($formatter = self::getPlaceholderFormatterDefinition($matches[1])) {
+                        return $formatter($this);
+                    }
 
-            return $matches[0];
-        }, $this->format ?? ''));
+                    return $matches[0];
+                }, $this->format ?? ''
+            )
+        );
     }
 
     private function determineBestFormat(): string

@@ -52,7 +52,8 @@ final class AlternativeSyntaxAnalyzer
         $openParenthesisIndex = $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $prevIndex);
         $beforeOpenParenthesisIndex = $tokens->getPrevMeaningfulToken($openParenthesisIndex);
 
-        return $tokens[$beforeOpenParenthesisIndex]->isGivenKind([
+        return $tokens[$beforeOpenParenthesisIndex]->isGivenKind(
+            [
             T_DECLARE,
             T_ELSEIF,
             T_FOR,
@@ -60,7 +61,8 @@ final class AlternativeSyntaxAnalyzer
             T_IF,
             T_SWITCH,
             T_WHILE,
-        ]);
+            ]
+        );
     }
 
     public function findAlternativeSyntaxBlockEnd(Tokens $tokens, int $index): int

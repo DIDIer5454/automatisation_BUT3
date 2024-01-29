@@ -42,8 +42,7 @@ final class HelpCommand extends BaseHelpCommand
     {
         return \is_array($value)
             ? static::arrayToString($value)
-            : static::scalarToString($value)
-        ;
+            : static::scalarToString($value);
     }
 
     /**
@@ -54,24 +53,28 @@ final class HelpCommand extends BaseHelpCommand
         $allowed = $option->getAllowedValues();
 
         if (null !== $allowed) {
-            $allowed = array_filter($allowed, static function ($value): bool {
-                return !($value instanceof \Closure);
-            });
-
-            usort($allowed, static function ($valueA, $valueB): int {
-                if ($valueA instanceof AllowedValueSubset) {
-                    return -1;
+            $allowed = array_filter(
+                $allowed, static function ($value): bool {
+                    return !($value instanceof \Closure);
                 }
+            );
 
-                if ($valueB instanceof AllowedValueSubset) {
-                    return 1;
+            usort(
+                $allowed, static function ($valueA, $valueB): int {
+                    if ($valueA instanceof AllowedValueSubset) {
+                        return -1;
+                    }
+
+                    if ($valueB instanceof AllowedValueSubset) {
+                        return 1;
+                    }
+
+                    return strcasecmp(
+                        self::toString($valueA),
+                        self::toString($valueB)
+                    );
                 }
-
-                return strcasecmp(
-                    self::toString($valueA),
-                    self::toString($valueB)
-                );
-            });
+            );
 
             if (0 === \count($allowed)) {
                 $allowed = null;

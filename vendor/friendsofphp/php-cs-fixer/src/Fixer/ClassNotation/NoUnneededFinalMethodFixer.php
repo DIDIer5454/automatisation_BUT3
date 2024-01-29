@@ -113,12 +113,14 @@ class Bar
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('private_methods', 'Private methods of non-`final` classes must not be declared `final`.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function getClassMethods(Tokens $tokens): \Generator

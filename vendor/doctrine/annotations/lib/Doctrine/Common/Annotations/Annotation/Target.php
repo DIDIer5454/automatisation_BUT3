@@ -28,7 +28,9 @@ final class Target
     public const TARGET_FUNCTION   = 16;
     public const TARGET_ALL        = 31;
 
-    /** @var array<string, int> */
+    /**
+     * @var array<string, int> 
+     */
     private static $map = [
         'ALL'        => self::TARGET_ALL,
         'CLASS'      => self::TARGET_CLASS,
@@ -38,7 +40,9 @@ final class Target
         'ANNOTATION' => self::TARGET_ANNOTATION,
     ];
 
-    /** @phpstan-var list<string> */
+    /**
+     * @phpstan-var list<string> 
+     */
     public $value;
 
     /**

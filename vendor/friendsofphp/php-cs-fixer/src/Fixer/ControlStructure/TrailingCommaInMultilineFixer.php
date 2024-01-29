@@ -107,35 +107,41 @@ SAMPLE
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('after_heredoc', 'Whether a trailing comma should also be placed after heredoc end.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
-                ->setNormalizer(static function (Options $options, $value) {
-                    if (\PHP_VERSION_ID < 70300 && $value) {
-                        throw new InvalidOptionsForEnvException('"after_heredoc" option can only be enabled with PHP 7.3+.');
-                    }
+                ->setNormalizer(
+                    static function (Options $options, $value) {
+                        if (\PHP_VERSION_ID < 70300 && $value) {
+                            throw new InvalidOptionsForEnvException('"after_heredoc" option can only be enabled with PHP 7.3+.');
+                        }
 
-                    return $value;
-                })
+                        return $value;
+                    }
+                )
                 ->getOption(),
             (new FixerOptionBuilder('elements', sprintf('Where to fix multiline trailing comma (PHP >= 7.3 required for `%s`, PHP >= 8.0 for `%s`).', self::ELEMENTS_ARGUMENTS, self::ELEMENTS_PARAMETERS)))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset([self::ELEMENTS_ARRAYS, self::ELEMENTS_ARGUMENTS, self::ELEMENTS_PARAMETERS])])
                 ->setDefault([self::ELEMENTS_ARRAYS])
-                ->setNormalizer(static function (Options $options, $value) {
-                    if (\PHP_VERSION_ID < 70300 && \in_array(self::ELEMENTS_ARGUMENTS, $value, true)) {
-                        throw new InvalidOptionsForEnvException(sprintf('"%s" option can only be enabled with PHP 7.3+.', self::ELEMENTS_ARGUMENTS));
-                    }
+                ->setNormalizer(
+                    static function (Options $options, $value) {
+                        if (\PHP_VERSION_ID < 70300 && \in_array(self::ELEMENTS_ARGUMENTS, $value, true)) {
+                            throw new InvalidOptionsForEnvException(sprintf('"%s" option can only be enabled with PHP 7.3+.', self::ELEMENTS_ARGUMENTS));
+                        }
 
-                    if (\PHP_VERSION_ID < 80000 && \in_array(self::ELEMENTS_PARAMETERS, $value, true)) {
-                        throw new InvalidOptionsForEnvException(sprintf('"%s" option can only be enabled with PHP 8.0+.', self::ELEMENTS_PARAMETERS));
-                    }
+                        if (\PHP_VERSION_ID < 80000 && \in_array(self::ELEMENTS_PARAMETERS, $value, true)) {
+                            throw new InvalidOptionsForEnvException(sprintf('"%s" option can only be enabled with PHP 8.0+.', self::ELEMENTS_PARAMETERS));
+                        }
 
-                    return $value;
-                })
+                        return $value;
+                    }
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -150,11 +156,9 @@ SAMPLE
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
             $prevIndex = $tokens->getPrevMeaningfulToken($index);
 
-            if (
-                $fixArrays
-                && (
-                    $tokens[$index]->equals('(') && $tokens[$prevIndex]->isGivenKind(T_ARRAY) // long syntax
-                    || $tokens[$index]->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_OPEN) // short syntax
+            if ($fixArrays
+                && (                $tokens[$index]->equals('(') && $tokens[$prevIndex]->isGivenKind(T_ARRAY) // long syntax
+                || $tokens[$index]->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_OPEN) // short syntax
                 )
             ) {
                 $this->fixBlock($tokens, $index);
@@ -177,12 +181,9 @@ SAMPLE
                 continue;
             }
 
-            if (
-                $fixParameters
-                && (
-                    $tokens[$prevIndex]->isGivenKind(T_STRING) && $tokens[$prevPrevIndex]->isGivenKind(T_FUNCTION)
-                    || $tokens[$prevIndex]->isGivenKind([T_FN, T_FUNCTION])
-                )
+            if ($fixParameters
+                && (                $tokens[$prevIndex]->isGivenKind(T_STRING) && $tokens[$prevPrevIndex]->isGivenKind(T_FUNCTION)
+                || $tokens[$prevIndex]->isGivenKind([T_FN, T_FUNCTION]))
             ) {
                 $this->fixBlock($tokens, $index);
             }
@@ -204,8 +205,7 @@ SAMPLE
         $beforeEndToken = $tokens[$beforeEndIndex];
 
         // if there is some item between braces then add `,` after it
-        if (
-            $startIndex !== $beforeEndIndex && !$beforeEndToken->equals(',')
+        if ($startIndex !== $beforeEndIndex && !$beforeEndToken->equals(',')
             && (true === $this->configuration['after_heredoc'] || !$beforeEndToken->isGivenKind(T_END_HEREDOC))
         ) {
             $tokens->insertAt($beforeEndIndex + 1, new Token(','));

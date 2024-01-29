@@ -54,7 +54,9 @@ class Process implements \IteratorAggregate
     private array|string $commandline;
     private ?string $cwd;
     private array $env = [];
-    /** @var resource|string|\Iterator|null */
+    /**
+     * @var resource|string|\Iterator|null 
+     */
     private $input;
     private ?float $starttime = null;
     private ?float $lastOutputTime = null;
@@ -64,11 +66,17 @@ class Process implements \IteratorAggregate
     private array $fallbackStatus = [];
     private array $processInformation;
     private bool $outputDisabled = false;
-    /** @var resource */
+    /**
+     * @var resource 
+     */
     private $stdout;
-    /** @var resource */
+    /**
+     * @var resource 
+     */
     private $stderr;
-    /** @var resource|null */
+    /**
+     * @var resource|null 
+     */
     private $process;
     private string $status = self::STATUS_READY;
     private int $incrementalOutputOffset = 0;
@@ -1577,13 +1585,15 @@ class Process implements \IteratorAggregate
 
     private function replacePlaceholders(string $commandline, array $env): string
     {
-        return preg_replace_callback('/"\$\{:([_a-zA-Z]++[_a-zA-Z0-9]*+)\}"/', function ($matches) use ($commandline, $env) {
-            if (!isset($env[$matches[1]]) || false === $env[$matches[1]]) {
-                throw new InvalidArgumentException(sprintf('Command line is missing a value for parameter "%s": ', $matches[1]).$commandline);
-            }
+        return preg_replace_callback(
+            '/"\$\{:([_a-zA-Z]++[_a-zA-Z0-9]*+)\}"/', function ($matches) use ($commandline, $env) {
+                if (!isset($env[$matches[1]]) || false === $env[$matches[1]]) {
+                    throw new InvalidArgumentException(sprintf('Command line is missing a value for parameter "%s": ', $matches[1]).$commandline);
+                }
 
-            return $this->escapeArgument($env[$matches[1]]);
-        }, $commandline);
+                return $this->escapeArgument($env[$matches[1]]);
+            }, $commandline
+        );
     }
 
     private function getDefaultEnv(): array

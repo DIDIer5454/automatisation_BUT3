@@ -76,7 +76,8 @@ final class PhpdocLineSpanFixer extends AbstractFixer implements WhitespacesAwar
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('const', 'Whether const blocks should be single or multi line'))
                 ->setAllowedValues(['single', 'multi', null])
                 ->setDefault('multi')
@@ -89,7 +90,8 @@ final class PhpdocLineSpanFixer extends AbstractFixer implements WhitespacesAwar
                 ->setAllowedValues(['single', 'multi', null])
                 ->setDefault('multi')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void

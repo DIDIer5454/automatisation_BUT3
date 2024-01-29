@@ -14,7 +14,9 @@ use function get_class;
  */
 class IndexedReader implements Reader
 {
-    /** @var Reader */
+    /**
+     * @var Reader 
+     */
     private $delegate;
 
     public function __construct(Reader $reader)

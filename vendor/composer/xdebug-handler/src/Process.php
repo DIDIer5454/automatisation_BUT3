@@ -26,9 +26,9 @@ class Process
      * From https://github.com/johnstevenson/winbox-args
      * MIT Licensed (c) John Stevenson <john-stevenson@blueyonder.co.uk>
      *
-     * @param string $arg  The argument to be escaped
-     * @param bool   $meta Additionally escape cmd.exe meta characters
-     * @param bool $module The argument is the module to invoke
+     * @param string $arg    The argument to be escaped
+     * @param bool   $meta   Additionally escape cmd.exe meta characters
+     * @param bool   $module The argument is the module to invoke
      *
      * @return string The escaped argument
      */
@@ -89,7 +89,7 @@ class Process
     /**
      * Makes putenv environment changes available in $_SERVER and $_ENV
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $value A null value unsets the variable
      *
      * @return bool Whether the environment variable was set

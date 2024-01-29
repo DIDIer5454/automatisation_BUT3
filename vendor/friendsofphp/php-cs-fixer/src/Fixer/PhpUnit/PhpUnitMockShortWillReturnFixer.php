@@ -45,7 +45,8 @@ final class PhpUnitMockShortWillReturnFixer extends AbstractPhpUnitFixer
         return new FixerDefinition(
             'Usage of PHPUnit\'s mock e.g. `->will($this->returnValue(..))` must be replaced by its shorter equivalent such as `->willReturn(...)`.',
             [
-                new CodeSample('<?php
+                new CodeSample(
+                    '<?php
 final class MyTest extends \PHPUnit_Framework_TestCase
 {
     public function testSomeTest()
@@ -58,7 +59,8 @@ final class MyTest extends \PHPUnit_Framework_TestCase
         $someMock->method("some")->will($this->returnValueMap(["a","b","c"]));
     }
 }
-'),
+'
+                ),
             ],
             null,
             'Risky when PHPUnit classes are overridden or not accessible, or when project has PHPUnit incompatibilities.'

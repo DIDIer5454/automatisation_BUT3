@@ -111,7 +111,9 @@ call_user_func(static function ($a, $b) { var_dump($a, $b); }, 1, 2);
             $tokens->getNextMeaningfulToken($index)
         );
 
-        /** @var Token $firstArgToken */
+        /**
+ * @var Token $firstArgToken 
+*/
         $firstArgToken = $tokens[$firstArgIndex];
 
         if ($firstArgToken->isGivenKind(T_CONSTANT_ENCAPSED_STRING)) {
@@ -134,12 +136,9 @@ call_user_func(static function ($a, $b) { var_dump($a, $b); }, 1, 2);
             $newCallTokens->clearEmptyTokens();
 
             $this->replaceCallUserFuncWithCallback($tokens, $index, $newCallTokens, $firstArgIndex, $firstArgIndex);
-        } elseif (
-            $firstArgToken->isGivenKind(T_FUNCTION)
-            || (
-                $firstArgToken->isGivenKind(T_STATIC)
-                && $tokens[$tokens->getNextMeaningfulToken($firstArgIndex)]->isGivenKind(T_FUNCTION)
-            )
+        } elseif ($firstArgToken->isGivenKind(T_FUNCTION)
+            || (            $firstArgToken->isGivenKind(T_STATIC)
+            && $tokens[$tokens->getNextMeaningfulToken($firstArgIndex)]->isGivenKind(T_FUNCTION))
         ) {
             $firstArgEndIndex = $tokens->findBlockEnd(
                 Tokens::BLOCK_TYPE_CURLY_BRACE,
@@ -231,7 +230,9 @@ call_user_func(static function ($a, $b) { var_dump($a, $b); }, 1, 2);
         $subCollection = new Tokens($size);
 
         for ($i = 0; $i < $size; ++$i) {
-            /** @var Token $toClone */
+            /**
+ * @var Token $toClone 
+*/
             $toClone = $tokens[$i + $indexStart];
             $subCollection[$i] = clone $toClone;
         }

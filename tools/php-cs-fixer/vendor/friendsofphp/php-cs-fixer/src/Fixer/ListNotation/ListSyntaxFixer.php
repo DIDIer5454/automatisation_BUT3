@@ -92,12 +92,14 @@ final class ListSyntaxFixer extends AbstractFixer implements ConfigurableFixerIn
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('syntax', 'Whether to use the `long` or `short` syntax for array destructuring.'))
                 ->setAllowedValues(['long', 'short'])
                 ->setDefault('short')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixToLongSyntax(Tokens $tokens, int $index): void

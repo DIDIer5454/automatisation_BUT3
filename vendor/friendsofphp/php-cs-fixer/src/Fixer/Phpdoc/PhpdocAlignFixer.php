@@ -203,7 +203,8 @@ EOF;
         $tags
             ->setAllowedTypes(['array'])
             ->setAllowedValues([new AllowedValueSubset(self::ALIGNABLE_TAGS)])
-            ->setDefault([
+            ->setDefault(
+                [
                 'method',
                 'param',
                 'property',
@@ -211,15 +212,14 @@ EOF;
                 'throws',
                 'type',
                 'var',
-            ])
-        ;
+                ]
+            );
 
         $align = new FixerOptionBuilder('align', 'Align comments');
         $align
             ->setAllowedTypes(['string'])
             ->setAllowedValues([self::ALIGN_LEFT, self::ALIGN_VERTICAL])
-            ->setDefault(self::ALIGN_VERTICAL)
-        ;
+            ->setDefault(self::ALIGN_VERTICAL);
 
         return new FixerConfigurationResolver([$tags->getOption(), $align->getOption()]);
     }

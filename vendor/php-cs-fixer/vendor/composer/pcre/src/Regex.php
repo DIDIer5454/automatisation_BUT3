@@ -22,8 +22,8 @@ class Regex
     }
 
     /**
-     * @param non-empty-string $pattern
-     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param non-empty-string                 $pattern
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags   PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      */
     public static function match(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchResult
     {
@@ -37,8 +37,8 @@ class Regex
     /**
      * Variant of `match()` which returns non-null matches (or throws)
      *
-     * @param non-empty-string $pattern
-     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param  non-empty-string                 $pattern
+     * @param  int-mask<PREG_UNMATCHED_AS_NULL> $flags   PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      * @throws UnexpectedNullMatchException
      */
     public static function matchStrictGroups(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchStrictGroupsResult
@@ -51,8 +51,8 @@ class Regex
     /**
      * Runs preg_match with PREG_OFFSET_CAPTURE
      *
-     * @param non-empty-string $pattern
-     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
+     * @param non-empty-string                                     $pattern
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags   PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      */
     public static function matchWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchWithOffsetsResult
     {
@@ -62,8 +62,8 @@ class Regex
     }
 
     /**
-     * @param non-empty-string $pattern
-     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param non-empty-string                 $pattern
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags   PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      */
     public static function matchAll(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchAllResult
     {
@@ -78,8 +78,8 @@ class Regex
     /**
      * Variant of `matchAll()` which returns non-null matches (or throws)
      *
-     * @param non-empty-string $pattern
-     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param  non-empty-string                 $pattern
+     * @param  int-mask<PREG_UNMATCHED_AS_NULL> $flags   PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      * @throws UnexpectedNullMatchException
      */
     public static function matchAllStrictGroups(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchAllStrictGroupsResult
@@ -95,8 +95,8 @@ class Regex
     /**
      * Runs preg_match_all with PREG_OFFSET_CAPTURE
      *
-     * @param non-empty-string $pattern
-     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
+     * @param non-empty-string                                     $pattern
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags   PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      */
     public static function matchAllWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0): MatchAllWithOffsetsResult
     {
@@ -119,10 +119,10 @@ class Regex
     }
 
     /**
-     * @param string|string[] $pattern
-     * @param callable(array<int|string, string|null>): string $replacement
-     * @param string          $subject
-     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     * @param string|string[]                                      $pattern
+     * @param callable(array<int|string, string|null>): string     $replacement
+     * @param string                                               $subject
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags       PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
      */
     public static function replaceCallback($pattern, callable $replacement, $subject, int $limit = -1, int $flags = 0): ReplaceResult
     {
@@ -134,10 +134,10 @@ class Regex
     /**
      * Variant of `replaceCallback()` which outputs non-null matches (or throws)
      *
-     * @param string $pattern
-     * @param callable(array<int|string, string>): string $replacement
-     * @param string          $subject
-     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
+     * @param string                                               $pattern
+     * @param callable(array<int|string, string>): string          $replacement
+     * @param string                                               $subject
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags       PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
      */
     public static function replaceCallbackStrictGroups($pattern, callable $replacement, $subject, int $limit = -1, int $flags = 0): ReplaceResult
     {
@@ -148,8 +148,8 @@ class Regex
 
     /**
      * @param array<string, callable(array<int|string, string|null>): string> $pattern
-     * @param string $subject
-     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     * @param string                                                          $subject
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE>            $flags   PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
      */
     public static function replaceCallbackArray(array $pattern, $subject, int $limit = -1, int $flags = 0): ReplaceResult
     {

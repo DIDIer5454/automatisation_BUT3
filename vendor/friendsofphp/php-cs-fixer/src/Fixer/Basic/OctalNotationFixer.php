@@ -67,8 +67,7 @@ final class OctalNotationFixer extends AbstractFixer
 
             $tokens[$index] = 1 === Preg::match('#^0+$#', $content)
                 ? new Token([T_LNUMBER, '0'])
-                : new Token([T_LNUMBER, '0o'.substr($content, 1)])
-            ;
+                : new Token([T_LNUMBER, '0o'.substr($content, 1)]);
         }
     }
 }

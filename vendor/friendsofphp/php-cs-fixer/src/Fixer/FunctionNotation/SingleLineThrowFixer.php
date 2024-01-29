@@ -131,8 +131,7 @@ final class SingleLineThrowFixer extends AbstractFixer
 
             $nextIndex = $tokens->getNonEmptySibling($index, 1);
 
-            if (
-                $this->isNextTokenToClear($tokens[$nextIndex])
+            if ($this->isNextTokenToClear($tokens[$nextIndex])
                 && !$tokens[$prevIndex]->isGivenKind(T_FUNCTION)
             ) {
                 $tokens->clearAt($index);

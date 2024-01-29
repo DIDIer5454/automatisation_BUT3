@@ -174,7 +174,9 @@ namespace {
         $namespaces = $tokens->getNamespaceDeclarations();
 
         // 'scope' is 'namespaced' here
-        /** @var NamespaceAnalysis $namespace */
+        /**
+ * @var NamespaceAnalysis $namespace 
+*/
         foreach (array_reverse($namespaces) as $namespace) {
             if ($namespace->isGlobalNamespace()) {
                 continue;
@@ -189,17 +191,20 @@ namespace {
         $constantChecker = static function (array $value): bool {
             foreach ($value as $constantName) {
                 if (!\is_string($constantName) || '' === trim($constantName) || trim($constantName) !== $constantName) {
-                    throw new InvalidOptionsException(sprintf(
-                        'Each element must be a non-empty, trimmed string, got "%s" instead.',
-                        get_debug_type($constantName)
-                    ));
+                    throw new InvalidOptionsException(
+                        sprintf(
+                            'Each element must be a non-empty, trimmed string, got "%s" instead.',
+                            get_debug_type($constantName)
+                        )
+                    );
                 }
             }
 
             return true;
         };
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('fix_built_in', 'Whether to fix constants returned by `get_defined_constants`. User constants are not accounted in this list and must be specified in the include one.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
@@ -222,7 +227,8 @@ namespace {
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixConstantInvocations(Tokens $tokens, int $startIndex, int $endIndex): void

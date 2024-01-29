@@ -163,14 +163,11 @@ class Sample
                 continue;
             }
 
-            if (
-                $prevToken->isGivenKind([T_INSTANCEOF, T_NEW])
+            if ($prevToken->isGivenKind([T_INSTANCEOF, T_NEW])
                 || $nextToken->isGivenKind(T_PAAMAYIM_NEKUDOTAYIM)
-                || (
-                    null !== $insideMethodSignatureUntil
-                    && $i < $insideMethodSignatureUntil
-                    && $prevToken->equalsAny(['(', ',', [CT::T_NULLABLE_TYPE], [CT::T_TYPE_ALTERNATION], [CT::T_TYPE_COLON]])
-                )
+                || (                null !== $insideMethodSignatureUntil
+                && $i < $insideMethodSignatureUntil
+                && $prevToken->equalsAny(['(', ',', [CT::T_NULLABLE_TYPE], [CT::T_TYPE_ALTERNATION], [CT::T_TYPE_COLON]]))
             ) {
                 for ($j = $classStartIndex; $j < $i; ++$j) {
                     $tokens->clearTokenAndMergeSurroundingWhitespace($j);

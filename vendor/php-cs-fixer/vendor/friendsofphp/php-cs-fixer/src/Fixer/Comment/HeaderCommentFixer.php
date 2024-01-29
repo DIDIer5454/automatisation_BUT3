@@ -186,20 +186,23 @@ echo 1;
     {
         $fixerName = $this->getName();
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('header', 'Proper header content.'))
                 ->setAllowedTypes(['string'])
-                ->setNormalizer(static function (Options $options, string $value) use ($fixerName): string {
-                    if ('' === trim($value)) {
-                        return '';
-                    }
+                ->setNormalizer(
+                    static function (Options $options, string $value) use ($fixerName): string {
+                        if ('' === trim($value)) {
+                            return '';
+                        }
 
-                    if (str_contains($value, '*/')) {
-                        throw new InvalidFixerConfigurationException($fixerName, 'Cannot use \'*/\' in header.');
-                    }
+                        if (str_contains($value, '*/')) {
+                            throw new InvalidFixerConfigurationException($fixerName, 'Cannot use \'*/\' in header.');
+                        }
 
-                    return $value;
-                })
+                        return $value;
+                    }
+                )
                 ->getOption(),
             (new FixerOptionBuilder('comment_type', 'Comment syntax type.'))
                 ->setAllowedValues([self::HEADER_PHPDOC, self::HEADER_COMMENT])
@@ -213,7 +216,8 @@ echo 1;
                 ->setAllowedValues(['both', 'top', 'bottom', 'none'])
                 ->setDefault('both')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -326,8 +330,7 @@ echo 1;
         $lineEnding = $this->whitespacesConfig->getLineEnding();
 
         // fix lines after header comment
-        if (
-            ('both' === $this->configuration['separate'] || 'bottom' === $this->configuration['separate'])
+        if (('both' === $this->configuration['separate'] || 'bottom' === $this->configuration['separate'])
             && null !== $tokens->getNextMeaningfulToken($headerIndex)
         ) {
             $expectedLineCount = 2;
@@ -350,10 +353,12 @@ echo 1;
                 }
             } elseif ($lineBreakCount > $expectedLineCount && $tokens[$headerIndex + 1]->isWhitespace()) {
                 $newLinesToRemove = $lineBreakCount - $expectedLineCount;
-                $tokens[$headerIndex + 1] = new Token([
+                $tokens[$headerIndex + 1] = new Token(
+                    [
                     T_WHITESPACE,
                     Preg::replace("/^\\R{{$newLinesToRemove}}/", '', $tokens[$headerIndex + 1]->getContent()),
-                ]);
+                    ]
+                );
             }
         }
 

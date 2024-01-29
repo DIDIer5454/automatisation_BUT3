@@ -19,7 +19,9 @@ namespace PhpCsFixer\RuleSet;
  */
 abstract class AbstractRuleSetDescription implements RuleSetDescriptionInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function getName(): string
     {

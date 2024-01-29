@@ -136,12 +136,9 @@ $f = fn () => null;
             // eg: `function foo(){}` => `function foo() {}`
             // eg: `function foo()   {}` => `function foo() {}`
             // eg: `fn()   =>` => `fn() =>`
-            if (
-                $tokens[$startBraceIndex]->equalsAny(['{', [T_DOUBLE_ARROW]])
-                && (
-                    !$tokens[$startBraceIndex - 1]->isWhitespace()
-                    || $tokens[$startBraceIndex - 1]->isWhitespace($this->singleLineWhitespaceOptions)
-                )
+            if ($tokens[$startBraceIndex]->equalsAny(['{', [T_DOUBLE_ARROW]])
+                && (                !$tokens[$startBraceIndex - 1]->isWhitespace()
+                || $tokens[$startBraceIndex - 1]->isWhitespace($this->singleLineWhitespaceOptions))
             ) {
                 $tokens->ensureWhitespaceAtIndex($startBraceIndex - 1, 1, ' ');
             }
@@ -211,7 +208,8 @@ $f = fn () => null;
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('closure_function_spacing', 'Spacing to use before open parenthesis for closures.'))
                 ->setDefault(self::SPACING_ONE)
                 ->setAllowedValues(self::SUPPORTED_SPACINGS)
@@ -224,7 +222,8 @@ $f = fn () => null;
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixParenthesisInnerEdge(Tokens $tokens, int $start, int $end): void

@@ -139,8 +139,7 @@ enum Foo
             if ($tokens[$classyIndex]->isGivenKind(T_CLASS)) {
                 $modifiers = $this->tokensAnalyzer->getClassyModifiers($classyIndex);
 
-                if (
-                    isset($modifiers['final'])
+                if (isset($modifiers['final'])
                     || $this->tokensAnalyzer->isAnonymousClass($classyIndex)
                 ) {
                     $classyIndex = $this->fixClassy($tokens, $classyIndex);

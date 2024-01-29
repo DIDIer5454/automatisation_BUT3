@@ -58,11 +58,13 @@ final class Application extends BaseApplication
         $this->add(new FixCommand($this->toolInfo));
         $this->add(new ListFilesCommand($this->toolInfo));
         $this->add(new ListSetsCommand());
-        $this->add(new SelfUpdateCommand(
-            new NewVersionChecker(new GithubClient()),
-            $this->toolInfo,
-            new PharChecker()
-        ));
+        $this->add(
+            new SelfUpdateCommand(
+                new NewVersionChecker(new GithubClient()),
+                $this->toolInfo,
+                new PharChecker()
+            )
+        );
     }
 
     public static function getMajorVersion(): int
@@ -96,8 +98,7 @@ final class Application extends BaseApplication
 
         $result = parent::doRun($input, $output);
 
-        if (
-            null !== $stdErr
+        if (null !== $stdErr
             && $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE
         ) {
             $triggeredDeprecations = Utils::getTriggeredDeprecations();
@@ -119,11 +120,13 @@ final class Application extends BaseApplication
      */
     public function getLongVersion(): string
     {
-        $version = implode('', [
+        $version = implode(
+            '', [
             parent::getLongVersion(),
             self::VERSION_CODENAME ? sprintf(' <info>%s</info>', self::VERSION_CODENAME) : '', // @phpstan-ignore-line to avoid `Ternary operator condition is always true|false.`
             ' by <comment>Fabien Potencier</comment> and <comment>Dariusz Ruminski</comment>',
-        ]);
+            ]
+        );
 
         $commit = '@git-commit@';
 

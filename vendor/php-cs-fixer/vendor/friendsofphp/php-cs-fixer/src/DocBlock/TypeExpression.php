@@ -265,17 +265,19 @@ final class TypeExpression
      */
     public function sortTypes(\Closure $compareCallback): void
     {
-        $this->walkTypes(static function (self $type) use ($compareCallback): void {
-            if ($type->isUnionType) {
-                $type->innerTypeExpressions = Utils::stableSort(
-                    $type->innerTypeExpressions,
-                    static fn (array $type): self => $type['expression'],
-                    $compareCallback,
-                );
+        $this->walkTypes(
+            static function (self $type) use ($compareCallback): void {
+                if ($type->isUnionType) {
+                    $type->innerTypeExpressions = Utils::stableSort(
+                        $type->innerTypeExpressions,
+                        static fn (array $type): self => $type['expression'],
+                        $compareCallback,
+                    );
 
-                $type->value = implode($type->getTypesGlue(), $type->getTypes());
+                    $type->value = implode($type->getTypesGlue(), $type->getTypes());
+                }
             }
-        });
+        );
     }
 
     public function getCommonType(): ?string
@@ -550,7 +552,8 @@ final class TypeExpression
             return $aliases[$type];
         }
 
-        if (\in_array($type, [
+        if (\in_array(
+            $type, [
             'array',
             'bool',
             'callable',
@@ -566,7 +569,9 @@ final class TypeExpression
             'string',
             'true',
             'void',
-        ], true)) {
+            ], true
+        )
+        ) {
             return $type;
         }
 

@@ -48,22 +48,34 @@ class Deprecation
     private const TYPE_TRIGGER_ERROR      = 2;
     private const TYPE_PSR_LOGGER         = 4;
 
-    /** @var int-mask-of<self::TYPE_*>|null */
+    /**
+     * @var int-mask-of<self::TYPE_*>|null 
+     */
     private static $type;
 
-    /** @var LoggerInterface|null */
+    /**
+     * @var LoggerInterface|null 
+     */
     private static $logger;
 
-    /** @var array<string,bool> */
+    /**
+     * @var array<string,bool> 
+     */
     private static $ignoredPackages = [];
 
-    /** @var array<string,int> */
+    /**
+     * @var array<string,int> 
+     */
     private static $triggeredDeprecations = [];
 
-    /** @var array<string,bool> */
+    /**
+     * @var array<string,bool> 
+     */
     private static $ignoredLinks = [];
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private static $deduplication = true;
 
     /**
@@ -274,9 +286,11 @@ class Deprecation
 
     public static function getUniqueTriggeredDeprecationsCount(): int
     {
-        return array_reduce(self::$triggeredDeprecations, static function (int $carry, int $count) {
-            return $carry + $count;
-        }, 0);
+        return array_reduce(
+            self::$triggeredDeprecations, static function (int $carry, int $count) {
+                return $carry + $count;
+            }, 0
+        );
     }
 
     /**
@@ -295,17 +309,17 @@ class Deprecation
     private static function getTypeFromEnv(): int
     {
         switch ($_SERVER['DOCTRINE_DEPRECATIONS'] ?? $_ENV['DOCTRINE_DEPRECATIONS'] ?? null) {
-            case 'trigger':
-                self::$type = self::TYPE_TRIGGER_ERROR;
-                break;
+        case 'trigger':
+            self::$type = self::TYPE_TRIGGER_ERROR;
+            break;
 
-            case 'track':
-                self::$type = self::TYPE_TRACK_DEPRECATIONS;
-                break;
+        case 'track':
+            self::$type = self::TYPE_TRACK_DEPRECATIONS;
+            break;
 
-            default:
-                self::$type = self::TYPE_NONE;
-                break;
+        default:
+            self::$type = self::TYPE_NONE;
+            break;
         }
 
         return self::$type;

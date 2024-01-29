@@ -77,7 +77,8 @@ final class TypesSpacesFixer extends AbstractFixer implements ConfigurableFixerI
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('space', 'Spacing to apply around union type and intersection type operators.'))
                 ->setAllowedValues(['none', 'single'])
                 ->setDefault('none')
@@ -86,7 +87,8 @@ final class TypesSpacesFixer extends AbstractFixer implements ConfigurableFixerI
                 ->setAllowedValues(['none', 'single', null])
                 ->setDefault(null)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void

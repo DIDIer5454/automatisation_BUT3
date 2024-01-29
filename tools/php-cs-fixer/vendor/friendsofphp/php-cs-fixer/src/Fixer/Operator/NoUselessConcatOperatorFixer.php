@@ -96,12 +96,14 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('juggle_simple_strings', 'Allow for simple string quote juggling if it results in more concat-operations merges.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -120,8 +122,7 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
     {
         // if both operands are of the same type then these operands can always be merged
 
-        if (
-            (self::STR_DOUBLE_QUOTE === $firstOperand['type'] && self::STR_DOUBLE_QUOTE === $secondOperand['type'])
+        if ((self::STR_DOUBLE_QUOTE === $firstOperand['type'] && self::STR_DOUBLE_QUOTE === $secondOperand['type'])
             || (self::STR_SINGLE_QUOTE === $firstOperand['type'] && self::STR_SINGLE_QUOTE === $secondOperand['type'])
         ) {
             $this->mergeConstantEscapedStringOperands($tokens, $firstOperand, $concatIndex, $secondOperand);

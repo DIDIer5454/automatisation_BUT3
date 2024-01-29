@@ -90,10 +90,12 @@ final class CastSpacesFixer extends AbstractFixer implements ConfigurableFixerIn
                 continue;
             }
 
-            $tokens[$index] = new Token([
+            $tokens[$index] = new Token(
+                [
                 $token->getId(),
                 strtr($token->getContent(), self::INSIDE_CAST_SPACE_REPLACE_MAP),
-            ]);
+                ]
+            );
 
             if ('single' === $this->configuration['space']) {
                 // force single whitespace after cast token:
@@ -120,11 +122,13 @@ final class CastSpacesFixer extends AbstractFixer implements ConfigurableFixerIn
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('space', 'spacing to apply between cast and variable.'))
                 ->setAllowedValues(['none', 'single'])
                 ->setDefault('single')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

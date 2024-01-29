@@ -61,20 +61,24 @@ class Normalizer
         }
 
         switch ($form) {
-            case self::NFC: $C = true; $K = false; break;
-            case self::NFD: $C = false; $K = false; break;
-            case self::NFKC: $C = true; $K = true; break;
-            case self::NFKD: $C = false; $K = true; break;
-            default:
-                if (\defined('Normalizer::NONE') && \Normalizer::NONE == $form) {
-                    return $s;
-                }
+        case self::NFC: $C = true; $K = false; 
+            break;
+        case self::NFD: $C = false; $K = false; 
+            break;
+        case self::NFKC: $C = true; $K = true; 
+            break;
+        case self::NFKD: $C = false; $K = true; 
+            break;
+        default:
+            if (\defined('Normalizer::NONE') && \Normalizer::NONE == $form) {
+                return $s;
+            }
 
-                if (80000 > \PHP_VERSION_ID) {
-                    return false;
-                }
+            if (80000 > \PHP_VERSION_ID) {
+                return false;
+            }
 
-                throw new \ValueError('normalizer_normalize(): Argument #2 ($form) must be a a valid normalization form');
+            throw new \ValueError('normalizer_normalize(): Argument #2 ($form) must be a a valid normalization form');
         }
 
         if ('' === $s) {
@@ -151,7 +155,8 @@ class Normalizer
 
             if ($lastUchr < "\xE1\x84\x80" || "\xE1\x84\x92" < $lastUchr
                 || $uchr < "\xE1\x85\xA1" || "\xE1\x85\xB5" < $uchr
-                || $lastUcls) {
+                || $lastUcls
+            ) {
                 // Table lookup and combining chars composition
 
                 $ucls = $combClass[$uchr] ?? 0;
@@ -302,7 +307,7 @@ class Normalizer
     private static function getData($file)
     {
         if (file_exists($file = __DIR__.'/Resources/unidata/'.$file.'.php')) {
-            return require $file;
+            return include $file;
         }
 
         return false;

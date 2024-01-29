@@ -83,10 +83,12 @@ final class FixerDocumentGenerator
             $alternatives = $fixer->getSuccessorsNames();
 
             if (0 !== \count($alternatives)) {
-                $deprecationDescription .= RstUtils::toRst(sprintf(
-                    "\n\nYou should use %s instead.",
-                    Utils::naturalLanguageJoinWithBackticks($alternatives)
-                ), 0);
+                $deprecationDescription .= RstUtils::toRst(
+                    sprintf(
+                        "\n\nYou should use %s instead.",
+                        Utils::naturalLanguageJoinWithBackticks($alternatives)
+                    ), 0
+                );
             }
         }
 
@@ -125,13 +127,17 @@ final class FixerDocumentGenerator
             }
 
             $warningsHeaderLine = str_repeat('-', \strlen($warningsHeader));
-            $doc .= "\n\n".implode("\n", array_filter([
-                $warningsHeader,
-                $warningsHeaderLine,
-                $deprecationDescription,
-                $experimentalDescription,
-                $riskyDescription,
-            ]));
+            $doc .= "\n\n".implode(
+                "\n", array_filter(
+                    [
+                    $warningsHeader,
+                    $warningsHeaderLine,
+                    $deprecationDescription,
+                    $experimentalDescription,
+                    $riskyDescription,
+                    ]
+                )
+            );
         }
 
         if ($fixer instanceof ConfigurableFixerInterface) {
@@ -169,9 +175,11 @@ final class FixerDocumentGenerator
                     );
                 } else {
                     $allowedKind = 'Allowed values';
-                    $allowed = array_map(static fn ($value): string => $value instanceof AllowedValueSubset
+                    $allowed = array_map(
+                        static fn ($value): string => $value instanceof AllowedValueSubset
                         ? 'a subset of ``'.Utils::toString($value->getAllowedValues()).'``'
-                        : '``'.Utils::toString($value).'``', $allowed);
+                        : '``'.Utils::toString($value).'``', $allowed
+                    );
                 }
 
                 $allowed = Utils::naturalLanguageJoin($allowed, '');

@@ -38,10 +38,12 @@ final class ProcessLinterProcessBuilder
 
     public function build(string $path): Process
     {
-        return new Process([
+        return new Process(
+            [
             $this->executable,
             '-l',
             $path,
-        ]);
+            ]
+        );
     }
 }

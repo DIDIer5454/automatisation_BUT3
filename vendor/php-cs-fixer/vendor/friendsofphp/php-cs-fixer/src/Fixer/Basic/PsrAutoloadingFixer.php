@@ -105,8 +105,7 @@ class InvalidName {}
             return false;
         }
 
-        if (
-            // ignore file with extension other than php
+        if (// ignore file with extension other than php
             ('php' !== $file->getExtension())
             // ignore file with name that cannot be a class name
             || !Preg::match('/^'.TypeExpression::REGEX_IDENTIFIER.'$/', $file->getBasename('.php'))
@@ -132,12 +131,14 @@ class InvalidName {}
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('dir', 'If provided, the directory where the project code is placed.'))
                 ->setAllowedTypes(['null', 'string'])
                 ->setDefault(null)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void

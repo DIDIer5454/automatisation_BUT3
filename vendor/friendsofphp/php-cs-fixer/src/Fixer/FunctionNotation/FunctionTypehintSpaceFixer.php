@@ -63,8 +63,7 @@ final class FunctionTypehintSpaceFixer extends AbstractFixer
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
             $token = $tokens[$index];
 
-            if (
-                !$token->isGivenKind(T_FUNCTION)
+            if (!$token->isGivenKind(T_FUNCTION)
                 && (\PHP_VERSION_ID < 70400 || !$token->isGivenKind(T_FN))
             ) {
                 continue;

@@ -72,12 +72,14 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('fix_non_monolithic_code', 'Whether to also fix code with inline HTML.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true) // @TODO change to "false" on next major 4.0
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

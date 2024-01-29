@@ -126,8 +126,7 @@ EOF;
                 || ($token->isGivenKind(T_ENCAPSED_AND_WHITESPACE) && $doubleQuoteOpened)
             ;
             $isHeredocSyntax = !$isSingleQuotedString && !$isDoubleQuotedString;
-            if (
-                (false === $this->configuration['single_quoted'] && $isSingleQuotedString)
+            if ((false === $this->configuration['single_quoted'] && $isSingleQuotedString)
                 || (false === $this->configuration['double_quoted'] && $isDoubleQuotedString)
                 || (false === $this->configuration['heredoc_syntax'] && $isHeredocSyntax)
             ) {
@@ -153,7 +152,8 @@ EOF;
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('single_quoted', 'Whether to fix single-quoted strings.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
@@ -166,6 +166,7 @@ EOF;
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

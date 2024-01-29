@@ -125,7 +125,8 @@ function foo() {}
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('annotations', 'List of annotations to remove, e.g. `["author"]`.'))
                 ->setAllowedTypes(['array'])
                 ->setDefault([])
@@ -134,7 +135,8 @@ function foo() {}
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

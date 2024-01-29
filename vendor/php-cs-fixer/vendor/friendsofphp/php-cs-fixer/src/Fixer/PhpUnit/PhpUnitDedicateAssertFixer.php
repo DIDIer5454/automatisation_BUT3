@@ -128,7 +128,8 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
 
         if (PhpUnitTargetVersion::fulfills($this->configuration['target'], PhpUnitTargetVersion::VERSION_3_5)) {
             // assertions added in 3.5: assertInternalType assertNotEmpty assertEmpty
-            $this->functions = array_merge($this->functions, [
+            $this->functions = array_merge(
+                $this->functions, [
                 'empty',
                 'is_array',
                 'is_bool',
@@ -144,30 +145,37 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
                 'is_real',
                 'is_scalar',
                 'is_string',
-            ]);
+                ]
+            );
         }
 
         if (PhpUnitTargetVersion::fulfills($this->configuration['target'], PhpUnitTargetVersion::VERSION_5_0)) {
             // assertions added in 5.0: assertFinite assertInfinite assertNan
-            $this->functions = array_merge($this->functions, [
+            $this->functions = array_merge(
+                $this->functions, [
                 'is_infinite',
                 'is_nan',
-            ]);
+                ]
+            );
         }
 
         if (PhpUnitTargetVersion::fulfills($this->configuration['target'], PhpUnitTargetVersion::VERSION_5_6)) {
             // assertions added in 5.6: assertDirectoryExists assertDirectoryNotExists assertIsReadable assertNotIsReadable assertIsWritable assertNotIsWritable
-            $this->functions = array_merge($this->functions, [
+            $this->functions = array_merge(
+                $this->functions, [
                 'is_dir',
                 'is_readable',
                 'is_writable',
-            ]);
+                ]
+            );
         }
 
         if (PhpUnitTargetVersion::fulfills($this->configuration['target'], PhpUnitTargetVersion::VERSION_7_5)) {
-            $this->functions = array_merge($this->functions, [
+            $this->functions = array_merge(
+                $this->functions, [
                 'str_contains',
-            ]);
+                ]
+            );
         }
     }
 
@@ -236,8 +244,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
 
-            if (
-                'assertsame' === $assertCall['loweredName']
+            if ('assertsame' === $assertCall['loweredName']
                 || 'assertnotsame' === $assertCall['loweredName']
                 || 'assertequals' === $assertCall['loweredName']
                 || 'assertnotequals' === $assertCall['loweredName']
@@ -251,19 +258,23 @@ final class MyTest extends \PHPUnit_Framework_TestCase
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('target', 'Target version of PHPUnit.'))
                 ->setAllowedTypes(['string'])
-                ->setAllowedValues([
+                ->setAllowedValues(
+                    [
                     PhpUnitTargetVersion::VERSION_3_0,
                     PhpUnitTargetVersion::VERSION_3_5,
                     PhpUnitTargetVersion::VERSION_5_0,
                     PhpUnitTargetVersion::VERSION_5_6,
                     PhpUnitTargetVersion::VERSION_NEWEST,
-                ])
+                    ]
+                )
                 ->setDefault(PhpUnitTargetVersion::VERSION_NEWEST)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -510,10 +521,12 @@ final class MyTest extends \PHPUnit_Framework_TestCase
             $countCallCloseBraceIndex
         );
 
-        $tokens[$assertCall['index']] = new Token([
+        $tokens[$assertCall['index']] = new Token(
+            [
             T_STRING,
             false === strpos($assertCall['loweredName'], 'not', 6) ? 'assertCount' : 'assertNotCount',
-        ]);
+            ]
+        );
     }
 
     /**

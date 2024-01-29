@@ -142,8 +142,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
 
             $meaningfulTokenBeforeParenthesis = $tokens[$tokens->getPrevMeaningfulToken($index)];
 
-            if (
-                $meaningfulTokenBeforeParenthesis->isKeyword()
+            if ($meaningfulTokenBeforeParenthesis->isKeyword()
                 && !$meaningfulTokenBeforeParenthesis->isGivenKind($expectedTokens)
             ) {
                 continue;
@@ -151,8 +150,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
 
             $isMultiline = $this->fixFunction($tokens, $index);
 
-            if (
-                $isMultiline
+            if ($isMultiline
                 && 'ensure_fully_multiline' === $this->configuration['on_multiline']
                 && !$meaningfulTokenBeforeParenthesis->isGivenKind(T_LIST)
             ) {
@@ -163,7 +161,8 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('keep_multiple_spaces_after_comma', 'Whether keep multiple spaces after comma.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
@@ -186,7 +185,8 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
                 ->setAllowedValues(['ignore', 'same_line', 'standalone'])
                 ->setDefault('standalone')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -423,8 +423,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
         if ($tokens[$index - 1]->isWhitespace()) {
             $prevIndex = $tokens->getPrevNonWhitespace($index - 1);
 
-            if (
-                !$tokens[$prevIndex]->equals(',') && !$tokens[$prevIndex]->isComment()
+            if (!$tokens[$prevIndex]->equals(',') && !$tokens[$prevIndex]->isComment()
                 && (true === $this->configuration['after_heredoc'] || !$tokens[$prevIndex]->isGivenKind(T_END_HEREDOC))
             ) {
                 $tokens->clearAt($index - 1);
@@ -444,8 +443,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
                 $newContent = Preg::replace('/\R/', '', $newContent);
             }
 
-            if (
-                (false === $this->configuration['keep_multiple_spaces_after_comma'] || Preg::match('/\R/', $newContent))
+            if ((false === $this->configuration['keep_multiple_spaces_after_comma'] || Preg::match('/\R/', $newContent))
                 && !$this->isCommentLastLineToken($tokens, $index + 2)
             ) {
                 $newContent = ltrim($newContent, " \t");

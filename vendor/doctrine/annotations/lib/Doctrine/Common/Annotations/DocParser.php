@@ -139,7 +139,9 @@ final class DocParser
      */
     private $ignoredAnnotationNamespaces = [];
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $context = '';
 
     /**
@@ -501,13 +503,15 @@ final class DocParser
 
             self::$metadataParser->setIgnoreNotImportedAnnotations(true);
             self::$metadataParser->setIgnoredAnnotationNames($this->ignoredAnnotationNames);
-            self::$metadataParser->setImports([
+            self::$metadataParser->setImports(
+                [
                 'enum'                     => Enum::class,
                 'target'                   => Target::class,
                 'attribute'                => Attribute::class,
                 'attributes'               => Attributes::class,
                 'namedargumentconstructor' => NamedArgumentConstructor::class,
-            ]);
+                ]
+            );
 
             // Make sure that annotations from metadata are loaded
             class_exists(Enum::class);
@@ -694,9 +698,8 @@ final class DocParser
             }
 
             // make sure the @ is preceded by non-catchable pattern
-            if (
-                $this->lexer->token !== null &&
-                $this->lexer->lookahead['position'] === $this->lexer->token['position'] + strlen(
+            if ($this->lexer->token !== null 
+                && $this->lexer->lookahead['position'] === $this->lexer->token['position'] + strlen(
                     $this->lexer->token['value']
                 )
             ) {
@@ -707,8 +710,7 @@ final class DocParser
             // make sure the @ is followed by either a namespace separator, or
             // an identifier token
             $peek = $this->lexer->glimpse();
-            if (
-                ($peek === null)
+            if (($peek === null)
                 || ($peek['type'] !== DocLexer::T_NAMESPACE_SEPARATOR && ! in_array(
                     $peek['type'],
                     self::$classIdentifiers,
@@ -751,8 +753,7 @@ final class DocParser
         // check if we have an annotation
         $name = $this->Identifier();
 
-        if (
-            $this->lexer->isNextToken(DocLexer::T_MINUS)
+        if ($this->lexer->isNextToken(DocLexer::T_MINUS)
             && $this->lexer->nextTokenIsAdjacent()
         ) {
             // Annotations with dashes, such as "@foo-" or "@foo-bar", are to be discarded
@@ -783,8 +784,7 @@ final class DocParser
                     ? $namespace . substr($name, $pos)
                     : $namespace;
                 $found     = $this->classExists($name);
-            } elseif (
-                ! isset($this->ignoredAnnotationNames[$name])
+            } elseif (! isset($this->ignoredAnnotationNames[$name])
                 && isset($this->imports['__NAMESPACE__'])
                 && $this->classExists($this->imports['__NAMESPACE__'] . '\\' . $name)
             ) {
@@ -799,25 +799,29 @@ final class DocParser
                     return false;
                 }
 
-                throw AnnotationException::semanticalError(sprintf(
-                    <<<'EXCEPTION'
+                throw AnnotationException::semanticalError(
+                    sprintf(
+                        <<<'EXCEPTION'
 The annotation "@%s" in %s was never imported. Did you maybe forget to add a "use" statement for this annotation?
-EXCEPTION
-                    ,
-                    $name,
-                    $this->context
-                ));
+    EXCEPTION
+                        ,
+                        $name,
+                        $this->context
+                    )
+                );
             }
         }
 
         $name = ltrim($name, '\\');
 
         if (! $this->classExists($name)) {
-            throw AnnotationException::semanticalError(sprintf(
-                'The annotation "@%s" in %s does not exist, or could not be auto-loaded.',
-                $name,
-                $this->context
-            ));
+            throw AnnotationException::semanticalError(
+                sprintf(
+                    'The annotation "@%s" in %s does not exist, or could not be auto-loaded.',
+                    $name,
+                    $this->context
+                )
+            );
         }
 
         // at this point, $name contains the fully qualified class name of the
@@ -835,19 +839,21 @@ EXCEPTION
                 return false;
             }
 
-            throw AnnotationException::semanticalError(sprintf(
-                <<<'EXCEPTION'
+            throw AnnotationException::semanticalError(
+                sprintf(
+                    <<<'EXCEPTION'
 The class "%s" is not annotated with @Annotation.
 Are you sure this class can be used as annotation?
 If so, then you need to add @Annotation to the _class_ doc comment of "%s".
 If it is indeed no annotation, then you need to add @IgnoreAnnotation("%s") to the _class_ doc comment of %s.
-EXCEPTION
-                ,
-                $name,
-                $name,
-                $originalName,
-                $this->context
-            ));
+    EXCEPTION
+                    ,
+                    $name,
+                    $name,
+                    $originalName,
+                    $this->context
+                )
+            );
         }
 
         //if target is nested annotation
@@ -892,8 +898,7 @@ EXCEPTION
 
         // checks all declared attributes
         foreach (self::$annotationMetadata[$name]['attribute_types'] as $property => $type) {
-            if (
-                $property === self::$annotationMetadata[$name]['default_property']
+            if ($property === self::$annotationMetadata[$name]['default_property']
                 && ! isset($values[$property]) && isset($values['value'])
             ) {
                 $property = 'value';
@@ -948,18 +953,20 @@ EXCEPTION
             if (PHP_VERSION_ID >= 80000) {
                 foreach ($values as $property => $value) {
                     if (! isset(self::$annotationMetadata[$name]['constructor_args'][$property])) {
-                        throw AnnotationException::creationError(sprintf(
-                            <<<'EXCEPTION'
+                        throw AnnotationException::creationError(
+                            sprintf(
+                                <<<'EXCEPTION'
 The annotation @%s declared on %s does not have a property named "%s"
 that can be set through its named arguments constructor.
 Available named arguments: %s
-EXCEPTION
-                            ,
-                            $originalName,
-                            $this->context,
-                            $property,
-                            implode(', ', array_keys(self::$annotationMetadata[$name]['constructor_args']))
-                        ));
+    EXCEPTION
+                                ,
+                                $originalName,
+                                $this->context,
+                                $property,
+                                implode(', ', array_keys(self::$annotationMetadata[$name]['constructor_args']))
+                            )
+                        );
                     }
                 }
 
@@ -973,18 +980,20 @@ EXCEPTION
 
             foreach ($values as $property => $value) {
                 if (! isset(self::$annotationMetadata[$name]['constructor_args'][$property])) {
-                    throw AnnotationException::creationError(sprintf(
-                        <<<'EXCEPTION'
+                    throw AnnotationException::creationError(
+                        sprintf(
+                            <<<'EXCEPTION'
 The annotation @%s declared on %s does not have a property named "%s"
 that can be set through its named arguments constructor.
 Available named arguments: %s
-EXCEPTION
-                        ,
-                        $originalName,
-                        $this->context,
-                        $property,
-                        implode(', ', array_keys(self::$annotationMetadata[$name]['constructor_args']))
-                    ));
+    EXCEPTION
+                            ,
+                            $originalName,
+                            $this->context,
+                            $property,
+                            implode(', ', array_keys(self::$annotationMetadata[$name]['constructor_args']))
+                        )
+                    );
                 }
 
                 $positionalValues[self::$annotationMetadata[$name]['constructor_args'][$property]['position']] = $value;
@@ -1004,28 +1013,32 @@ EXCEPTION
         foreach ($values as $property => $value) {
             if (! isset(self::$annotationMetadata[$name]['properties'][$property])) {
                 if ($property !== 'value') {
-                    throw AnnotationException::creationError(sprintf(
-                        <<<'EXCEPTION'
+                    throw AnnotationException::creationError(
+                        sprintf(
+                            <<<'EXCEPTION'
 The annotation @%s declared on %s does not have a property named "%s".
 Available properties: %s
-EXCEPTION
-                        ,
-                        $originalName,
-                        $this->context,
-                        $property,
-                        implode(', ', self::$annotationMetadata[$name]['properties'])
-                    ));
+    EXCEPTION
+                            ,
+                            $originalName,
+                            $this->context,
+                            $property,
+                            implode(', ', self::$annotationMetadata[$name]['properties'])
+                        )
+                    );
                 }
 
                 // handle the case if the property has no annotations
                 $property = self::$annotationMetadata[$name]['default_property'];
                 if (! $property) {
-                    throw AnnotationException::creationError(sprintf(
-                        'The annotation @%s declared on %s does not accept any values, but got %s.',
-                        $originalName,
-                        $this->context,
-                        json_encode($values)
-                    ));
+                    throw AnnotationException::creationError(
+                        sprintf(
+                            'The annotation @%s declared on %s does not accept any values, but got %s.',
+                            $originalName,
+                            $this->context,
+                            json_encode($values)
+                        )
+                    );
                 }
             }
 
@@ -1120,35 +1133,35 @@ EXCEPTION
             $loweredAlias = strtolower($alias);
 
             switch (true) {
-                case ! empty($this->namespaces):
-                    foreach ($this->namespaces as $ns) {
-                        if (class_exists($ns . '\\' . $className) || interface_exists($ns . '\\' . $className)) {
-                            $className = $ns . '\\' . $className;
-                            $found     = true;
-                            break;
-                        }
+            case ! empty($this->namespaces):
+                foreach ($this->namespaces as $ns) {
+                    if (class_exists($ns . '\\' . $className) || interface_exists($ns . '\\' . $className)) {
+                        $className = $ns . '\\' . $className;
+                        $found     = true;
+                        break;
                     }
+                }
 
-                    break;
+                break;
 
-                case isset($this->imports[$loweredAlias]):
-                    $found     = true;
-                    $className = ($pos !== false)
-                        ? $this->imports[$loweredAlias] . substr($className, $pos)
-                        : $this->imports[$loweredAlias];
-                    break;
+            case isset($this->imports[$loweredAlias]):
+                $found     = true;
+                $className = ($pos !== false)
+                    ? $this->imports[$loweredAlias] . substr($className, $pos)
+                    : $this->imports[$loweredAlias];
+                break;
 
-                default:
-                    if (isset($this->imports['__NAMESPACE__'])) {
-                        $ns = $this->imports['__NAMESPACE__'];
+            default:
+                if (isset($this->imports['__NAMESPACE__'])) {
+                    $ns = $this->imports['__NAMESPACE__'];
 
-                        if (class_exists($ns . '\\' . $className) || interface_exists($ns . '\\' . $className)) {
-                            $className = $ns . '\\' . $className;
-                            $found     = true;
-                        }
+                    if (class_exists($ns . '\\' . $className) || interface_exists($ns . '\\' . $className)) {
+                        $className = $ns . '\\' . $className;
+                        $found     = true;
                     }
+                }
 
-                    break;
+                break;
             }
 
             if ($found) {
@@ -1159,9 +1172,8 @@ EXCEPTION
         /**
          * Checks if identifier ends with ::class and remove the leading backslash if it exists.
          */
-        if (
-            $this->identifierEndsWithClassConstant($identifier) &&
-            ! $this->identifierStartsWithBackslash($identifier)
+        if ($this->identifierEndsWithClassConstant($identifier) 
+            && ! $this->identifierStartsWithBackslash($identifier)
         ) {
             return substr($identifier, 0, $this->getClassConstantPositionInIdentifier($identifier));
         }
@@ -1187,7 +1199,9 @@ EXCEPTION
         return $this->getClassConstantPositionInIdentifier($identifier) === strlen($identifier) - strlen('::class');
     }
 
-    /** @return int|false */
+    /**
+     * @return int|false 
+     */
     private function getClassConstantPositionInIdentifier(string $identifier)
     {
         return stripos($identifier, '::class');
@@ -1266,38 +1280,38 @@ EXCEPTION
         }
 
         switch ($this->lexer->lookahead['type']) {
-            case DocLexer::T_STRING:
-                $this->match(DocLexer::T_STRING);
+        case DocLexer::T_STRING:
+            $this->match(DocLexer::T_STRING);
 
-                return $this->lexer->token['value'];
+            return $this->lexer->token['value'];
 
-            case DocLexer::T_INTEGER:
-                $this->match(DocLexer::T_INTEGER);
+        case DocLexer::T_INTEGER:
+            $this->match(DocLexer::T_INTEGER);
 
-                return (int) $this->lexer->token['value'];
+            return (int) $this->lexer->token['value'];
 
-            case DocLexer::T_FLOAT:
-                $this->match(DocLexer::T_FLOAT);
+        case DocLexer::T_FLOAT:
+            $this->match(DocLexer::T_FLOAT);
 
-                return (float) $this->lexer->token['value'];
+            return (float) $this->lexer->token['value'];
 
-            case DocLexer::T_TRUE:
-                $this->match(DocLexer::T_TRUE);
+        case DocLexer::T_TRUE:
+            $this->match(DocLexer::T_TRUE);
 
-                return true;
+            return true;
 
-            case DocLexer::T_FALSE:
-                $this->match(DocLexer::T_FALSE);
+        case DocLexer::T_FALSE:
+            $this->match(DocLexer::T_FALSE);
 
-                return false;
+            return false;
 
-            case DocLexer::T_NULL:
-                $this->match(DocLexer::T_NULL);
+        case DocLexer::T_NULL:
+            $this->match(DocLexer::T_NULL);
 
-                return null;
+            return null;
 
-            default:
-                throw $this->syntaxError('PlainValue');
+        default:
+            throw $this->syntaxError('PlainValue');
         }
     }
 
@@ -1385,9 +1399,8 @@ EXCEPTION
     {
         $peek = $this->lexer->glimpse();
 
-        if (
-            $peek['type'] === DocLexer::T_EQUALS
-                || $peek['type'] === DocLexer::T_COLON
+        if ($peek['type'] === DocLexer::T_EQUALS
+            || $peek['type'] === DocLexer::T_COLON
         ) {
             if ($this->lexer->isNextToken(DocLexer::T_IDENTIFIER)) {
                 $key = $this->Constant();
@@ -1436,17 +1449,15 @@ EXCEPTION
         $positionalArguments = $arguments['positional_arguments'] ?? [];
         $values              = $arguments['named_arguments'] ?? [];
 
-        if (
-            self::$annotationMetadata[$name]['has_named_argument_constructor']
+        if (self::$annotationMetadata[$name]['has_named_argument_constructor']
             && self::$annotationMetadata[$name]['default_property'] !== null
         ) {
             // We must ensure that we don't have positional arguments after named ones
             $positions    = array_keys($positionalArguments);
             $lastPosition = null;
             foreach ($positions as $position) {
-                if (
-                    ($lastPosition === null && $position !== 0) ||
-                    ($lastPosition !== null && $position !== $lastPosition + 1)
+                if (($lastPosition === null && $position !== 0) 
+                    || ($lastPosition !== null && $position !== $lastPosition + 1)
                 ) {
                     throw $this->syntaxError('Positional arguments after named arguments is not allowed');
                 }

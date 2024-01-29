@@ -65,8 +65,7 @@ final class ListFilesCommand extends Command
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The path to a .php-cs-fixer.php file.'),
                 ]
             )
-            ->setDescription('List all files being fixed by the given config.')
-        ;
+            ->setDescription('List all files being fixed by the given config.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -85,7 +84,9 @@ final class ListFilesCommand extends Command
 
         $finder = $resolver->getFinder();
 
-        /** @var SplFileInfo $file */
+        /**
+ * @var SplFileInfo $file 
+*/
         foreach ($finder as $file) {
             if ($file->isFile()) {
                 $relativePath = str_replace($cwd, '.', $file->getRealPath());

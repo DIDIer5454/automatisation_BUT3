@@ -231,15 +231,13 @@ final class PhpdocAlignFixer extends AbstractFixer implements ConfigurableFixerI
         );
         $tags
             ->setAllowedTypes(['array'])
-            ->setDefault(self::DEFAULT_TAGS)
-        ;
+            ->setDefault(self::DEFAULT_TAGS);
 
         $align = new FixerOptionBuilder('align', 'How comments should be aligned.');
         $align
             ->setAllowedTypes(['string'])
             ->setAllowedValues([self::ALIGN_LEFT, self::ALIGN_VERTICAL])
-            ->setDefault(self::ALIGN_VERTICAL)
-        ;
+            ->setDefault(self::ALIGN_VERTICAL);
 
         $spacing = new FixerOptionBuilder(
             'spacing',
@@ -247,8 +245,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements ConfigurableFixerI
         );
         $spacing->setAllowedTypes(['int', 'int[]'])
             ->setAllowedValues([$allowPositiveIntegers])
-            ->setDefault(self::DEFAULT_SPACING)
-        ;
+            ->setDefault(self::DEFAULT_SPACING);
 
         return new FixerConfigurationResolver([$tags->getOption(), $align->getOption(), $spacing->getOption()]);
     }

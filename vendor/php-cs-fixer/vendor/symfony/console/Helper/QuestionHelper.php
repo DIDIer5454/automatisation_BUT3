@@ -198,9 +198,13 @@ class QuestionHelper extends Helper
         $message = $question->getQuestion();
 
         if ($question instanceof ChoiceQuestion) {
-            $output->writeln(array_merge([
-                $question->getQuestion(),
-            ], $this->formatChoiceQuestionChoices($question, 'info')));
+            $output->writeln(
+                array_merge(
+                    [
+                    $question->getQuestion(),
+                    ], $this->formatChoiceQuestionChoices($question, 'info')
+                )
+            );
 
             $message = $question->getPrompt();
         }

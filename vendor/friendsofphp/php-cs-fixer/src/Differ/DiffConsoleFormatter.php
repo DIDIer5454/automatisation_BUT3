@@ -46,8 +46,7 @@ final class DiffConsoleFormatter
 
         $template = $isDecorated
             ? $this->template
-            : Preg::replace('/<[^<>]+>/', '', $this->template)
-        ;
+            : Preg::replace('/<[^<>]+>/', '', $this->template);
 
         return sprintf(
             $template,

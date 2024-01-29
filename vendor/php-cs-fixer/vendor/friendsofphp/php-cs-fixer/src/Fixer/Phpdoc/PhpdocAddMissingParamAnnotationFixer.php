@@ -122,14 +122,16 @@ function f9(string $foo, $bar, $baz) {}
                 return;
             }
 
-            while ($tokens[$index]->isGivenKind([
+            while ($tokens[$index]->isGivenKind(
+                [
                 T_ABSTRACT,
                 T_FINAL,
                 T_PRIVATE,
                 T_PROTECTED,
                 T_PUBLIC,
                 T_STATIC,
-            ])) {
+                ]
+            )) {
                 $index = $tokens->getNextMeaningfulToken($index);
             }
 
@@ -186,13 +188,15 @@ function f9(string $foo, $bar, $baz) {}
                     $type = 'null|'.$type;
                 }
 
-                $newLines[] = new Line(sprintf(
-                    '%s* @param %s %s%s',
-                    $indent,
-                    $type,
-                    $argument['name'],
-                    $this->whitespacesConfig->getLineEnding()
-                ));
+                $newLines[] = new Line(
+                    sprintf(
+                        '%s* @param %s %s%s',
+                        $indent,
+                        $type,
+                        $argument['name'],
+                        $this->whitespacesConfig->getLineEnding()
+                    )
+                );
             }
 
             array_splice(
@@ -208,12 +212,14 @@ function f9(string $foo, $bar, $baz) {}
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('only_untyped', 'Whether to add missing `@param` annotations for untyped parameters only.'))
                 ->setDefault(true)
                 ->setAllowedTypes(['bool'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -232,14 +238,15 @@ function f9(string $foo, $bar, $baz) {}
         for ($index = $start; $index <= $end; ++$index) {
             $token = $tokens[$index];
 
-            if (
-                $token->isComment()
+            if ($token->isComment()
                 || $token->isWhitespace()
-                || $token->isGivenKind([
+                || $token->isGivenKind(
+                    [
                     CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE,
                     CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED,
                     CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC,
-                ])
+                    ]
+                )
                 || (\defined('T_READONLY') && $token->isGivenKind(T_READONLY))
             ) {
                 continue;

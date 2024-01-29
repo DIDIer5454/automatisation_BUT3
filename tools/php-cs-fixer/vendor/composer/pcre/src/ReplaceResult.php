@@ -15,19 +15,19 @@ final class ReplaceResult
 {
     /**
      * @readonly
-     * @var string
+     * @var      string
      */
     public $result;
 
     /**
      * @readonly
-     * @var 0|positive-int
+     * @var      0|positive-int
      */
     public $count;
 
     /**
      * @readonly
-     * @var bool
+     * @var      bool
      */
     public $matched;
 

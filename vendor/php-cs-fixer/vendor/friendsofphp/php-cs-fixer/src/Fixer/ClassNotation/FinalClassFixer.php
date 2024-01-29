@@ -57,10 +57,12 @@ class MyApp {}
     protected function createProxyFixers(): array
     {
         $fixer = new FinalInternalClassFixer();
-        $fixer->configure([
+        $fixer->configure(
+            [
             'include' => [],
             'consider_absent_docblock_as_internal_class' => true,
-        ]);
+            ]
+        );
 
         return [$fixer];
     }

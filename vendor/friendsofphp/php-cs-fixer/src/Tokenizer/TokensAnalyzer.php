@@ -161,8 +161,7 @@ final class TokensAnalyzer
                 continue;
             }
 
-            if (
-                $token->isWhitespace()
+            if ($token->isWhitespace()
                 && !$tokens[$index - 1]->isGivenKind(T_END_HEREDOC)
                 && str_contains($token->getContent(), "\n")
             ) {
@@ -280,8 +279,7 @@ final class TokensAnalyzer
      */
     public function isLambda(int $index): bool
     {
-        if (
-            !$this->tokens[$index]->isGivenKind(T_FUNCTION)
+        if (!$this->tokens[$index]->isGivenKind(T_FUNCTION)
             && (\PHP_VERSION_ID < 70400 || !$this->tokens[$index]->isGivenKind(T_FN))
         ) {
             throw new \LogicException(sprintf('No T_FUNCTION or T_FN at given index %d, got "%s".', $index, $this->tokens[$index]->getName()));
@@ -310,8 +308,7 @@ final class TokensAnalyzer
 
         $nextIndex = $this->tokens->getNextMeaningfulToken($index);
 
-        if (
-            $this->tokens[$nextIndex]->equalsAny(['(', '{'])
+        if ($this->tokens[$nextIndex]->equalsAny(['(', '{'])
             || $this->tokens[$nextIndex]->isGivenKind([T_AS, T_DOUBLE_COLON, T_ELLIPSIS, T_NS_SEPARATOR, CT::T_RETURN_REF, CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION, T_VARIABLE])
         ) {
             return false;

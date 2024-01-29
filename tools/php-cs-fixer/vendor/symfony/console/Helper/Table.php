@@ -620,7 +620,9 @@ class Table
 
     private function buildTableRows(array $rows): TableRows
     {
-        /** @var WrappableOutputFormatterInterface $formatter */
+        /**
+ * @var WrappableOutputFormatterInterface $formatter 
+*/
         $formatter = $this->output->getFormatter();
         $unmergedRows = [];
         for ($rowKey = 0; $rowKey < \count($rows); ++$rowKey) {
@@ -655,18 +657,20 @@ class Table
             }
         }
 
-        return new TableRows(function () use ($rows, $unmergedRows): \Traversable {
-            foreach ($rows as $rowKey => $row) {
-                $rowGroup = [$row instanceof TableSeparator ? $row : $this->fillCells($row)];
+        return new TableRows(
+            function () use ($rows, $unmergedRows): \Traversable {
+                foreach ($rows as $rowKey => $row) {
+                    $rowGroup = [$row instanceof TableSeparator ? $row : $this->fillCells($row)];
 
-                if (isset($unmergedRows[$rowKey])) {
-                    foreach ($unmergedRows[$rowKey] as $row) {
-                        $rowGroup[] = $row instanceof TableSeparator ? $row : $this->fillCells($row);
+                    if (isset($unmergedRows[$rowKey])) {
+                        foreach ($unmergedRows[$rowKey] as $row) {
+                            $rowGroup[] = $row instanceof TableSeparator ? $row : $this->fillCells($row);
+                        }
                     }
+                    yield $rowGroup;
                 }
-                yield $rowGroup;
             }
-        });
+        );
     }
 
     private function calculateRowCount(): int
@@ -874,36 +878,31 @@ class Table
         $borderless
             ->setHorizontalBorderChars('=')
             ->setVerticalBorderChars(' ')
-            ->setDefaultCrossingChar(' ')
-        ;
+            ->setDefaultCrossingChar(' ');
 
         $compact = new TableStyle();
         $compact
             ->setHorizontalBorderChars('')
             ->setVerticalBorderChars('')
             ->setDefaultCrossingChar('')
-            ->setCellRowContentFormat('%s ')
-        ;
+            ->setCellRowContentFormat('%s ');
 
         $styleGuide = new TableStyle();
         $styleGuide
             ->setHorizontalBorderChars('-')
             ->setVerticalBorderChars(' ')
             ->setDefaultCrossingChar(' ')
-            ->setCellHeaderFormat('%s')
-        ;
+            ->setCellHeaderFormat('%s');
 
         $box = (new TableStyle())
             ->setHorizontalBorderChars('─')
             ->setVerticalBorderChars('│')
-            ->setCrossingChars('┼', '┌', '┬', '┐', '┤', '┘', '┴', '└', '├')
-        ;
+            ->setCrossingChars('┼', '┌', '┬', '┐', '┤', '┘', '┴', '└', '├');
 
         $boxDouble = (new TableStyle())
             ->setHorizontalBorderChars('═', '─')
             ->setVerticalBorderChars('║', '│')
-            ->setCrossingChars('┼', '╔', '╤', '╗', '╢', '╝', '╧', '╚', '╟', '╠', '╪', '╣')
-        ;
+            ->setCrossingChars('┼', '╔', '╤', '╗', '╢', '╝', '╧', '╚', '╟', '╠', '╪', '╣');
 
         return [
             'default' => new TableStyle(),

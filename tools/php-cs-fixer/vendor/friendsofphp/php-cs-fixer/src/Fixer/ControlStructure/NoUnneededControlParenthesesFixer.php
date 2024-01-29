@@ -269,13 +269,15 @@ while ($y) { continue (2); }
             static fn (string $option): bool => 'negative_instanceof' !== $option && 'others' !== $option && 'yield_from' !== $option
         );
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('statements', 'List of control statements to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(self::CONFIG_OPTIONS)])
                 ->setDefault(array_values($defaults))
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function isUselessWrapped(Tokens $tokens, int $beforeOpenIndex, int $afterCloseIndex): bool
@@ -302,15 +304,12 @@ while ($y) { continue (2); }
     {
         $beforeOpenIndex = $tokens->getPrevMeaningfulToken($beforeOpenIndex);
 
-        if (
-            !(
-                $tokens[$beforeOpenIndex]->equals('?') // For BC reasons
-                || $this->isSimpleAssignment($tokens, $beforeOpenIndex, $afterCloseIndex)
-                || $this->isSingleStatement($tokens, $beforeOpenIndex, $afterCloseIndex)
-                || $this->isWrappedFnBody($tokens, $beforeOpenIndex, $afterCloseIndex)
-                || $this->isWrappedForElement($tokens, $beforeOpenIndex, $afterCloseIndex)
-                || $this->isWrappedSequenceElement($tokens, $beforeOpenIndex, $afterCloseIndex)
-            )
+        if (!(            $tokens[$beforeOpenIndex]->equals('?') // For BC reasons
+            || $this->isSimpleAssignment($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isSingleStatement($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedFnBody($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedForElement($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedSequenceElement($tokens, $beforeOpenIndex, $afterCloseIndex))
         ) {
             return false;
         }
@@ -333,8 +332,7 @@ while ($y) { continue (2); }
 
     private function isWrappedInstanceOf(Tokens $tokens, int $instanceOfIndex, int $beforeOpenIndex, int $openIndex, int $closeIndex, int $afterCloseIndex): bool
     {
-        if (
-            $this->containsOperation($tokens, $openIndex, $instanceOfIndex)
+        if ($this->containsOperation($tokens, $openIndex, $instanceOfIndex)
             || $this->containsOperation($tokens, $instanceOfIndex, $closeIndex)
         ) {
             return false;
@@ -564,8 +562,7 @@ while ($y) { continue (2); }
                 continue;
             }
 
-            if (
-                $tokens[$index]->isObjectOperator()
+            if ($tokens[$index]->isObjectOperator()
                 || $tokens[$index]->equalsAny(['$', [T_PAAMAYIM_NEKUDOTAYIM], [T_STRING], [T_VARIABLE]])
             ) {
                 $index = $tokens->getNextMeaningfulToken($index);

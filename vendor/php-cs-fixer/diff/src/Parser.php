@@ -34,8 +34,9 @@ final class Parser
         $collected = [];
 
         for ($i = 0; $i < $lineCount; ++$i) {
-            if (\preg_match('(^---\\s+(?P<file>\\S+))', $lines[$i], $fromMatch) &&
-                \preg_match('(^\\+\\+\\+\\s+(?P<file>\\S+))', $lines[$i + 1], $toMatch)) {
+            if (\preg_match('(^---\\s+(?P<file>\\S+))', $lines[$i], $fromMatch) 
+                && \preg_match('(^\\+\\+\\+\\s+(?P<file>\\S+))', $lines[$i + 1], $toMatch)
+            ) {
                 if ($diff !== null) {
                     $this->parseFileDiff($diff, $collected);
 

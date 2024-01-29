@@ -125,17 +125,21 @@ final class MyTest extends \PHPUnit_Framework_TestCase
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('assertions', 'List of assertion methods to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(array_keys(self::$assertionMap))])
-                ->setDefault([
+                ->setDefault(
+                    [
                     'assertAttributeEquals',
                     'assertAttributeNotEquals',
                     'assertEquals',
                     'assertNotEquals',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

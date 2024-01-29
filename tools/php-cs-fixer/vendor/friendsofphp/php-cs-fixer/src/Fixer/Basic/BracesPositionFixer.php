@@ -205,8 +205,7 @@ $bar = function () { $result = true;
                 for ($indexInsideBraces = $openBraceIndex + 1; $indexInsideBraces < $closeBraceIndex; ++$indexInsideBraces) {
                     $tokenInsideBraces = $tokens[$indexInsideBraces];
 
-                    if (
-                        ($allowSingleLineIfEmpty && !$tokenInsideBraces->isWhitespace() && !$tokenInsideBraces->isComment())
+                    if (($allowSingleLineIfEmpty && !$tokenInsideBraces->isWhitespace() && !$tokenInsideBraces->isComment())
                         || ($tokenInsideBraces->isWhitespace() && Preg::match('/\R/', $tokenInsideBraces->getContent()))
                     ) {
                         $addNewlinesInsideBraces = true;
@@ -220,8 +219,7 @@ $bar = function () { $result = true;
                 }
             }
 
-            if (
-                $addNewlinesInsideBraces
+            if ($addNewlinesInsideBraces
                 && !$this->isFollowedByNewLine($tokens, $openBraceIndex)
                 && !$this->hasCommentOnSameLine($tokens, $openBraceIndex)
                 && !$tokens[$tokens->getNextMeaningfulToken($openBraceIndex)]->isGivenKind(T_CLOSE_TAG)
@@ -245,8 +243,7 @@ $bar = function () { $result = true;
                     if ($tokens[--$previousTokenIndex]->isComment()) {
                         --$previousTokenIndex;
                     }
-                    if (
-                        $tokens[$previousTokenIndex]->isWhitespace()
+                    if ($tokens[$previousTokenIndex]->isWhitespace()
                         && Preg::match('/\R/', $tokens[$previousTokenIndex]->getContent())
                     ) {
                         $whitespace = ' ';
@@ -283,7 +280,9 @@ $bar = function () { $result = true;
             }
 
             if (null !== $moveBraceToIndex) {
-                /** @var Token $movedToken */
+                /**
+ * @var Token $movedToken 
+*/
                 $movedToken = clone $tokens[$openBraceIndex];
 
                 $delta = $openBraceIndex < $moveBraceToIndex ? 1 : -1;
@@ -302,7 +301,9 @@ $bar = function () { $result = true;
                 }
 
                 for (; $openBraceIndex !== $moveBraceToIndex; $openBraceIndex += $delta) {
-                    /** @var Token $siblingToken */
+                    /**
+ * @var Token $siblingToken 
+*/
                     $siblingToken = $tokens[$openBraceIndex + $delta];
                     $tokens[$openBraceIndex] = $siblingToken;
                 }
@@ -319,8 +320,7 @@ $bar = function () { $result = true;
                 }
             }
 
-            if (
-                !$addNewlinesInsideBraces
+            if (!$addNewlinesInsideBraces
                 || $tokens[$tokens->getPrevMeaningfulToken($closeBraceIndex)]->isGivenKind(T_OPEN_TAG)
             ) {
                 continue;
@@ -340,7 +340,8 @@ $bar = function () { $result = true;
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('control_structures_opening_brace', 'The position of the opening brace of control structures‘ body.'))
                 ->setAllowedValues([self::NEXT_LINE_UNLESS_NEWLINE_AT_SIGNATURE_END, self::SAME_LINE])
                 ->setDefault(self::SAME_LINE)
@@ -369,7 +370,8 @@ $bar = function () { $result = true;
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function findParenthesisEnd(Tokens $tokens, int $structureTokenIndex): int

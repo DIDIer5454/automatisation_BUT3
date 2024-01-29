@@ -25,7 +25,9 @@ use Symfony\Component\Console\Helper\ProgressBar;
  */
 final class PercentageBarOutput implements ProgressOutputInterface
 {
-    /** @readonly */
+    /**
+     * @readonly 
+     */
     private OutputContext $context;
 
     private ProgressBar $progressBar;
@@ -72,5 +74,7 @@ final class PercentageBarOutput implements ProgressOutputInterface
         }
     }
 
-    public function printLegend(): void {}
+    public function printLegend(): void
+    {
+    }
 }

@@ -99,13 +99,15 @@ final class Example
     {
         $values = ['const', 'property'];
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('elements', 'List of strings which element should be modified.'))
                 ->setDefault($values)
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset($values)])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixElement(Tokens $tokens, string $type, int $index): void

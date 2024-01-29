@@ -41,10 +41,13 @@ final class ClassConstantTransformer extends AbstractTransformer
      */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
-        if (!$token->equalsAny([
+        if (!$token->equalsAny(
+            [
             [T_CLASS, 'class'],
             [T_STRING, 'class'],
-        ], false)) {
+            ], false
+        )
+        ) {
             return;
         }
 

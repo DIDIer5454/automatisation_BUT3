@@ -51,7 +51,9 @@ final class ConstructorPromotionTransformer extends AbstractTransformer
             return;
         }
 
-        /** @var int $openIndex */
+        /**
+ * @var int $openIndex 
+*/
         $openIndex = $tokens->getNextMeaningfulToken($index); // we are @ '(' now
         $closeIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $openIndex);
 

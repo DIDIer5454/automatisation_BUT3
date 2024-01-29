@@ -52,11 +52,13 @@ final class ImportProcessor
             $items = [];
 
             foreach ($typeImports as $name) {
-                $items = array_merge($items, [
+                $items = array_merge(
+                    $items, [
                     new Token([T_WHITESPACE, $lineEnding]),
                     new Token([T_USE, 'use']),
                     new Token([T_WHITESPACE, ' ']),
-                ]);
+                    ]
+                );
 
                 if ('const' === $type) {
                     $items[] = new Token([CT::T_CONST_IMPORT, 'const']);

@@ -163,7 +163,8 @@ if (count($x)) {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('import_constants', 'Whether to import, not import or ignore global constants.'))
                 ->setDefault(null)
                 ->setAllowedValues([true, false, null])
@@ -176,7 +177,8 @@ if (count($x)) {
                 ->setDefault(true)
                 ->setAllowedValues([true, false, null])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -309,7 +311,9 @@ if (count($x)) {
     {
         [$global, $other] = $this->filterUseDeclarations($useDeclarations, static fn (NamespaceUseAnalysis $declaration): bool => $declaration->isClass(), false);
 
-        /** @var DocBlock[] $docBlocks */
+        /**
+ * @var DocBlock[] $docBlocks 
+*/
         $docBlocks = [];
 
         // find class declarations and class usages in docblocks
@@ -320,17 +324,19 @@ if (count($x)) {
             if ($token->isGivenKind(T_DOC_COMMENT)) {
                 $docBlocks[$index] = new DocBlock($token->getContent());
 
-                $this->traverseDocBlockTypes($docBlocks[$index], static function (string $type) use ($global, &$other): void {
-                    if (str_contains($type, '\\')) {
-                        return;
-                    }
+                $this->traverseDocBlockTypes(
+                    $docBlocks[$index], static function (string $type) use ($global, &$other): void {
+                        if (str_contains($type, '\\')) {
+                            return;
+                        }
 
-                    $name = strtolower($type);
+                        $name = strtolower($type);
 
-                    if (!isset($global[$name])) {
-                        $other[$name] = true;
+                        if (!isset($global[$name])) {
+                            $other[$name] = true;
+                        }
                     }
-                });
+                );
             }
 
             if (!$token->isClassy()) {
@@ -383,26 +389,28 @@ if (count($x)) {
         $imports = [];
 
         foreach ($docBlocks as $index => $docBlock) {
-            $changed = $this->traverseDocBlockTypes($docBlock, static function (string $type) use ($global, $other, &$imports): string {
-                if ('\\' !== $type[0]) {
-                    return $type;
+            $changed = $this->traverseDocBlockTypes(
+                $docBlock, static function (string $type) use ($global, $other, &$imports): string {
+                    if ('\\' !== $type[0]) {
+                        return $type;
+                    }
+
+                    $name = substr($type, 1);
+                    $checkName = strtolower($name);
+
+                    if (str_contains($checkName, '\\') || isset($other[$checkName])) {
+                        return $type;
+                    }
+
+                    if (isset($global[$checkName])) {
+                        return \is_string($global[$checkName]) ? $global[$checkName] : $name;
+                    }
+
+                    $imports[$checkName] = $name;
+
+                    return $name;
                 }
-
-                $name = substr($type, 1);
-                $checkName = strtolower($name);
-
-                if (str_contains($checkName, '\\') || isset($other[$checkName])) {
-                    return $type;
-                }
-
-                if (isset($global[$checkName])) {
-                    return \is_string($global[$checkName]) ? $global[$checkName] : $name;
-                }
-
-                $imports[$checkName] = $name;
-
-                return $name;
-            });
+            );
 
             if ($changed) {
                 $tokens[$index] = new Token([T_DOC_COMMENT, $docBlock->getContent()]);
@@ -548,13 +556,15 @@ if (count($x)) {
             if ($token->isGivenKind(T_DOC_COMMENT)) {
                 $doc = new DocBlock($token->getContent());
 
-                $changed = $this->traverseDocBlockTypes($doc, static function (string $type) use ($global): string {
-                    if (!isset($global[strtolower($type)])) {
-                        return $type;
-                    }
+                $changed = $this->traverseDocBlockTypes(
+                    $doc, static function (string $type) use ($global): string {
+                        if (!isset($global[strtolower($type)])) {
+                            return $type;
+                        }
 
-                    return '\\'.$type;
-                });
+                        return '\\'.$type;
+                    }
+                );
 
                 if ($changed) {
                     $tokens[$index] = new Token([T_DOC_COMMENT, $doc->getContent()]);

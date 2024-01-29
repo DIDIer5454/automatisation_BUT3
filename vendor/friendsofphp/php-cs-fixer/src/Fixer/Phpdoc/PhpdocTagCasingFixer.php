@@ -37,9 +37,11 @@ final class PhpdocTagCasingFixer extends AbstractProxyFixer implements Configura
             'Fixes casing of PHPDoc tags.',
             [
                 new CodeSample("<?php\n/**\n * @inheritdoc\n */\n"),
-                new CodeSample("<?php\n/**\n * @inheritdoc\n * @Foo\n */\n", [
+                new CodeSample(
+                    "<?php\n/**\n * @inheritdoc\n * @Foo\n */\n", [
                     'tags' => ['foo'],
-                ]),
+                    ]
+                ),
             ]
         );
     }
@@ -64,16 +66,20 @@ final class PhpdocTagCasingFixer extends AbstractProxyFixer implements Configura
             $replacements[$tag] = $tag;
         }
 
-        /** @var GeneralPhpdocTagRenameFixer $generalPhpdocTagRenameFixer */
+        /**
+ * @var GeneralPhpdocTagRenameFixer $generalPhpdocTagRenameFixer 
+*/
         $generalPhpdocTagRenameFixer = $this->proxyFixers['general_phpdoc_tag_rename'];
 
         try {
-            $generalPhpdocTagRenameFixer->configure([
+            $generalPhpdocTagRenameFixer->configure(
+                [
                 'fix_annotation' => true,
                 'fix_inline' => true,
                 'replacements' => $replacements,
                 'case_sensitive' => false,
-            ]);
+                ]
+            );
         } catch (InvalidConfigurationException $exception) {
             throw new InvalidFixerConfigurationException(
                 $this->getName(),
@@ -88,12 +94,14 @@ final class PhpdocTagCasingFixer extends AbstractProxyFixer implements Configura
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('tags', 'List of tags to fix with their expected casing.'))
                 ->setAllowedTypes(['array'])
                 ->setDefault(['inheritDoc'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

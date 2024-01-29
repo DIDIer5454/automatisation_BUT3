@@ -163,8 +163,7 @@ final class Runner
             foreach ($this->fixers as $fixer) {
                 // for custom fixers we don't know is it safe to run `->fix()` without checking `->supports()` and `->isCandidate()`,
                 // thus we need to check it and conditionally skip fixing
-                if (
-                    !$fixer instanceof AbstractFixer
+                if (!$fixer instanceof AbstractFixer
                     && (!$fixer->supports($file) || !$fixer->isCandidate($tokens))
                 ) {
                     continue;

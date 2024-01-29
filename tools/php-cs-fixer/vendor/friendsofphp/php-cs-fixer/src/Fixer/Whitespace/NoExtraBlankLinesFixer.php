@@ -280,13 +280,15 @@ switch($a) {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('tokens', 'List of tokens to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(self::$availableTokens)])
                 ->setDefault(['extra'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixByToken(Token $token, int $index): void
@@ -430,8 +432,7 @@ switch($a) {
                 continue;
             }
 
-            if (
-                $this->tokens[$end]->equals('}')
+            if ($this->tokens[$end]->equals('}')
                 || str_contains($this->tokens[$end]->getContent(), "\n")
             ) {
                 break;

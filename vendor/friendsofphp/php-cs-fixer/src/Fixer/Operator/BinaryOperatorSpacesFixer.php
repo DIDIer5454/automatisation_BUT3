@@ -61,7 +61,7 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
 
     /**
      * @internal
-     * @const Placeholder used as anchor for right alignment.
+     * @const    Placeholder used as anchor for right alignment.
      */
     public const ALIGN_PLACEHOLDER = "\x2 ALIGNABLE%d \x3";
 
@@ -309,42 +309,46 @@ $array = [
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('default', 'Default fix strategy.'))
                 ->setDefault(self::SINGLE_SPACE)
                 ->setAllowedValues(self::$allowedValues)
                 ->getOption(),
             (new FixerOptionBuilder('operators', 'Dictionary of `binary operator` => `fix strategy` values that differ from the default strategy. Supported are: `'.implode('`, `', self::SUPPORTED_OPERATORS).'`'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([static function (array $option): bool {
-                    foreach ($option as $operator => $value) {
-                        if (!\in_array($operator, self::SUPPORTED_OPERATORS, true)) {
-                            throw new InvalidOptionsException(
-                                sprintf(
-                                    'Unexpected "operators" key, expected any of "%s", got "%s".',
-                                    implode('", "', self::SUPPORTED_OPERATORS),
-                                    \gettype($operator).'#'.$operator
-                                )
-                            );
+                ->setAllowedValues(
+                    [static function (array $option): bool {
+                        foreach ($option as $operator => $value) {
+                            if (!\in_array($operator, self::SUPPORTED_OPERATORS, true)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unexpected "operators" key, expected any of "%s", got "%s".',
+                                        implode('", "', self::SUPPORTED_OPERATORS),
+                                        \gettype($operator).'#'.$operator
+                                    )
+                                );
+                            }
+
+                            if (!\in_array($value, self::$allowedValues, true)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unexpected value for operator "%s", expected any of "%s", got "%s".',
+                                        $operator,
+                                        implode('", "', self::$allowedValues),
+                                        \is_object($value) ? \get_class($value) : (null === $value ? 'null' : \gettype($value).'#'.$value)
+                                    )
+                                );
+                            }
                         }
 
-                        if (!\in_array($value, self::$allowedValues, true)) {
-                            throw new InvalidOptionsException(
-                                sprintf(
-                                    'Unexpected value for operator "%s", expected any of "%s", got "%s".',
-                                    $operator,
-                                    implode('", "', self::$allowedValues),
-                                    \is_object($value) ? \get_class($value) : (null === $value ? 'null' : \gettype($value).'#'.$value)
-                                )
-                            );
-                        }
-                    }
-
-                    return true;
-                }])
+                        return true;
+                    }]
+                )
                 ->setDefault([])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixWhiteSpaceAroundOperator(Tokens $tokens, int $index): void
@@ -535,8 +539,7 @@ $array = [
             $token = $tokens[$index];
 
             $content = $token->getContent();
-            if (
-                strtolower($content) === $tokenContent
+            if (strtolower($content) === $tokenContent
                 && $this->tokensAnalyzer->isBinaryOperator($index)
                 && ('=' !== $content || !$this->isEqualPartOfDeclareStatement($tokens, $index))
             ) {

@@ -174,8 +174,7 @@ final class ControlCaseStructuresAnalyzer
     {
         $default = null === $analysis['default']
             ? null
-            : new DefaultAnalysis($analysis['default']['index'], $analysis['default']['open'])
-        ;
+            : new DefaultAnalysis($analysis['default']['index'], $analysis['default']['open']);
 
         $cases = [];
 

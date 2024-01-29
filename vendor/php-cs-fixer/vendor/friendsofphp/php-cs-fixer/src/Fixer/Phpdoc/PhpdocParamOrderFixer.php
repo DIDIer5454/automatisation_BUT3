@@ -149,8 +149,7 @@ function m($a, array $b, Foo $c) {}
             $annotation->remove();
             $doc
                 ->getLine($annotation->getStart())
-                ->setContent(current($orderedAnnotations))
-            ;
+                ->setContent(current($orderedAnnotations));
 
             next($orderedAnnotations);
         }
@@ -181,7 +180,9 @@ function m($a, array $b, Foo $c) {}
         }
 
         // Detect superfluous annotations
-        /** @var Annotation[] $invalidParams */
+        /**
+ * @var Annotation[] $invalidParams 
+*/
         $invalidParams = array_diff_key($paramAnnotations, $validParams);
         $invalidParams = array_values($invalidParams);
 

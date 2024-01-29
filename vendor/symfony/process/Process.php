@@ -76,7 +76,9 @@ class Process implements \IteratorAggregate
     private $options = ['suppress_errors' => true, 'bypass_shell' => true];
 
     private $useFileHandles = false;
-    /** @var PipesInterface */
+    /**
+     * @var PipesInterface 
+     */
     private $processPipes;
 
     private $latestSignal;
@@ -1633,13 +1635,15 @@ class Process implements \IteratorAggregate
 
     private function replacePlaceholders(string $commandline, array $env)
     {
-        return preg_replace_callback('/"\$\{:([_a-zA-Z]++[_a-zA-Z0-9]*+)\}"/', function ($matches) use ($commandline, $env) {
-            if (!isset($env[$matches[1]]) || false === $env[$matches[1]]) {
-                throw new InvalidArgumentException(sprintf('Command line is missing a value for parameter "%s": ', $matches[1]).$commandline);
-            }
+        return preg_replace_callback(
+            '/"\$\{:([_a-zA-Z]++[_a-zA-Z0-9]*+)\}"/', function ($matches) use ($commandline, $env) {
+                if (!isset($env[$matches[1]]) || false === $env[$matches[1]]) {
+                    throw new InvalidArgumentException(sprintf('Command line is missing a value for parameter "%s": ', $matches[1]).$commandline);
+                }
 
-            return $this->escapeArgument($env[$matches[1]]);
-        }, $commandline);
+                return $this->escapeArgument($env[$matches[1]]);
+            }, $commandline
+        );
     }
 
     private function getDefaultEnv(): array

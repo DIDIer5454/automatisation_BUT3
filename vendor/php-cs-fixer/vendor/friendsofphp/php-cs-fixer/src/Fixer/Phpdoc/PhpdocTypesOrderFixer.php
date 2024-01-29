@@ -111,7 +111,8 @@ final class PhpdocTypesOrderFixer extends AbstractFixer implements ConfigurableF
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('sort_algorithm', 'The sorting algorithm to apply.'))
                 ->setAllowedValues(['alpha', 'none'])
                 ->setDefault('alpha')
@@ -124,7 +125,8 @@ final class PhpdocTypesOrderFixer extends AbstractFixer implements ConfigurableF
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -153,11 +155,15 @@ final class PhpdocTypesOrderFixer extends AbstractFixer implements ConfigurableF
 
                 // fix @method parameters types
                 $line = $doc->getLine($annotation->getStart());
-                $line->setContent(Preg::replaceCallback('/\*\h*@method\h+'.TypeExpression::REGEX_TYPES.'\h+\K(?&callable)/', function (array $matches) {
-                    $typeExpression = new TypeExpression($matches[0], null, []);
+                $line->setContent(
+                    Preg::replaceCallback(
+                        '/\*\h*@method\h+'.TypeExpression::REGEX_TYPES.'\h+\K(?&callable)/', function (array $matches) {
+                            $typeExpression = new TypeExpression($matches[0], null, []);
 
-                    return implode('|', $this->sortTypes($typeExpression));
-                }, $line->getContent()));
+                            return implode('|', $this->sortTypes($typeExpression));
+                        }, $line->getContent()
+                    )
+                );
             }
 
             $tokens[$index] = new Token([T_DOC_COMMENT, $doc->getContent()]);

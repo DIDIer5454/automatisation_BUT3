@@ -17,19 +17,19 @@ final class MatchStrictGroupsResult
      * An array of match group => string matched
      *
      * @readonly
-     * @var array<int|string, string>
+     * @var      array<int|string, string>
      */
     public $matches;
 
     /**
      * @readonly
-     * @var bool
+     * @var      bool
      */
     public $matched;
 
     /**
      * @param 0|positive-int $count
-     * @param array<string> $matches
+     * @param array<string>  $matches
      */
     public function __construct(int $count, array $matches)
     {

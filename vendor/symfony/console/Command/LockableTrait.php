@@ -24,7 +24,9 @@ use Symfony\Component\Lock\Store\SemaphoreStore;
  */
 trait LockableTrait
 {
-    /** @var LockInterface|null */
+    /**
+     * @var LockInterface|null 
+     */
     private $lock;
 
     /**

@@ -119,8 +119,7 @@ $a = new class() {
         $classIndex = $tokens->getNextTokenOfKind(0, [[T_CLASS]]);
 
         while (null !== $classIndex) {
-            if (
-                $this->tokensAnalyzer->isAnonymousClass($classIndex)
+            if ($this->tokensAnalyzer->isAnonymousClass($classIndex)
                 || $tokens[$tokens->getPrevMeaningfulToken($classIndex)]->isGivenKind(T_FINAL)
             ) {
                 $classIndex = $this->fixClass($tokens, $classIndex);

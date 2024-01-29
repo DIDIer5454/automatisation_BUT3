@@ -87,23 +87,29 @@ final class GroupImportFixer extends AbstractFixer
             $useDeclarations
         );
 
-        $sameNamespaces = array_filter(array_count_values($allNamespaceAndType), static function (int $count): bool {
-            return $count > 1;
-        });
+        $sameNamespaces = array_filter(
+            array_count_values($allNamespaceAndType), static function (int $count): bool {
+                return $count > 1;
+            }
+        );
         $sameNamespaces = array_keys($sameNamespaces);
 
-        $sameNamespaceAnalysis = array_filter($useDeclarations, function (NamespaceUseAnalysis $useDeclaration) use ($sameNamespaces): bool {
-            $namespaceNameAndType = $this->getNamespaceNameWithSlash($useDeclaration).$useDeclaration->getType();
+        $sameNamespaceAnalysis = array_filter(
+            $useDeclarations, function (NamespaceUseAnalysis $useDeclaration) use ($sameNamespaces): bool {
+                $namespaceNameAndType = $this->getNamespaceNameWithSlash($useDeclaration).$useDeclaration->getType();
 
-            return \in_array($namespaceNameAndType, $sameNamespaces, true);
-        });
+                return \in_array($namespaceNameAndType, $sameNamespaces, true);
+            }
+        );
 
-        usort($sameNamespaceAnalysis, function (NamespaceUseAnalysis $a, NamespaceUseAnalysis $b): int {
-            $namespaceA = $this->getNamespaceNameWithSlash($a);
-            $namespaceB = $this->getNamespaceNameWithSlash($b);
+        usort(
+            $sameNamespaceAnalysis, function (NamespaceUseAnalysis $a, NamespaceUseAnalysis $b): int {
+                $namespaceA = $this->getNamespaceNameWithSlash($a);
+                $namespaceB = $this->getNamespaceNameWithSlash($b);
 
-            return \strlen($namespaceA) - \strlen($namespaceB) ?: strcmp($a->getFullName(), $b->getFullName());
-        });
+                return \strlen($namespaceA) - \strlen($namespaceB) ?: strcmp($a->getFullName(), $b->getFullName());
+            }
+        );
 
         return $sameNamespaceAnalysis;
     }

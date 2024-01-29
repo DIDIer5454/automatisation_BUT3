@@ -98,7 +98,9 @@ final class Transformers
      */
     private function findBuiltInTransformers(): iterable
     {
-        /** @var SplFileInfo $file */
+        /**
+ * @var SplFileInfo $file 
+*/
         foreach (Finder::create()->files()->in(__DIR__.'/Transformer') as $file) {
             $relativeNamespace = $file->getRelativePath();
             $class = __NAMESPACE__.'\\Transformer\\'.('' !== $relativeNamespace ? $relativeNamespace.'\\' : '').$file->getBasename('.php');

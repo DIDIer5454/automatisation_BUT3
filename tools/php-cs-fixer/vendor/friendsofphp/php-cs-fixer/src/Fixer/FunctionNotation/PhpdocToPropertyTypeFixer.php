@@ -187,13 +187,15 @@ class Foo {
     {
         do {
             $index = $tokens->getNextMeaningfulToken($index);
-        } while ($tokens[$index]->isGivenKind([
+        } while ($tokens[$index]->isGivenKind(
+            [
             T_PRIVATE,
             T_PROTECTED,
             T_PUBLIC,
             T_STATIC,
             T_VAR,
-        ]));
+            ]
+        ));
 
         if (!$tokens[$index]->isGivenKind(T_VARIABLE)) {
             return [];

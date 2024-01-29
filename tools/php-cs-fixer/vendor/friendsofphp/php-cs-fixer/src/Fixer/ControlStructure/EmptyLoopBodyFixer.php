@@ -114,12 +114,14 @@ final class EmptyLoopBodyFixer extends AbstractFixer implements ConfigurableFixe
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('style', 'Style of empty loop-bodies.'))
                 ->setAllowedTypes(['string'])
                 ->setAllowedValues([self::STYLE_BRACES, self::STYLE_SEMICOLON])
                 ->setDefault(self::STYLE_SEMICOLON)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

@@ -15,9 +15,13 @@ use Composer\Semver\Constraint\Constraint;
 
 class Interval
 {
-    /** @var Constraint */
+    /**
+     * @var Constraint 
+     */
     private $start;
-    /** @var Constraint */
+    /**
+     * @var Constraint 
+     */
     private $end;
 
     public function __construct(Constraint $start, Constraint $end)

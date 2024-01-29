@@ -240,7 +240,7 @@ class Paste extends AbstractModel
         if ((1 === $data['adata'][2] && ( // open discussion flag
             !$this->_conf->getKey('discussion')
             || 1 === $data['adata'][3]  // burn after reading flag
-        ))
+            ))
             || (0 !== $data['adata'][2] && 1 !== $data['adata'][2])
         ) {
             throw new Exception('Invalid data.', 74);

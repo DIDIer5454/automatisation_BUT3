@@ -103,7 +103,9 @@ final class FunctionsAnalyzer
         // global namespace and don't need checking
 
         if (!$inGlobalNamespace) {
-            /** @var int $functionNameIndex */
+            /**
+ * @var int $functionNameIndex 
+*/
             foreach ($this->functionsAnalysis['declarations'] as $functionNameIndex) {
                 if ($functionNameIndex < $scopeStartIndex || $functionNameIndex > $scopeEndIndex) {
                     continue;
@@ -115,7 +117,9 @@ final class FunctionsAnalyzer
             }
         }
 
-        /** @var NamespaceUseAnalysis $functionUse */
+        /**
+ * @var NamespaceUseAnalysis $functionUse 
+*/
         foreach ($this->functionsAnalysis['imports'] as $functionUse) {
             if ($functionUse->getStartIndex() < $scopeStartIndex || $functionUse->getEndIndex() > $scopeEndIndex) {
                 continue;

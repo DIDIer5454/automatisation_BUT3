@@ -148,7 +148,9 @@ class Tokens extends \SplFixedArray
         }
 
         // inlined extractTokenKind() call on the hot path
-        /** @var int|non-empty-string */
+        /**
+ * @var int|non-empty-string 
+*/
         $tokenKind = $token->isArray() ? $token->getId() : $token->getContent();
 
         return $blockEdgeKinds[$tokenKind] ?? null;
@@ -1163,14 +1165,16 @@ class Tokens extends \SplFixedArray
 
     public function hasAlternativeSyntax(): bool
     {
-        return $this->isAnyTokenKindsFound([
+        return $this->isAnyTokenKindsFound(
+            [
             T_ENDDECLARE,
             T_ENDFOR,
             T_ENDFOREACH,
             T_ENDIF,
             T_ENDSWITCH,
             T_ENDWHILE,
-        ]);
+            ]
+        );
     }
 
     public function clearTokenAndMergeSurroundingWhitespace(int $index): void
@@ -1397,7 +1401,9 @@ class Tokens extends \SplFixedArray
     private function registerFoundToken($token): void
     {
         // inlined extractTokenKind() call on the hot path
-        /** @var int|non-empty-string */
+        /**
+ * @var int|non-empty-string 
+*/
         $tokenKind = $token instanceof Token
             ? ($token->isArray() ? $token->getId() : $token->getContent())
             : (\is_array($token) ? $token[0] : $token);
@@ -1414,7 +1420,9 @@ class Tokens extends \SplFixedArray
     private function unregisterFoundToken($token): void
     {
         // inlined extractTokenKind() call on the hot path
-        /** @var int|non-empty-string */
+        /**
+ * @var int|non-empty-string 
+*/
         $tokenKind = $token instanceof Token
             ? ($token->isArray() ? $token->getId() : $token->getContent())
             : (\is_array($token) ? $token[0] : $token);

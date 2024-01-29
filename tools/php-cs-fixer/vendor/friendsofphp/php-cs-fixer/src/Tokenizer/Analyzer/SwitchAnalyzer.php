@@ -22,7 +22,9 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class SwitchAnalyzer
 {
-    /** @var array<string, array<int>> */
+    /**
+     * @var array<string, array<int>> 
+     */
     private static array $cache = [];
 
     public static function belongsToSwitch(Tokens $tokens, int $index): bool
@@ -47,7 +49,9 @@ final class SwitchAnalyzer
     {
         $colonIndices = [];
 
-        /** @var SwitchAnalysis $analysis */
+        /**
+ * @var SwitchAnalysis $analysis 
+*/
         foreach (ControlCaseStructuresAnalyzer::findControlStructures($tokens, [T_SWITCH]) as $analysis) {
             if ($tokens[$analysis->getOpenIndex()]->equals(':')) {
                 $colonIndices[] = $analysis->getOpenIndex();

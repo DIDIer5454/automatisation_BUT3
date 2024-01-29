@@ -29,46 +29,74 @@ class XdebugHandler
     const RESTART_SETTINGS = 'XDEBUG_HANDLER_SETTINGS';
     const DEBUG = 'XDEBUG_HANDLER_DEBUG';
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     protected $tmpIni;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private static $inRestart;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private static $name;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     private static $skipped;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private static $xdebugActive;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     private static $xdebugMode;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     private static $xdebugVersion;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $cli;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     private $debug;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $envAllowXdebug;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $envOriginalInis;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $persistent;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     private $script;
 
-    /** @var Status */
+    /**
+     * @var Status 
+     */
     private $statusWriter;
 
     /**
@@ -78,7 +106,7 @@ class XdebugHandler
      * uppercased and prepended to the default base values. For example 'myapp'
      * would result in MYAPP_ALLOW_XDEBUG and MYAPP_ORIGINAL_INIS.
      *
-     * @param string $envPrefix Value used in environment variables
+     * @param  string $envPrefix Value used in environment variables
      * @throws \RuntimeException If the parameter is invalid
      */
     public function __construct(string $envPrefix)
@@ -220,7 +248,8 @@ class XdebugHandler
         $envArgs = explode('|', (string) getenv(self::RESTART_SETTINGS));
 
         if (count($envArgs) !== 6
-            || (!self::$inRestart && php_ini_loaded_file() !== $envArgs[0])) {
+            || (!self::$inRestart && php_ini_loaded_file() !== $envArgs[0])
+        ) {
             return null;
         }
 
@@ -267,7 +296,7 @@ class XdebugHandler
     /**
      * Allows an extending class to access the tmpIni
      *
-     * @param string[] $command     *
+     * @param string[] $command *
      */
     protected function restart(array $command): void
     {
@@ -277,7 +306,7 @@ class XdebugHandler
     /**
      * Executes the restarted command then deletes the tmp ini
      *
-     * @param string[] $command
+     * @param          string[] $command
      * @phpstan-return never
      */
     private function doRestart(array $command): void
@@ -469,8 +498,7 @@ class XdebugHandler
      * Returns default, changed and command-line ini settings
      *
      * @param mixed[] $loadedConfig All current ini settings
-     * @param mixed[] $iniConfig Settings from user ini files
-     *
+     * @param mixed[] $iniConfig    Settings from user ini files
      */
     private function mergeLoadedConfig(array $loadedConfig, array $iniConfig): string
     {
@@ -480,7 +508,8 @@ class XdebugHandler
             // Value will either be null, string or array (HHVM only)
             if (!is_string($value)
                 || strpos($name, 'xdebug') === 0
-                || $name === 'apc.mmap_file_mask') {
+                || $name === 'apc.mmap_file_mask'
+            ) {
                 continue;
             }
 
@@ -615,7 +644,10 @@ class XdebugHandler
             // Restarting, so set a handler to ignore CTRL events in the parent.
             // This ensures that CTRL+C events will be available in the child
             // process without having to enable them there, which is unreliable.
-            sapi_windows_set_ctrl_handler(function ($evt) {});
+            sapi_windows_set_ctrl_handler(
+                function ($evt) {
+                }
+            );
         }
     }
 

@@ -23,7 +23,9 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  */
 trait ServiceSubscriberTrait
 {
-    /** @var ContainerInterface */
+    /**
+     * @var ContainerInterface 
+     */
     protected $container;
 
     public static function getSubscribedServices(): array

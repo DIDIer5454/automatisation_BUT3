@@ -59,10 +59,12 @@ final class ImportTransformer extends AbstractTransformer
             }
         }
 
-        $tokens[$index] = new Token([
+        $tokens[$index] = new Token(
+            [
             $token->isGivenKind(T_FUNCTION) ? CT::T_FUNCTION_IMPORT : CT::T_CONST_IMPORT,
             $token->getContent(),
-        ]);
+            ]
+        );
     }
 
     public function getCustomTokens(): array

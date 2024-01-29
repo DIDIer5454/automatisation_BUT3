@@ -63,13 +63,19 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
      */
     private array $symbolsForImport = [];
 
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string> 
+     */
     private array $cacheUsesLast = [];
 
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string> 
+     */
     private array $cacheUseNameByShortNameLower;
 
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string> 
+     */
     private array $cacheUseShortNameByNameLower;
 
     public function getDefinition(): FixerDefinitionInterface
@@ -184,7 +190,8 @@ class Foo extends \Other\BaseClass implements \Other\Interface1, \Other\Interfac
 
     public function isCandidate(Tokens $tokens): bool
     {
-        return $tokens->isAnyTokenKindsFound([
+        return $tokens->isAnyTokenKindsFound(
+            [
             CT::T_USE_TRAIT,
             ...(\defined('T_ATTRIBUTE') ? [T_ATTRIBUTE] : []), // @TODO: drop condition when PHP 8.0+ is required
             T_CATCH,
@@ -196,12 +203,14 @@ class Foo extends \Other\BaseClass implements \Other\Interface1, \Other\Interfac
             T_INSTANCEOF,
             T_NEW,
             T_VARIABLE,
-        ]);
+            ]
+        );
     }
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(
                 'leading_backslash_in_global_namespace',
                 'Whether FQCN is prefixed with backslash when that FQCN is used in global namespace context.'
@@ -221,7 +230,8 @@ class Foo extends \Other\BaseClass implements \Other\Interface1, \Other\Interfac
                 'Collection of PHPDoc annotation tags where FQCNs should be processed. As of now only simple tags with `@tag \F\Q\C\N` format are supported (no complex types).'
             ))
                 ->setAllowedTypes(['array'])
-                ->setDefault([
+                ->setDefault(
+                    [
                     'param',
                     'phpstan-param',
                     'phpstan-property',
@@ -242,9 +252,11 @@ class Foo extends \Other\BaseClass implements \Other\Interface1, \Other\Interfac
                     'see',
                     'throws',
                     'var',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -517,26 +529,30 @@ class Foo extends \Other\BaseClass implements \Other\Interface1, \Other\Interfac
 
         $phpDoc = $tokens[$index];
         $phpDocContent = $phpDoc->getContent();
-        $phpDocContentNew = Preg::replaceCallback('/([*{]\h*@)(\S+)(\h+)('.TypeExpression::REGEX_TYPES.')(?!(?!\})\S)/', function ($matches) use ($allowedTags, $uses, $namespaceName) {
-            if (!\in_array($matches[2], $allowedTags, true)) {
-                return $matches[0];
-            }
+        $phpDocContentNew = Preg::replaceCallback(
+            '/([*{]\h*@)(\S+)(\h+)('.TypeExpression::REGEX_TYPES.')(?!(?!\})\S)/', function ($matches) use ($allowedTags, $uses, $namespaceName) {
+                if (!\in_array($matches[2], $allowedTags, true)) {
+                    return $matches[0];
+                }
 
-            // @TODO parse the complex type using TypeExpression and fix all names inside (like `int|string` or `list<int|string>`)
-            if (!Preg::match('/^[a-zA-Z0-9_\\\\]+(\|null)?$/', $matches[4])) {
-                return $matches[0];
-            }
+                // @TODO parse the complex type using TypeExpression and fix all names inside (like `int|string` or `list<int|string>`)
+                if (!Preg::match('/^[a-zA-Z0-9_\\\\]+(\|null)?$/', $matches[4])) {
+                    return $matches[0];
+                }
 
-            $shortTokens = $this->determineShortType($matches[4], $uses, $namespaceName);
-            if (null === $shortTokens) {
-                return $matches[0];
-            }
+                $shortTokens = $this->determineShortType($matches[4], $uses, $namespaceName);
+                if (null === $shortTokens) {
+                    return $matches[0];
+                }
 
-            return $matches[1].$matches[2].$matches[3].implode('', array_map(
-                static fn (Token $token) => $token->getContent(),
-                $shortTokens
-            ));
-        }, $phpDocContent);
+                return $matches[1].$matches[2].$matches[3].implode(
+                    '', array_map(
+                        static fn (Token $token) => $token->getContent(),
+                        $shortTokens
+                    )
+                );
+            }, $phpDocContent
+        );
 
         if ($phpDocContentNew !== $phpDocContent) {
             $tokens[$index] = new Token([T_DOC_COMMENT, $phpDocContentNew]);
@@ -746,8 +762,7 @@ class Foo extends \Other\BaseClass implements \Other\Interface1, \Other\Interfac
                 continue;
             }
 
-            if (
-                $tokens[$index]->isGivenKind([CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION, CT::T_DISJUNCTIVE_NORMAL_FORM_TYPE_PARENTHESIS_CLOSE])
+            if ($tokens[$index]->isGivenKind([CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION, CT::T_DISJUNCTIVE_NORMAL_FORM_TYPE_PARENTHESIS_CLOSE])
                 || $index > $endIndex
             ) {
                 if (!$skipNextYield && null !== $typeStartIndex) {

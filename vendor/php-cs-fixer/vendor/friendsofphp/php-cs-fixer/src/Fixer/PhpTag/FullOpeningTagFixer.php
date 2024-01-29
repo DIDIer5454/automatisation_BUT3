@@ -80,7 +80,9 @@ echo "Hello!";
                 $tokenContent = $token->getContent();
                 $possibleOpenContent = substr($content, $tokensOldContentLength, 5);
 
-                if (false === $possibleOpenContent || '<?php' !== strtolower($possibleOpenContent)) { /** @phpstan-ignore-line as pre PHP 8.0 `false` might be returned by substr @TODO clean up when PHP8+ is required */
+                if (false === $possibleOpenContent || '<?php' !== strtolower($possibleOpenContent)) { /**
+ * @phpstan-ignore-line as pre PHP 8.0 `false` might be returned by substr @TODO clean up when PHP8+ is required 
+*/
                     $tokenContent = '<? ';
                 }
 

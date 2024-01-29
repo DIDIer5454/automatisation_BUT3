@@ -117,8 +117,7 @@ final class ArgumentsAnalyzer
                 continue;
             }
 
-            if (
-                $token->isComment()
+            if ($token->isComment()
                 || $token->isWhitespace()
                 || $token->isGivenKind($skipTypes)
                 || $token->equals('&')

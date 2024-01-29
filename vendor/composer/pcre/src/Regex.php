@@ -14,9 +14,9 @@ namespace Composer\Pcre;
 class Regex
 {
     /**
-     * @param non-empty-string $pattern
-     * @param string $subject
-     * @param int    $offset
+     * @param  non-empty-string $pattern
+     * @param  string           $subject
+     * @param  int              $offset
      * @return bool
      */
     public static function isMatch($pattern, $subject, $offset = 0)
@@ -25,10 +25,10 @@ class Regex
     }
 
     /**
-     * @param non-empty-string $pattern
-     * @param string $subject
-     * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int    $offset
+     * @param  non-empty-string $pattern
+     * @param  string           $subject
+     * @param  int              $flags   PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
+     * @param  int              $offset
      * @return MatchResult
      */
     public static function match($pattern, $subject, $flags = 0, $offset = 0)
@@ -45,10 +45,10 @@ class Regex
     /**
      * Runs preg_match with PREG_OFFSET_CAPTURE
      *
-     * @param non-empty-string $pattern
-     * @param string $subject
-     * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int    $offset
+     * @param  non-empty-string $pattern
+     * @param  string           $subject
+     * @param  int              $flags   PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
+     * @param  int              $offset
      * @return MatchWithOffsetsResult
      */
     public static function matchWithOffsets($pattern, $subject, $flags = 0, $offset = 0)
@@ -59,10 +59,10 @@ class Regex
     }
 
     /**
-     * @param non-empty-string $pattern
-     * @param string $subject
-     * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int    $offset
+     * @param  non-empty-string $pattern
+     * @param  string           $subject
+     * @param  int              $flags   PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
+     * @param  int              $offset
      * @return MatchAllResult
      */
     public static function matchAll($pattern, $subject, $flags = 0, $offset = 0)
@@ -83,10 +83,10 @@ class Regex
     /**
      * Runs preg_match_all with PREG_OFFSET_CAPTURE
      *
-     * @param non-empty-string $pattern
-     * @param string $subject
-     * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
-     * @param int    $offset
+     * @param  non-empty-string $pattern
+     * @param  string           $subject
+     * @param  int              $flags   PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
+     * @param  int              $offset
      * @return MatchAllWithOffsetsResult
      */
     public static function matchAllWithOffsets($pattern, $subject, $flags = 0, $offset = 0)
@@ -96,10 +96,10 @@ class Regex
         return new MatchAllWithOffsetsResult($count, $matches);
     }
     /**
-     * @param string|string[] $pattern
-     * @param string|string[] $replacement
-     * @param string          $subject
-     * @param int             $limit
+     * @param  string|string[] $pattern
+     * @param  string|string[] $replacement
+     * @param  string          $subject
+     * @param  int             $limit
      * @return ReplaceResult
      */
     public static function replace($pattern, $replacement, $subject, $limit = -1)
@@ -110,11 +110,11 @@ class Regex
     }
 
     /**
-     * @param string|string[] $pattern
-     * @param callable        $replacement
-     * @param string          $subject
-     * @param int             $limit
-     * @param int             $flags PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
+     * @param  string|string[] $pattern
+     * @param  callable        $replacement
+     * @param  string          $subject
+     * @param  int             $limit
+     * @param  int             $flags       PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
      * @return ReplaceResult
      */
     public static function replaceCallback($pattern, $replacement, $subject, $limit = -1, $flags = 0)
@@ -127,10 +127,10 @@ class Regex
     /**
      * Available from PHP 7.0
      *
-     * @param array<string, callable> $pattern
-     * @param string $subject
-     * @param int    $limit
-     * @param int    $flags PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
+     * @param  array<string, callable> $pattern
+     * @param  string                  $subject
+     * @param  int                     $limit
+     * @param  int                     $flags   PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
      * @return ReplaceResult
      */
     public static function replaceCallbackArray($pattern, $subject, $limit = -1, $flags = 0)

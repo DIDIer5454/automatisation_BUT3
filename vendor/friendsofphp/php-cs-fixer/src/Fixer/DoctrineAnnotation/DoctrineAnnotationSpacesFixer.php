@@ -66,9 +66,10 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver(array_merge(
-            parent::createConfigurationDefinition()->getOptions(),
-            [
+        return new FixerConfigurationResolver(
+            array_merge(
+                parent::createConfigurationDefinition()->getOptions(),
+                [
                 (new FixerOptionBuilder('around_parentheses', 'Whether to fix spaces around parentheses.'))
                     ->setAllowedTypes(['bool'])
                     ->setDefault(true)
@@ -101,8 +102,9 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
                     ->setAllowedTypes(['null', 'bool'])
                     ->setDefault(true)
                     ->getOption(),
-            ]
-        ));
+                ]
+            )
+        );
     }
 
     /**
@@ -118,8 +120,7 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
             $this->fixSpacesAroundCommas($doctrineAnnotationTokens);
         }
 
-        if (
-            null !== $this->configuration['before_argument_assignments']
+        if (null !== $this->configuration['before_argument_assignments']
             || null !== $this->configuration['after_argument_assignments']
             || null !== $this->configuration['before_array_assignments_equals']
             || null !== $this->configuration['after_array_assignments_equals']

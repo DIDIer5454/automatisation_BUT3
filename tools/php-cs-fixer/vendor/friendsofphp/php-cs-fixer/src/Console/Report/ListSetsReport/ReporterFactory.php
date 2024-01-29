@@ -30,7 +30,9 @@ final class ReporterFactory
 
     public function registerBuiltInReporters(): self
     {
-        /** @var null|list<string> $builtInReporters */
+        /**
+         * @var null|list<string> $builtInReporters 
+         */
         static $builtInReporters;
 
         if (null === $builtInReporters) {

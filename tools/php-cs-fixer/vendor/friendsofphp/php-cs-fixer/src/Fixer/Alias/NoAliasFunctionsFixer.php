@@ -245,7 +245,9 @@ mbereg_search_getregs();
         $functionsAnalyzer = new FunctionsAnalyzer();
         $argumentsAnalyzer = new ArgumentsAnalyzer();
 
-        /** @var Token $token */
+        /**
+ * @var Token $token 
+*/
         foreach ($tokens->findGivenKind(T_STRING) as $index => $token) {
             // check mapping hit
             $tokenContent = strtolower($token->getContent());
@@ -311,12 +313,14 @@ mbereg_search_getregs();
 
         $list = rtrim($list, ";\n").'.';
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('sets', $list))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(array_keys($sets))])
                 ->setDefault(['@internal', '@IMAP', '@pg'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

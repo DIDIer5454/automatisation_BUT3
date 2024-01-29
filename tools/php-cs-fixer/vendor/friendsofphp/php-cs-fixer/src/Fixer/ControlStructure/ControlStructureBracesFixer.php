@@ -59,8 +59,7 @@ final class ControlStructureBracesFixer extends AbstractFixer
                 continue;
             }
 
-            if (
-                $token->isGivenKind(T_ELSE)
+            if ($token->isGivenKind(T_ELSE)
                 && $tokens[$tokens->getNextMeaningfulToken($index)]->isGivenKind(T_IF)
             ) {
                 continue;
@@ -108,10 +107,12 @@ final class ControlStructureBracesFixer extends AbstractFixer
             $tokens->insertSlices([$statementEndIndex + 1 => $tokensToInsertAfterStatement]);
 
             // insert opening brace
-            $tokens->insertSlices([$parenthesisEndIndex + 1 => [
+            $tokens->insertSlices(
+                [$parenthesisEndIndex + 1 => [
                 new Token([T_WHITESPACE, ' ']),
                 new Token('{'),
-            ]]);
+                ]]
+            );
         }
     }
 

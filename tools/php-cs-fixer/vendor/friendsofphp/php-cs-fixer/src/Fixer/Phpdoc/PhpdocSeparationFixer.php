@@ -75,17 +75,21 @@ final class PhpdocSeparationFixer extends AbstractFixer implements ConfigurableF
             'Annotations in PHPDoc should be grouped together so that annotations of the same type immediately follow each other. Annotations of a different type are separated by a single blank line.',
             [
                 new CodeSample($code),
-                new CodeSample($code, ['groups' => [
+                new CodeSample(
+                    $code, ['groups' => [
                     ['deprecated', 'link', 'see', 'since'],
                     ['author', 'copyright', 'license'],
                     ['category', 'package', 'subpackage'],
                     ['property', 'property-read', 'property-write'],
                     ['param', 'return'],
-                ]]),
-                new CodeSample($code, ['groups' => [
+                    ]]
+                ),
+                new CodeSample(
+                    $code, ['groups' => [
                     ['author', 'throws', 'custom'],
                     ['return', 'param'],
-                ]]),
+                    ]]
+                ),
                 new CodeSample(
                     <<<'EOF'
                         <?php
@@ -170,7 +174,8 @@ final class PhpdocSeparationFixer extends AbstractFixer implements ConfigurableF
             return true;
         };
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('groups', 'Sets of annotation types to be grouped together. Use `*` to match any tag character.'))
                 ->setAllowedTypes(['string[][]'])
                 ->setDefault(self::OPTION_GROUPS_DEFAULT)
@@ -180,7 +185,8 @@ final class PhpdocSeparationFixer extends AbstractFixer implements ConfigurableF
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false) // @TODO 4.0: set to `true`.
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

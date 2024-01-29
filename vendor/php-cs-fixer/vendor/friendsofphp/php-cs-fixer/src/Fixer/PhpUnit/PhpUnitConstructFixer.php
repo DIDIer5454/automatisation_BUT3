@@ -115,18 +115,22 @@ final class FooTest extends \PHPUnit_Framework_TestCase {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('assertions', 'List of assertion methods to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(array_keys(self::$assertionFixers))])
-                ->setDefault([
+                ->setDefault(
+                    [
                     'assertEquals',
                     'assertSame',
                     'assertNotEquals',
                     'assertNotSame',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixAssertNegative(Tokens $tokens, int $index, string $method): ?int

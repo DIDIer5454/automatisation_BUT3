@@ -135,15 +135,17 @@ abstract class AbstractUnicodeString extends AbstractString
             } elseif (!\function_exists('iconv')) {
                 $s = preg_replace('/[^\x00-\x7F]/u', '?', $s);
             } else {
-                $s = @preg_replace_callback('/[^\x00-\x7F]/u', static function ($c) {
-                    $c = (string) iconv('UTF-8', 'ASCII//TRANSLIT', $c[0]);
+                $s = @preg_replace_callback(
+                    '/[^\x00-\x7F]/u', static function ($c) {
+                        $c = (string) iconv('UTF-8', 'ASCII//TRANSLIT', $c[0]);
 
-                    if ('' === $c && '' === iconv('UTF-8', 'ASCII//TRANSLIT', '²')) {
-                        throw new \LogicException(sprintf('"%s" requires a translit-able iconv implementation, try installing "gnu-libiconv" if you\'re using Alpine Linux.', static::class));
-                    }
+                        if ('' === $c && '' === iconv('UTF-8', 'ASCII//TRANSLIT', '²')) {
+                            throw new \LogicException(sprintf('"%s" requires a translit-able iconv implementation, try installing "gnu-libiconv" if you\'re using Alpine Linux.', static::class));
+                        }
 
-                    return 1 < \strlen($c) ? ltrim($c, '\'`"^~') : ('' !== $c ? $c : '?');
-                }, $s);
+                        return 1 < \strlen($c) ? ltrim($c, '\'`"^~') : ('' !== $c ? $c : '?');
+                    }, $s
+                );
             }
         }
 
@@ -155,11 +157,15 @@ abstract class AbstractUnicodeString extends AbstractString
     public function camel(): static
     {
         $str = clone $this;
-        $str->string = str_replace(' ', '', preg_replace_callback('/\b.(?![A-Z]{2,})/u', static function ($m) {
-            static $i = 0;
+        $str->string = str_replace(
+            ' ', '', preg_replace_callback(
+                '/\b.(?![A-Z]{2,})/u', static function ($m) {
+                    static $i = 0;
 
-            return 1 === ++$i ? ('İ' === $m[0] ? 'i̇' : mb_strtolower($m[0], 'UTF-8')) : mb_convert_case($m[0], \MB_CASE_TITLE, 'UTF-8');
-        }, preg_replace('/[^\pL0-9]++/u', ' ', $this->string)));
+                    return 1 === ++$i ? ('İ' === $m[0] ? 'i̇' : mb_strtolower($m[0], 'UTF-8')) : mb_convert_case($m[0], \MB_CASE_TITLE, 'UTF-8');
+                }, preg_replace('/[^\pL0-9]++/u', ' ', $this->string)
+            )
+        );
 
         return $str;
     }
@@ -465,11 +471,13 @@ abstract class AbstractUnicodeString extends AbstractString
 
         foreach (explode("\n", $s) as $s) {
             if ($ignoreAnsiDecoration) {
-                $s = preg_replace('/(?:\x1B(?:
+                $s = preg_replace(
+                    '/(?:\x1B(?:
                     \[ [\x30-\x3F]*+ [\x20-\x2F]*+ [\x40-\x7E]
                     | [P\]X^_] .*? \x1B\\\\
                     | [\x41-\x7E]
-                )|[\p{Cc}\x7F]++)/xu', '', $s);
+                )|[\p{Cc}\x7F]++)/xu', '', $s
+                );
             }
 
             $lineWidth = $this->wcswidth($s);
@@ -495,26 +503,26 @@ abstract class AbstractUnicodeString extends AbstractString
         $len = $freeLen % $padLen;
 
         switch ($type) {
-            case \STR_PAD_RIGHT:
-                return $this->append(str_repeat($pad->string, intdiv($freeLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
+        case \STR_PAD_RIGHT:
+            return $this->append(str_repeat($pad->string, intdiv($freeLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
 
-            case \STR_PAD_LEFT:
-                return $this->prepend(str_repeat($pad->string, intdiv($freeLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
+        case \STR_PAD_LEFT:
+            return $this->prepend(str_repeat($pad->string, intdiv($freeLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
 
-            case \STR_PAD_BOTH:
-                $freeLen /= 2;
+        case \STR_PAD_BOTH:
+            $freeLen /= 2;
 
-                $rightLen = ceil($freeLen);
-                $len = $rightLen % $padLen;
-                $str = $this->append(str_repeat($pad->string, intdiv($rightLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
+            $rightLen = ceil($freeLen);
+            $len = $rightLen % $padLen;
+            $str = $this->append(str_repeat($pad->string, intdiv($rightLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
 
-                $leftLen = floor($freeLen);
-                $len = $leftLen % $padLen;
+            $leftLen = floor($freeLen);
+            $len = $leftLen % $padLen;
 
-                return $str->prepend(str_repeat($pad->string, intdiv($leftLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
+            return $str->prepend(str_repeat($pad->string, intdiv($leftLen, $padLen)).($len ? $pad->slice(0, $len) : ''));
 
-            default:
-                throw new InvalidArgumentException('Invalid padding type.');
+        default:
+            throw new InvalidArgumentException('Invalid padding type.');
         }
     }
 
@@ -546,7 +554,7 @@ abstract class AbstractUnicodeString extends AbstractString
                 return -1;
             }
 
-            self::$tableZero ??= require __DIR__.'/Resources/data/wcswidth_table_zero.php';
+            self::$tableZero ??= include __DIR__.'/Resources/data/wcswidth_table_zero.php';
 
             if ($codePoint >= self::$tableZero[0][0] && $codePoint <= self::$tableZero[$ubound = \count(self::$tableZero) - 1][1]) {
                 $lbound = 0;
@@ -563,7 +571,7 @@ abstract class AbstractUnicodeString extends AbstractString
                 }
             }
 
-            self::$tableWide ??= require __DIR__.'/Resources/data/wcswidth_table_wide.php';
+            self::$tableWide ??= include __DIR__.'/Resources/data/wcswidth_table_wide.php';
 
             if ($codePoint >= self::$tableWide[0][0] && $codePoint <= self::$tableWide[$ubound = \count(self::$tableWide) - 1][1]) {
                 $lbound = 0;

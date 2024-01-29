@@ -92,12 +92,14 @@ final class NoMixedEchoPrintFixer extends AbstractFixer implements ConfigurableF
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('use', 'The desired language construct.'))
                 ->setAllowedValues(['print', 'echo'])
                 ->setDefault('echo')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixEchoToPrint(Tokens $tokens, int $index): void

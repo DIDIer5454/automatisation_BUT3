@@ -365,7 +365,10 @@ class Command
         if ($code instanceof \Closure) {
             $r = new \ReflectionFunction($code);
             if (null === $r->getClosureThis()) {
-                set_error_handler(static function () {});
+                set_error_handler(
+                    static function () {
+                    }
+                );
                 try {
                     if ($c = \Closure::bind($code, $this)) {
                         $code = $c;
@@ -452,8 +455,8 @@ class Command
     /**
      * Adds an argument.
      *
-     * @param $mode    The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
-     * @param $default The default value (for InputArgument::OPTIONAL mode only)
+     * @param $mode            The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
+     * @param $default         The default value (for InputArgument::OPTIONAL mode only)
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
      * @return $this
@@ -475,9 +478,9 @@ class Command
     /**
      * Adds an option.
      *
-     * @param $shortcut The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
-     * @param $mode     The option mode: One of the InputOption::VALUE_* constants
-     * @param $default  The default value (must be null for InputOption::VALUE_NONE)
+     * @param $shortcut        The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
+     * @param $mode            The option mode: One of the InputOption::VALUE_* constants
+     * @param $default         The default value (must be null for InputOption::VALUE_NONE)
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
      * @return $this

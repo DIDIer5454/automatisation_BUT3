@@ -124,13 +124,15 @@ final class EmptyLoopConditionFixer extends AbstractFixer implements Configurabl
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('style', 'Style of empty loop-condition.'))
                 ->setAllowedTypes(['string'])
                 ->setAllowedValues([self::STYLE_WHILE, self::STYLE_FOR])
                 ->setDefault(self::STYLE_WHILE)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private static function clearNotCommentsInRange(Tokens $tokens, int $indexStart, int $indexEnd): void

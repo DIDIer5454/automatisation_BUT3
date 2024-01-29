@@ -118,12 +118,14 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
             }
 
             // make class 'final'
-            $tokens->insertSlices([
+            $tokens->insertSlices(
+                [
                 $index => [
                     new Token([T_FINAL, 'final']),
                     new Token([T_WHITESPACE, ' ']),
                 ],
-            ]);
+                ]
+            );
         }
     }
 
@@ -152,7 +154,8 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
             return $newValue;
         };
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('annotation_include', 'Class level attribute or annotation tags that must be set in order to fix the class (case insensitive).'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues($annotationsAsserts)
@@ -193,7 +196,8 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

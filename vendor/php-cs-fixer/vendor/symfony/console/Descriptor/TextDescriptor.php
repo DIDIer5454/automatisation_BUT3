@@ -39,13 +39,16 @@ class TextDescriptor extends Descriptor
         $totalWidth = $options['total_width'] ?? Helper::width($argument->getName());
         $spacingWidth = $totalWidth - \strlen($argument->getName());
 
-        $this->writeText(sprintf('  <info>%s</info>  %s%s%s',
-            $argument->getName(),
-            str_repeat(' ', $spacingWidth),
-            // + 4 = 2 spaces before <info>, 2 spaces after </info>
-            preg_replace('/\s*[\r\n]\s*/', "\n".str_repeat(' ', $totalWidth + 4), $argument->getDescription()),
-            $default
-        ), $options);
+        $this->writeText(
+            sprintf(
+                '  <info>%s</info>  %s%s%s',
+                $argument->getName(),
+                str_repeat(' ', $spacingWidth),
+                // + 4 = 2 spaces before <info>, 2 spaces after </info>
+                preg_replace('/\s*[\r\n]\s*/', "\n".str_repeat(' ', $totalWidth + 4), $argument->getDescription()),
+                $default
+            ), $options
+        );
     }
 
     protected function describeInputOption(InputOption $option, array $options = []): void
@@ -66,21 +69,25 @@ class TextDescriptor extends Descriptor
         }
 
         $totalWidth = $options['total_width'] ?? $this->calculateTotalWidthForOptions([$option]);
-        $synopsis = sprintf('%s%s',
+        $synopsis = sprintf(
+            '%s%s',
             $option->getShortcut() ? sprintf('-%s, ', $option->getShortcut()) : '    ',
             sprintf($option->isNegatable() ? '--%1$s|--no-%1$s' : '--%1$s%2$s', $option->getName(), $value)
         );
 
         $spacingWidth = $totalWidth - Helper::width($synopsis);
 
-        $this->writeText(sprintf('  <info>%s</info>  %s%s%s%s',
-            $synopsis,
-            str_repeat(' ', $spacingWidth),
-            // + 4 = 2 spaces before <info>, 2 spaces after </info>
-            preg_replace('/\s*[\r\n]\s*/', "\n".str_repeat(' ', $totalWidth + 4), $option->getDescription()),
-            $default,
-            $option->isArray() ? '<comment> (multiple values allowed)</comment>' : ''
-        ), $options);
+        $this->writeText(
+            sprintf(
+                '  <info>%s</info>  %s%s%s%s',
+                $synopsis,
+                str_repeat(' ', $spacingWidth),
+                // + 4 = 2 spaces before <info>, 2 spaces after </info>
+                preg_replace('/\s*[\r\n]\s*/', "\n".str_repeat(' ', $totalWidth + 4), $option->getDescription()),
+                $default,
+                $option->isArray() ? '<comment> (multiple values allowed)</comment>' : ''
+            ), $options
+        );
     }
 
     protected function describeInputDefinition(InputDefinition $definition, array $options = []): void

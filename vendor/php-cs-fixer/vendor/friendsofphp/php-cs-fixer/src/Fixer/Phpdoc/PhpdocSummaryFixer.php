@@ -33,12 +33,14 @@ final class PhpdocSummaryFixer extends AbstractFixer implements WhitespacesAware
     {
         return new FixerDefinition(
             'PHPDoc summary should end in either a full stop, exclamation mark, or question mark.',
-            [new CodeSample('<?php
+            [new CodeSample(
+                '<?php
 /**
  * Foo function is great
  */
 function foo () {}
-')]
+'
+            )]
         );
     }
 
@@ -72,8 +74,7 @@ function foo () {}
                 $line = $doc->getLine($end);
                 $content = rtrim($line->getContent());
 
-                if (
-                    // final line of Description is NOT properly formatted
+                if (// final line of Description is NOT properly formatted
                     !$this->isCorrectlyFormatted($content)
                     // and first line  of Description, if different than final line, does NOT indicate a list
                     && (1 === $end || ($doc->isMultiLine() && ':' !== substr(rtrim($doc->getLine(1)->getContent()), -1)))

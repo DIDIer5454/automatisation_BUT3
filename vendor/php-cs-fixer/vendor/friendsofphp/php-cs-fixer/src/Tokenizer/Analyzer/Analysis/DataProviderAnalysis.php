@@ -20,7 +20,9 @@ final class DataProviderAnalysis
 
     private int $nameIndex;
 
-    /** @var array<int> */
+    /**
+     * @var array<int> 
+     */
     private array $usageIndices;
 
     /**

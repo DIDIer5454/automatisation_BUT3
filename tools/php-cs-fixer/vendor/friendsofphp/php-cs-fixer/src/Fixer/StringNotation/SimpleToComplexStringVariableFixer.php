@@ -99,12 +99,14 @@ final class SimpleToComplexStringVariableFixer extends AbstractFixer
                 $tokenOfStringBeforeToken = new Token([T_ENCAPSED_AND_WHITESPACE, $newContent]);
             }
 
-            $tokens->overrideRange($index - 1, $index + 2, [
+            $tokens->overrideRange(
+                $index - 1, $index + 2, [
                 $tokenOfStringBeforeToken,
                 new Token([T_CURLY_OPEN, '{']),
                 new Token([T_VARIABLE, '$'.$varnameToken->getContent()]),
                 new Token([CT::T_CURLY_CLOSE, '}']),
-            ]);
+                ]
+            );
         }
     }
 }

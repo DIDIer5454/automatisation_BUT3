@@ -69,8 +69,7 @@ final class DoctrineAnnotationArrayAssignmentFixer extends AbstractDoctrineAnnot
         $options[] = $operator
             ->setAllowedValues(['=', ':'])
             ->setDefault('=')
-            ->getOption()
-        ;
+            ->getOption();
 
         return new FixerConfigurationResolver($options);
     }

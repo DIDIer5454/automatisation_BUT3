@@ -19,4 +19,6 @@ namespace PhpCsFixer\ConfigurationException;
  *
  * @internal
  */
-final class InvalidForEnvFixerConfigurationException extends InvalidFixerConfigurationException {}
+final class InvalidForEnvFixerConfigurationException extends InvalidFixerConfigurationException
+{
+}

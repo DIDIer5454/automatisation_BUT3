@@ -232,9 +232,11 @@ final class NoHomoglyphNamesFixer extends AbstractFixer
                 continue;
             }
 
-            $replaced = Preg::replaceCallback('/[^[:ascii:]]/u', static function (array $matches): string {
-                return self::$replacements[$matches[0]] ?? $matches[0];
-            }, $token->getContent(), -1, $count);
+            $replaced = Preg::replaceCallback(
+                '/[^[:ascii:]]/u', static function (array $matches): string {
+                    return self::$replacements[$matches[0]] ?? $matches[0];
+                }, $token->getContent(), -1, $count
+            );
 
             if ($count) {
                 $tokens->offsetSet($index, new Token([$token->getId(), $replaced]));

@@ -55,12 +55,14 @@ final class PhpUnitSizeClassFixer extends AbstractPhpUnitFixer implements Whites
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('group', 'Define a specific group to be used in case no group is already in use'))
                 ->setAllowedValues(['small', 'medium', 'large'])
                 ->setDefault('small')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -191,10 +193,12 @@ final class PhpUnitSizeClassFixer extends AbstractPhpUnitFixer implements Whites
      */
     private function filterDocBlock(DocBlock $doc): array
     {
-        return array_filter([
+        return array_filter(
+            [
             $doc->getAnnotationsOfType('small'),
             $doc->getAnnotationsOfType('large'),
             $doc->getAnnotationsOfType('medium'),
-        ]);
+            ]
+        );
     }
 }

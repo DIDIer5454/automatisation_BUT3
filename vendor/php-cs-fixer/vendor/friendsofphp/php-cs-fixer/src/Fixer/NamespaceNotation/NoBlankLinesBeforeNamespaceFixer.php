@@ -64,10 +64,12 @@ final class NoBlankLinesBeforeNamespaceFixer extends AbstractProxyFixer implemen
     protected function createProxyFixers(): array
     {
         $blankLineBeforeNamespace = new BlankLinesBeforeNamespaceFixer();
-        $blankLineBeforeNamespace->configure([
+        $blankLineBeforeNamespace->configure(
+            [
             'min_line_breaks' => 0,
             'max_line_breaks' => 1,
-        ]);
+            ]
+        );
 
         return [
             $blankLineBeforeNamespace,

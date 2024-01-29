@@ -32,10 +32,14 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class OrderedClassElementsFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const SORT_ALPHA = 'alpha';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const SORT_NONE = 'none';
 
     private const SUPPORTED_SORT_ALGORITHMS = [
@@ -260,11 +264,13 @@ class Example
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('order', 'List of strings defining order of elements.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(array_keys(array_merge(self::$typeHierarchy, self::$specialTypes)))])
-                ->setDefault([
+                ->setDefault(
+                    [
                     'use_trait',
                     'constant_public',
                     'constant_protected',
@@ -279,13 +285,15 @@ class Example
                     'method_public',
                     'method_protected',
                     'method_private',
-                ])
+                    ]
+                )
                 ->getOption(),
             (new FixerOptionBuilder('sort_algorithm', 'How multiple occurrences of same type statements should be sorted'))
                 ->setAllowedValues(self::SUPPORTED_SORT_ALGORITHMS)
                 ->setDefault(self::SORT_NONE)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -394,8 +402,8 @@ class Example
             return 'destruct';
         }
 
-        if (
-            $nameToken->equalsAny([
+        if ($nameToken->equalsAny(
+            [
                 [T_STRING, 'setUpBeforeClass'],
                 [T_STRING, 'doSetUpBeforeClass'],
                 [T_STRING, 'tearDownAfterClass'],
@@ -406,7 +414,8 @@ class Example
                 [T_STRING, 'assertPostConditions'],
                 [T_STRING, 'tearDown'],
                 [T_STRING, 'doTearDown'],
-            ], false)
+                ], false
+        )
         ) {
             return ['phpunit', strtolower($nameToken->getContent())];
         }
@@ -485,13 +494,15 @@ class Example
         }
         unset($element);
 
-        usort($elements, function (array $a, array $b): int {
-            if ($a['position'] === $b['position']) {
-                return $this->sortGroupElements($a, $b);
-            }
+        usort(
+            $elements, function (array $a, array $b): int {
+                if ($a['position'] === $b['position']) {
+                    return $this->sortGroupElements($a, $b);
+                }
 
-            return $a['position'] <=> $b['position'];
-        });
+                return $a['position'] <=> $b['position'];
+            }
+        );
 
         return $elements;
     }

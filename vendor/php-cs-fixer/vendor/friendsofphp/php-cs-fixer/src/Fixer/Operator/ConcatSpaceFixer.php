@@ -93,12 +93,14 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurableFixerI
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('spacing', 'Spacing to apply around concatenation operator.'))
                 ->setAllowedValues(['one', 'none'])
                 ->setDefault('none')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -133,10 +135,12 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurableFixerI
     private function fixWhiteSpaceAroundConcatToken(Tokens $tokens, int $index, int $offset): void
     {
         if (-1 !== $offset && 1 !== $offset) {
-            throw new \InvalidArgumentException(sprintf(
-                'Expected `-1|1` for "$offset", got "%s"',
-                $offset
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Expected `-1|1` for "$offset", got "%s"',
+                    $offset
+                )
+            );
         }
 
         $offsetIndex = $index + $offset;

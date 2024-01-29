@@ -54,7 +54,9 @@ final class DocLexer
     public const T_COLON = 112;
     public const T_MINUS = 113;
 
-    /** @var array<string, self::T_*> */
+    /**
+     * @var array<string, self::T_*> 
+     */
     private array $noCase = [
         '@' => self::T_AT,
         ',' => self::T_COMMA,
@@ -68,7 +70,9 @@ final class DocLexer
         '\\' => self::T_NAMESPACE_SEPARATOR,
     ];
 
-    /** @var list<Token> */
+    /**
+     * @var list<Token> 
+     */
     private array $tokens = [];
 
     private int $position = 0;

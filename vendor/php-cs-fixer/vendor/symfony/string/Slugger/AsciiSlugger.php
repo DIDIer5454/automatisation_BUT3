@@ -148,8 +148,7 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
 
         return $unicodeString
             ->replaceMatches('/[^A-Za-z0-9]++/', $separator)
-            ->trim($separator)
-        ;
+            ->trim($separator);
     }
 
     private function createTransliterator(string $locale): ?\Transliterator

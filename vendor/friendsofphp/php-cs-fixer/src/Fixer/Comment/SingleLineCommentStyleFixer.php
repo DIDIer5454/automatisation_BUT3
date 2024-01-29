@@ -143,8 +143,7 @@ $c = 3;
                 continue;
             }
 
-            if (
-                !$this->asteriskEnabled
+            if (!$this->asteriskEnabled
                 || str_contains($commentContent, '?>')
                 || !str_starts_with($content, '/*')
                 || 1 === Preg::match('/[^\s\*].*\R.*[^\s\*]/s', $commentContent)
@@ -175,12 +174,14 @@ $c = 3;
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('comment_types', 'List of comment types to fix'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(['asterisk', 'hash'])])
                 ->setDefault(['asterisk', 'hash'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

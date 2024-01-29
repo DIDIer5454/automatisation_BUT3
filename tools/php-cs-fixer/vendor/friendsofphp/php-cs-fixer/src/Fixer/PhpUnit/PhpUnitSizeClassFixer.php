@@ -56,12 +56,14 @@ final class PhpUnitSizeClassFixer extends AbstractPhpUnitFixer implements Whites
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('group', 'Define a specific group to be used in case no group is already in use.'))
                 ->setAllowedValues(self::SIZES)
                 ->setDefault('small')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void

@@ -28,13 +28,17 @@ final class FullDiffer implements DifferInterface
 
     public function __construct()
     {
-        $this->differ = new Differ(new StrictUnifiedDiffOutputBuilder([
-            'collapseRanges' => false,
-            'commonLineThreshold' => 100,
-            'contextLines' => 100,
-            'fromFile' => 'Original',
-            'toFile' => 'New',
-        ]));
+        $this->differ = new Differ(
+            new StrictUnifiedDiffOutputBuilder(
+                [
+                'collapseRanges' => false,
+                'commonLineThreshold' => 100,
+                'contextLines' => 100,
+                'fromFile' => 'Original',
+                'toFile' => 'New',
+                ]
+            )
+        );
     }
 
     public function diff(string $old, string $new, ?\SplFileInfo $file = null): string

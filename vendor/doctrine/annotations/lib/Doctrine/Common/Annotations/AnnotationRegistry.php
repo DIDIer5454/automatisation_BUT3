@@ -66,7 +66,7 @@ final class AnnotationRegistry
     {
         self::$registerFileUsed = true;
 
-        require_once $file;
+        include_once $file;
     }
 
     /**
@@ -153,14 +153,14 @@ final class AnnotationRegistry
             if ($dirs === null) {
                 $path = stream_resolve_include_path($file);
                 if ($path) {
-                    require $path;
+                    include $path;
 
                     return true;
                 }
             } else {
                 foreach ((array) $dirs as $dir) {
                     if (is_file($dir . DIRECTORY_SEPARATOR . $file)) {
-                        require $dir . DIRECTORY_SEPARATOR . $file;
+                        include $dir . DIRECTORY_SEPARATOR . $file;
 
                         return true;
                     }
@@ -174,11 +174,10 @@ final class AnnotationRegistry
             }
         }
 
-        if (
-            self::$loaders === [] &&
-            self::$autoloadNamespaces === [] &&
-            self::$registerFileUsed === false &&
-            class_exists($class)
+        if (self::$loaders === [] 
+            && self::$autoloadNamespaces === [] 
+            && self::$registerFileUsed === false 
+            && class_exists($class)
         ) {
             return true;
         }

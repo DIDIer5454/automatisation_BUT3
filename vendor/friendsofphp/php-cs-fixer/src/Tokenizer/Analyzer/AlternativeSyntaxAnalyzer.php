@@ -18,7 +18,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * @internal
- * @TODO 4.0 remove this analyzer and move this logic into a transformer
+ * @TODO     4.0 remove this analyzer and move this logic into a transformer
  */
 final class AlternativeSyntaxAnalyzer
 {
@@ -42,13 +42,15 @@ final class AlternativeSyntaxAnalyzer
 
         $beforeOpenParenthesisIndex = $tokens->getPrevMeaningfulToken($openParenthesisIndex);
 
-        return $tokens[$beforeOpenParenthesisIndex]->isGivenKind([
+        return $tokens[$beforeOpenParenthesisIndex]->isGivenKind(
+            [
             T_DECLARE,
             T_FOR,
             T_FOREACH,
             T_IF,
             T_SWITCH,
             T_WHILE,
-        ]);
+            ]
+        );
     }
 }

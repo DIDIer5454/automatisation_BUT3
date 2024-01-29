@@ -170,11 +170,13 @@ yield(2);
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('statements', 'List of control statements to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(array_keys(self::$loops))])
-                ->setDefault([
+                ->setDefault(
+                    [
                     'break',
                     'clone',
                     'continue',
@@ -182,8 +184,10 @@ yield(2);
                     'return',
                     'switch_case',
                     'yield',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

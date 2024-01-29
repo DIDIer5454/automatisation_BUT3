@@ -241,8 +241,7 @@ final class CommentsAnalyzer
         for ($index = $openParenthesisIndex + 1; $index < $closeParenthesisIndex; ++$index) {
             $token = $tokens[$index];
 
-            if (
-                $token->isGivenKind(T_VARIABLE)
+            if ($token->isGivenKind(T_VARIABLE)
                 && str_contains($docsContent, $token->getContent())
             ) {
                 return true;

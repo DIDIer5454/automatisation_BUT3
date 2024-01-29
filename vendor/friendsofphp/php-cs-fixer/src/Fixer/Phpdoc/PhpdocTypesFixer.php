@@ -81,9 +81,13 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer implements Configu
     {
         parent::configure($configuration);
 
-        $typesToFix = array_merge(...array_map(static function (string $group): array {
-            return self::POSSIBLE_TYPES[$group];
-        }, $this->configuration['groups']));
+        $typesToFix = array_merge(
+            ...array_map(
+                static function (string $group): array {
+                    return self::POSSIBLE_TYPES[$group];
+                }, $this->configuration['groups']
+            )
+        );
 
         $this->patternToFix = sprintf(
             '/(?<![a-zA-Z0-9_\x80-\xff]\\\\)(\b|.(?=\$))(%s)\b(?!\\\\)/i',
@@ -170,12 +174,14 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer implements Configu
     {
         $possibleGroups = array_keys(self::POSSIBLE_TYPES);
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('groups', 'Type groups to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset($possibleGroups)])
                 ->setDefault($possibleGroups)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

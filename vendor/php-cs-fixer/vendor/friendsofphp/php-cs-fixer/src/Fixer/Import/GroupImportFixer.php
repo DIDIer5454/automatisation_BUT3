@@ -79,20 +79,24 @@ final class GroupImportFixer extends AbstractFixer
         $sameNamespaces = array_filter(array_count_values($allNamespaceAndType), static fn (int $count): bool => $count > 1);
         $sameNamespaces = array_keys($sameNamespaces);
 
-        $sameNamespaceAnalysis = array_filter($useDeclarations, function (NamespaceUseAnalysis $useDeclaration) use ($sameNamespaces): bool {
-            $namespaceNameAndType = $this->getNamespaceNameWithSlash($useDeclaration).$useDeclaration->getType();
+        $sameNamespaceAnalysis = array_filter(
+            $useDeclarations, function (NamespaceUseAnalysis $useDeclaration) use ($sameNamespaces): bool {
+                $namespaceNameAndType = $this->getNamespaceNameWithSlash($useDeclaration).$useDeclaration->getType();
 
-            return \in_array($namespaceNameAndType, $sameNamespaces, true);
-        });
+                return \in_array($namespaceNameAndType, $sameNamespaces, true);
+            }
+        );
 
-        usort($sameNamespaceAnalysis, function (NamespaceUseAnalysis $a, NamespaceUseAnalysis $b): int {
-            $namespaceA = $this->getNamespaceNameWithSlash($a);
-            $namespaceB = $this->getNamespaceNameWithSlash($b);
+        usort(
+            $sameNamespaceAnalysis, function (NamespaceUseAnalysis $a, NamespaceUseAnalysis $b): int {
+                $namespaceA = $this->getNamespaceNameWithSlash($a);
+                $namespaceB = $this->getNamespaceNameWithSlash($b);
 
-            $namespaceDifference = \strlen($namespaceA) <=> \strlen($namespaceB);
+                $namespaceDifference = \strlen($namespaceA) <=> \strlen($namespaceB);
 
-            return 0 !== $namespaceDifference ? $namespaceDifference : $a->getFullName() <=> $b->getFullName();
-        });
+                return 0 !== $namespaceDifference ? $namespaceDifference : $a->getFullName() <=> $b->getFullName();
+            }
+        );
 
         return $sameNamespaceAnalysis;
     }

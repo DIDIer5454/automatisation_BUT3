@@ -124,13 +124,17 @@ abstract class AbstractFixer implements FixerInterface
 
             $name = $option->getName();
             if (\array_key_exists($name, $configuration)) {
-                Utils::triggerDeprecation(new \InvalidArgumentException(sprintf(
-                    'Option "%s" for rule "%s" is deprecated and will be removed in version %d.0. %s',
-                    $name,
-                    $this->getName(),
-                    Application::getMajorVersion() + 1,
-                    str_replace('`', '"', $option->getDeprecationMessage())
-                )));
+                Utils::triggerDeprecation(
+                    new \InvalidArgumentException(
+                        sprintf(
+                            'Option "%s" for rule "%s" is deprecated and will be removed in version %d.0. %s',
+                            $name,
+                            $this->getName(),
+                            Application::getMajorVersion() + 1,
+                            str_replace('`', '"', $option->getDeprecationMessage())
+                        )
+                    )
+                );
             }
         }
 

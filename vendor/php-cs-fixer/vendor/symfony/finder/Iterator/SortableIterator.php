@@ -32,7 +32,9 @@ class SortableIterator implements \IteratorAggregate
     public const SORT_BY_EXTENSION = 9;
     public const SORT_BY_SIZE = 10;
 
-    /** @var \Traversable<string, \SplFileInfo> */
+    /**
+     * @var \Traversable<string, \SplFileInfo> 
+     */
     private \Traversable $iterator;
     private \Closure|int $sort;
 

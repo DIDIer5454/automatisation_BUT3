@@ -108,9 +108,11 @@ abstract class AbstractPhpUnitFixer extends AbstractFixer
                 $extraNewLines .= $this->whitespacesConfig->getLineEnding();
             }
 
-            $tokens->insertAt($index, [
+            $tokens->insertAt(
+                $index, [
                 new Token([T_WHITESPACE, $extraNewLines.WhitespacesAnalyzer::detectIndent($tokens, $index)]),
-            ]);
+                ]
+            );
         }
     }
 

@@ -33,7 +33,7 @@ class Filesystem extends AbstractData
      * > Note that wildcard patterns are not regular expressions, although they
      * > are a bit similar.
      *
-     * @see  https://man7.org/linux/man-pages/man7/glob.7.html
+     * @see   https://man7.org/linux/man-pages/man7/glob.7.html
      * @const string
      */
     public const PASTE_FILE_PATTERN = \DIRECTORY_SEPARATOR.'[a-f0-9][a-f0-9]'.

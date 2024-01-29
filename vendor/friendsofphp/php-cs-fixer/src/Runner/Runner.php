@@ -127,7 +127,9 @@ final class Runner
             ? new FileCachingLintingIterator($fileFilteredFileIterator, $this->linter)
             : new FileLintingIterator($fileFilteredFileIterator, $this->linter);
 
-        /** @var \SplFileInfo $file */
+        /**
+ * @var \SplFileInfo $file 
+*/
         foreach ($collection as $file) {
             $fixInfo = $this->fixFile($file, $collection->currentLintingResult());
 
@@ -178,8 +180,7 @@ final class Runner
             foreach ($this->fixers as $fixer) {
                 // for custom fixers we don't know is it safe to run `->fix()` without checking `->supports()` and `->isCandidate()`,
                 // thus we need to check it and conditionally skip fixing
-                if (
-                    !$fixer instanceof AbstractFixer
+                if (!$fixer instanceof AbstractFixer
                     && (!$fixer->supports($file) || !$fixer->isCandidate($tokens))
                 ) {
                     continue;

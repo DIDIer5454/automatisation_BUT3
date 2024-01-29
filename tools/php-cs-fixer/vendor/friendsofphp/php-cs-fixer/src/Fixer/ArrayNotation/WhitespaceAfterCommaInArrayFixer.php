@@ -50,12 +50,14 @@ final class WhitespaceAfterCommaInArrayFixer extends AbstractFixer implements Co
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('ensure_single_space', 'If there are only horizontal whitespaces after the comma then ensure it is a single space.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -82,8 +84,7 @@ final class WhitespaceAfterCommaInArrayFixer extends AbstractFixer implements Co
                 }
                 if (!$tokens[$i + 1]->isWhitespace()) {
                     $tokensToInsert[$i + 1] = new Token([T_WHITESPACE, ' ']);
-                } elseif (
-                    true === $this->configuration['ensure_single_space']
+                } elseif (true === $this->configuration['ensure_single_space']
                     && ' ' !== $tokens[$i + 1]->getContent()
                     && Preg::match('/^\h+$/', $tokens[$i + 1]->getContent())
                     && (!$tokens[$i + 2]->isComment() || Preg::match('/^\h+$/', $tokens[$i + 3]->getContent()))

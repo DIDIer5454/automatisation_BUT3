@@ -86,9 +86,13 @@ final class PhpdocInlineTagNormalizerFixer extends AbstractFixer implements Conf
             $content = Preg::replaceCallback(
                 sprintf(
                     '#(?:@{+|{+\h*@)\h*(%s)s?([^}]*)(?:}+)#i',
-                    implode('|', array_map(static function (string $tag): string {
-                        return preg_quote($tag, '/');
-                    }, $this->configuration['tags']))
+                    implode(
+                        '|', array_map(
+                            static function (string $tag): string {
+                                return preg_quote($tag, '/');
+                            }, $this->configuration['tags']
+                        )
+                    )
                 ),
                 static function (array $matches): string {
                     $doc = trim($matches[2]);
@@ -111,11 +115,13 @@ final class PhpdocInlineTagNormalizerFixer extends AbstractFixer implements Conf
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('tags', 'The list of tags to normalize'))
                 ->setAllowedTypes(['array'])
                 ->setDefault(['example', 'id', 'internal', 'inheritdoc', 'inheritdocs', 'link', 'source', 'toc', 'tutorial'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

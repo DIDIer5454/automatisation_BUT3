@@ -2001,11 +2001,13 @@ class ComposerStaticInitDontChange
 
     public static function getInitializer(ClassLoader $loader)
     {
-        return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitDontChange::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitDontChange::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitDontChange::$classMap;
+        return \Closure::bind(
+            function () use ($loader) {
+                $loader->prefixLengthsPsr4 = ComposerStaticInitDontChange::$prefixLengthsPsr4;
+                $loader->prefixDirsPsr4 = ComposerStaticInitDontChange::$prefixDirsPsr4;
+                $loader->classMap = ComposerStaticInitDontChange::$classMap;
 
-        }, null, ClassLoader::class);
+            }, null, ClassLoader::class
+        );
     }
 }

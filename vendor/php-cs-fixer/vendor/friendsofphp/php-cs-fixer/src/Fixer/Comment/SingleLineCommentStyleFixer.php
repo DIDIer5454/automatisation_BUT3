@@ -120,7 +120,9 @@ $c = 3;
 
             $content = $token->getContent();
 
-            /** @TODO PHP 8.0 - no more need for `?: ''` */
+            /**
+ * @TODO PHP 8.0 - no more need for `?: ''` 
+*/
             $commentContent = substr($content, 2, -2) ?: ''; // @phpstan-ignore-line
 
             if ($this->hashEnabled && str_starts_with($content, '#')) {
@@ -133,8 +135,7 @@ $c = 3;
                 continue;
             }
 
-            if (
-                !$this->asteriskEnabled
+            if (!$this->asteriskEnabled
                 || str_contains($commentContent, '?>')
                 || !str_starts_with($content, '/*')
                 || Preg::match('/[^\s\*].*\R.*[^\s\*]/s', $commentContent)
@@ -162,12 +163,14 @@ $c = 3;
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('comment_types', 'List of comment types to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(['asterisk', 'hash'])])
                 ->setDefault(['asterisk', 'hash'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

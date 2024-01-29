@@ -39,8 +39,7 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
                 $previous = $tokens->getPrevMeaningfulToken($previous);
             }
 
-            if (
-                !$tokens[$previous]->equals(';')                                    // 'if' block doesn't end with semicolon, keep 'else'
+            if (!$tokens[$previous]->equals(';')                                    // 'if' block doesn't end with semicolon, keep 'else'
                 || $tokens[$tokens->getPrevMeaningfulToken($previous)]->equals('{') // empty 'if' block, keep 'else'
             ) {
                 return false;

@@ -256,8 +256,7 @@ final class StringLengthToEmptyFixer extends AbstractFunctionReferenceFixer
     {
         return
             ($token->isGivenKind([T_IS_IDENTICAL, T_IS_NOT_IDENTICAL, T_IS_SMALLER_OR_EQUAL, T_IS_GREATER_OR_EQUAL]))
-            || $token->equals('<') || $token->equals('>')
-        ;
+            || $token->equals('<') || $token->equals('>');
     }
 
     private function isOfHigherPrecedence(Token $token): bool
@@ -292,7 +291,9 @@ final class StringLengthToEmptyFixer extends AbstractFunctionReferenceFixer
                 continue;
             }
 
-            /** @var null|array{isStart: bool, type: int} $blockType */
+            /**
+ * @var null|array{isStart: bool, type: int} $blockType 
+*/
             $blockType = Tokens::detectBlockType($token);
 
             if (null !== $blockType && $blockType['isStart']) {

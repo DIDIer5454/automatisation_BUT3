@@ -28,11 +28,13 @@ abstract class ServiceLocatorTestCase extends TestCase
 
     public function testHas()
     {
-        $locator = $this->getServiceLocator([
+        $locator = $this->getServiceLocator(
+            [
             'foo' => fn () => 'bar',
             'bar' => fn () => 'baz',
             fn () => 'dummy',
-        ]);
+            ]
+        );
 
         $this->assertTrue($locator->has('foo'));
         $this->assertTrue($locator->has('bar'));
@@ -41,10 +43,12 @@ abstract class ServiceLocatorTestCase extends TestCase
 
     public function testGet()
     {
-        $locator = $this->getServiceLocator([
+        $locator = $this->getServiceLocator(
+            [
             'foo' => fn () => 'bar',
             'bar' => fn () => 'baz',
-        ]);
+            ]
+        );
 
         $this->assertSame('bar', $locator->get('foo'));
         $this->assertSame('baz', $locator->get('bar'));
@@ -53,13 +57,15 @@ abstract class ServiceLocatorTestCase extends TestCase
     public function testGetDoesNotMemoize()
     {
         $i = 0;
-        $locator = $this->getServiceLocator([
+        $locator = $this->getServiceLocator(
+            [
             'foo' => function () use (&$i) {
                 ++$i;
 
                 return 'bar';
             },
-        ]);
+            ]
+        );
 
         $this->assertSame('bar', $locator->get('foo'));
         $this->assertSame('bar', $locator->get('foo'));
@@ -68,9 +74,13 @@ abstract class ServiceLocatorTestCase extends TestCase
 
     public function testThrowsOnUndefinedInternalService()
     {
-        $locator = $this->getServiceLocator([
-            'foo' => function () use (&$locator) { return $locator->get('bar'); },
-        ]);
+        $locator = $this->getServiceLocator(
+            [
+            'foo' => function () use (&$locator) {
+                return $locator->get('bar'); 
+            },
+            ]
+        );
 
         if (!$this->getExpectedException()) {
             $this->expectException(NotFoundExceptionInterface::class);
@@ -82,11 +92,19 @@ abstract class ServiceLocatorTestCase extends TestCase
 
     public function testThrowsOnCircularReference()
     {
-        $locator = $this->getServiceLocator([
-            'foo' => function () use (&$locator) { return $locator->get('bar'); },
-            'bar' => function () use (&$locator) { return $locator->get('baz'); },
-            'baz' => function () use (&$locator) { return $locator->get('bar'); },
-        ]);
+        $locator = $this->getServiceLocator(
+            [
+            'foo' => function () use (&$locator) {
+                return $locator->get('bar'); 
+            },
+            'bar' => function () use (&$locator) {
+                return $locator->get('baz'); 
+            },
+            'baz' => function () use (&$locator) {
+                return $locator->get('bar'); 
+            },
+            ]
+        );
 
         $this->expectException(ContainerExceptionInterface::class);
         $this->expectExceptionMessage('Circular reference detected for service "bar", path: "bar -> baz -> bar".');

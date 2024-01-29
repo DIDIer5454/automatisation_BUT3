@@ -28,24 +28,32 @@ final class Php80
     public static function get_debug_type($value): string
     {
         switch (true) {
-            case null === $value: return 'null';
-            case \is_bool($value): return 'bool';
-            case \is_string($value): return 'string';
-            case \is_array($value): return 'array';
-            case \is_int($value): return 'int';
-            case \is_float($value): return 'float';
-            case \is_object($value): break;
-            case $value instanceof \__PHP_Incomplete_Class: return '__PHP_Incomplete_Class';
-            default:
-                if (null === $type = @get_resource_type($value)) {
-                    return 'unknown';
-                }
+        case null === $value: 
+            return 'null';
+        case \is_bool($value): 
+            return 'bool';
+        case \is_string($value): 
+            return 'string';
+        case \is_array($value): 
+            return 'array';
+        case \is_int($value): 
+            return 'int';
+        case \is_float($value): 
+            return 'float';
+        case \is_object($value): 
+            break;
+        case $value instanceof \__PHP_Incomplete_Class: 
+            return '__PHP_Incomplete_Class';
+        default:
+            if (null === $type = @get_resource_type($value)) {
+                return 'unknown';
+            }
 
-                if ('Unknown' === $type) {
-                    $type = 'closed';
-                }
+            if ('Unknown' === $type) {
+                $type = 'closed';
+            }
 
-                return "resource ($type)";
+            return "resource ($type)";
         }
 
         $class = \get_class($value);
@@ -69,22 +77,22 @@ final class Php80
     public static function preg_last_error_msg(): string
     {
         switch (preg_last_error()) {
-            case \PREG_INTERNAL_ERROR:
-                return 'Internal error';
-            case \PREG_BAD_UTF8_ERROR:
-                return 'Malformed UTF-8 characters, possibly incorrectly encoded';
-            case \PREG_BAD_UTF8_OFFSET_ERROR:
-                return 'The offset did not correspond to the beginning of a valid UTF-8 code point';
-            case \PREG_BACKTRACK_LIMIT_ERROR:
-                return 'Backtrack limit exhausted';
-            case \PREG_RECURSION_LIMIT_ERROR:
-                return 'Recursion limit exhausted';
-            case \PREG_JIT_STACKLIMIT_ERROR:
-                return 'JIT stack limit exhausted';
-            case \PREG_NO_ERROR:
-                return 'No error';
-            default:
-                return 'Unknown error';
+        case \PREG_INTERNAL_ERROR:
+            return 'Internal error';
+        case \PREG_BAD_UTF8_ERROR:
+            return 'Malformed UTF-8 characters, possibly incorrectly encoded';
+        case \PREG_BAD_UTF8_OFFSET_ERROR:
+            return 'The offset did not correspond to the beginning of a valid UTF-8 code point';
+        case \PREG_BACKTRACK_LIMIT_ERROR:
+            return 'Backtrack limit exhausted';
+        case \PREG_RECURSION_LIMIT_ERROR:
+            return 'Recursion limit exhausted';
+        case \PREG_JIT_STACKLIMIT_ERROR:
+            return 'JIT stack limit exhausted';
+        case \PREG_NO_ERROR:
+            return 'No error';
+        default:
+            return 'Unknown error';
         }
     }
 

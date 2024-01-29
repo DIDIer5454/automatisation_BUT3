@@ -219,8 +219,7 @@ EOF
                     new InputOption('show-progress', '', InputOption::VALUE_REQUIRED, 'Type of progress indicator (none, dots).'),
                 ]
             )
-            ->setDescription('Fixes a directory or a file.')
-        ;
+            ->setDescription('Fixes a directory or a file.');
     }
 
     /**
@@ -336,8 +335,7 @@ EOF
 
         $output->isDecorated()
             ? $output->write($reporter->generate($reportSummary))
-            : $output->write($reporter->generate($reportSummary), false, OutputInterface::OUTPUT_RAW)
-        ;
+            : $output->write($reporter->generate($reportSummary), false, OutputInterface::OUTPUT_RAW);
 
         $invalidErrors = $this->errorsManager->getInvalidErrors();
         $exceptionErrors = $this->errorsManager->getExceptionErrors();

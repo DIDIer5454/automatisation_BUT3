@@ -84,12 +84,14 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('use_nullable_type_declaration', 'Whether to add or remove `?` before type declarations for parameters with a default `null` value.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -123,8 +125,7 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
     private function fixFunctionParameters(Tokens $tokens, array $arguments): void
     {
         foreach (array_reverse($arguments) as $argumentInfo) {
-            if (
-                // Skip, if the parameter
+            if (// Skip, if the parameter
                 // - doesn't have a type declaration
                 !$argumentInfo->hasTypeAnalysis()
                 // type is a union
@@ -137,17 +138,19 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
 
             $argumentTypeInfo = $argumentInfo->getTypeAnalysis();
 
-            if (
-                \PHP_VERSION_ID >= 80000
+            if (\PHP_VERSION_ID >= 80000
                 && false === $this->configuration['use_nullable_type_declaration']
             ) {
                 $visibility = $tokens[$tokens->getPrevMeaningfulToken($argumentTypeInfo->getStartIndex())];
 
-                if ($visibility->isGivenKind([
+                if ($visibility->isGivenKind(
+                    [
                     CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC,
                     CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED,
                     CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE,
-                ])) {
+                    ]
+                )
+                ) {
                     continue;
                 }
             }

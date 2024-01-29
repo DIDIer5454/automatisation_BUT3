@@ -111,12 +111,14 @@ if ($foo) {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('stick_comment_to_next_continuous_control_statement', 'Last comment of code block counts as comment for next block.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -227,8 +229,7 @@ if ($foo) {
                 ++$currentScope;
             }
 
-            if (
-                $token->equalsAny($blockFirstTokens)
+            if ($token->equalsAny($blockFirstTokens)
                 || ($token->equals('(') && !$tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_ARRAY))
                 || isset($alternativeBlockStarts[$index])
                 || isset($caseBlockStarts[$index])
@@ -397,8 +398,7 @@ if ($foo) {
                 continue;
             }
 
-            if (
-                $token->isWhitespace()
+            if ($token->isWhitespace()
                 || ($index > 0 && $tokens[$index - 1]->isGivenKind(T_OPEN_TAG))
             ) {
                 $previousOpenTagContent = $tokens[$index - 1]->isGivenKind(T_OPEN_TAG)
@@ -413,8 +413,7 @@ if ($foo) {
 
                 $nextToken = $tokens[$index + 1] ?? null;
 
-                if (
-                    $this->bracesFixerCompatibility
+                if ($this->bracesFixerCompatibility
                     && null !== $nextToken
                     && $nextToken->isComment()
                     && !$this->isCommentWithFixableIndentation($tokens, $index + 1)
@@ -452,18 +451,15 @@ if ($foo) {
                             ++$endIndex;
                         }
 
-                        if (
-                            (null !== $firstNonWhitespaceTokenIndex && $firstNonWhitespaceTokenIndex < $endIndex)
+                        if ((null !== $firstNonWhitespaceTokenIndex && $firstNonWhitespaceTokenIndex < $endIndex)
                             || (null !== $nextNewlineIndex && $nextNewlineIndex < $endIndex)
                         ) {
-                            if (
-                                // do we touch whitespace directly before comment...
+                            if (// do we touch whitespace directly before comment...
                                 $tokens[$firstNonWhitespaceTokenIndex]->isGivenKind(T_COMMENT)
                                 // ...and afterwards, there is only comment or `}`
                                 && $tokens[$tokens->getNextMeaningfulToken($firstNonWhitespaceTokenIndex)]->equals('}')
                             ) {
-                                if (
-                                    // ... and the comment was only content in docblock
+                                if (// ... and the comment was only content in docblock
                                     $tokens[$tokens->getPrevMeaningfulToken($firstNonWhitespaceTokenIndex)]->equals('{')
                                 ) {
                                     $indent = true;
@@ -521,14 +517,16 @@ if ($foo) {
                 }
 
                 if (null !== $nextToken && $nextToken->isComment()) {
-                    $tokens[$index + 1] = new Token([
+                    $tokens[$index + 1] = new Token(
+                        [
                         $nextToken->getId(),
                         Preg::replace(
                             '/(\R)'.preg_quote($previousLineInitialIndent, '/').'(\h*\S+.*)/',
                             '$1'.$previousLineNewIndent.'$2',
                             $nextToken->getContent()
                         ),
-                    ]);
+                        ]
+                    );
                 }
 
                 if ($token->isWhitespace()) {
@@ -582,8 +580,7 @@ if ($foo) {
         for ($searchEndIndex = $index; $searchEndIndex <= $parentScopeEndIndex; ++$searchEndIndex) {
             $searchEndToken = $tokens[$searchEndIndex];
 
-            if (
-                $searchEndToken->isGivenKind(T_IF)
+            if ($searchEndToken->isGivenKind(T_IF)
                 && !$tokens[$tokens->getPrevMeaningfulToken($searchEndIndex)]->isGivenKind(T_ELSE)
             ) {
                 ++$ifLevel;
@@ -616,13 +613,11 @@ if ($foo) {
 
             $controlStructureContinuationIndex = $tokens->getNextMeaningfulToken($searchEndIndex);
 
-            if (
-                $ifLevel > 0
+            if ($ifLevel > 0
                 && null !== $controlStructureContinuationIndex
                 && $tokens[$controlStructureContinuationIndex]->isGivenKind([T_ELSE, T_ELSEIF])
             ) {
-                if (
-                    $tokens[$controlStructureContinuationIndex]->isGivenKind(T_ELSE)
+                if ($tokens[$controlStructureContinuationIndex]->isGivenKind(T_ELSE)
                     && !$tokens[$tokens->getNextMeaningfulToken($controlStructureContinuationIndex)]->isGivenKind(T_IF)
                 ) {
                     --$ifLevel;
@@ -633,8 +628,7 @@ if ($foo) {
                 continue;
             }
 
-            if (
-                $doWhileLevel > 0
+            if ($doWhileLevel > 0
                 && null !== $controlStructureContinuationIndex
                 && $tokens[$controlStructureContinuationIndex]->isGivenKind([T_WHILE])
             ) {
@@ -695,8 +689,7 @@ if ($foo) {
 
     private function getLineIndentationWithBracesCompatibility(Tokens $tokens, int $index, string $regularIndent): string
     {
-        if (
-            $this->bracesFixerCompatibility
+        if ($this->bracesFixerCompatibility
             && $tokens[$index]->isGivenKind(T_OPEN_TAG)
             && Preg::match('/\R/', $tokens[$index]->getContent())
             && isset($tokens[$index + 1])

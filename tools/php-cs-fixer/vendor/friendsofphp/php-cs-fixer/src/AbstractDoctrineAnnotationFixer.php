@@ -45,7 +45,9 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
         $analyzer = new TokensAnalyzer($tokens);
         $this->classyElements = $analyzer->getClassyElements();
 
-        /** @var Token $docCommentToken */
+        /**
+ * @var Token $docCommentToken 
+*/
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $index => $docCommentToken) {
             if (!$this->nextElementAcceptsDoctrineAnnotations($tokens, $index)) {
                 continue;
@@ -68,19 +70,23 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('ignored_tags', 'List of tags that must not be treated as Doctrine Annotations.'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([static function (array $values): bool {
-                    foreach ($values as $value) {
-                        if (!\is_string($value)) {
-                            return false;
+                ->setAllowedValues(
+                    [static function (array $values): bool {
+                        foreach ($values as $value) {
+                            if (!\is_string($value)) {
+                                return false;
+                            }
                         }
-                    }
 
-                    return true;
-                }])
-                ->setDefault([
+                        return true;
+                    }]
+                )
+                ->setDefault(
+                    [
                     // PHPDocumentor 1
                     'abstract',
                     'access',
@@ -191,9 +197,11 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
                     'FIXME',
                     'fixme',
                     'override',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function nextElementAcceptsDoctrineAnnotations(Tokens $tokens, int $index): bool

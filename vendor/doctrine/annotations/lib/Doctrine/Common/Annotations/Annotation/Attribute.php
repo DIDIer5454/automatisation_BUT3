@@ -10,12 +10,18 @@ namespace Doctrine\Common\Annotations\Annotation;
  */
 final class Attribute
 {
-    /** @var string */
+    /**
+     * @var string 
+     */
     public $name;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     public $type;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     public $required = false;
 }

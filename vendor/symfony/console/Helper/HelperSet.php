@@ -23,7 +23,9 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
  */
 class HelperSet implements \IteratorAggregate
 {
-    /** @var array<string, Helper> */
+    /**
+     * @var array<string, Helper> 
+     */
     private $helpers = [];
     private $command;
 

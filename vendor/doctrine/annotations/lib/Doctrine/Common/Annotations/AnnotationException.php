@@ -75,11 +75,13 @@ class AnnotationException extends Exception
      */
     public static function semanticalErrorConstants($identifier, $context = null)
     {
-        return self::semanticalError(sprintf(
-            "Couldn't find constant %s%s.",
-            $identifier,
-            $context ? ', ' . $context : ''
-        ));
+        return self::semanticalError(
+            sprintf(
+                "Couldn't find constant %s%s.",
+                $identifier,
+                $context ? ', ' . $context : ''
+            )
+        );
     }
 
     /**
@@ -95,14 +97,16 @@ class AnnotationException extends Exception
      */
     public static function attributeTypeError($attributeName, $annotationName, $context, $expected, $actual)
     {
-        return self::typeError(sprintf(
-            'Attribute "%s" of @%s declared on %s expects %s, but got %s.',
-            $attributeName,
-            $annotationName,
-            $context,
-            $expected,
-            is_object($actual) ? 'an instance of ' . get_class($actual) : gettype($actual)
-        ));
+        return self::typeError(
+            sprintf(
+                'Attribute "%s" of @%s declared on %s expects %s, but got %s.',
+                $attributeName,
+                $annotationName,
+                $context,
+                $expected,
+                is_object($actual) ? 'an instance of ' . get_class($actual) : gettype($actual)
+            )
+        );
     }
 
     /**
@@ -117,39 +121,45 @@ class AnnotationException extends Exception
      */
     public static function requiredError($attributeName, $annotationName, $context, $expected)
     {
-        return self::typeError(sprintf(
-            'Attribute "%s" of @%s declared on %s expects %s. This value should not be null.',
-            $attributeName,
-            $annotationName,
-            $context,
-            $expected
-        ));
+        return self::typeError(
+            sprintf(
+                'Attribute "%s" of @%s declared on %s expects %s. This value should not be null.',
+                $attributeName,
+                $annotationName,
+                $context,
+                $expected
+            )
+        );
     }
 
     /**
      * Creates a new AnnotationException describing a invalid enummerator.
      *
-     * @param string $attributeName
-     * @param string $annotationName
-     * @param string $context
-     * @param mixed  $given
+     * @param         string $attributeName
+     * @param         string $annotationName
+     * @param         string $context
+     * @param         mixed  $given
      * @phpstan-param list<string>        $available
      *
      * @return AnnotationException
      */
     public static function enumeratorError($attributeName, $annotationName, $context, $available, $given)
     {
-        return new self(sprintf(
-            '[Enum Error] Attribute "%s" of @%s declared on %s accepts only [%s], but got %s.',
-            $attributeName,
-            $annotationName,
-            $context,
-            implode(', ', $available),
-            is_object($given) ? get_class($given) : $given
-        ));
+        return new self(
+            sprintf(
+                '[Enum Error] Attribute "%s" of @%s declared on %s accepts only [%s], but got %s.',
+                $attributeName,
+                $annotationName,
+                $context,
+                implode(', ', $available),
+                is_object($given) ? get_class($given) : $given
+            )
+        );
     }
 
-    /** @return AnnotationException */
+    /**
+     * @return AnnotationException 
+     */
     public static function optimizerPlusSaveComments()
     {
         return new self(
@@ -157,7 +167,9 @@ class AnnotationException extends Exception
         );
     }
 
-    /** @return AnnotationException */
+    /**
+     * @return AnnotationException 
+     */
     public static function optimizerPlusLoadComments()
     {
         return new self(

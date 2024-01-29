@@ -149,8 +149,7 @@ final class DateTimeCreateFromFormatCallFixer extends AbstractFixer
         $argumentEndIndex = $arguments[$argumentStartIndex];
         $argumentStartIndex = $tokens->getNextMeaningfulToken($argumentStartIndex - 1);
 
-        if (
-            $argumentStartIndex !== $argumentEndIndex
+        if ($argumentStartIndex !== $argumentEndIndex
             && $tokens->getNextMeaningfulToken($argumentStartIndex) <= $argumentEndIndex
         ) {
             return null; // argument is not a simple single string

@@ -152,7 +152,8 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
             return $newValue;
         };
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('annotation_include', 'Class level annotations tags that must be set in order to fix the class. (case insensitive)'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues($annotationsAsserts)
@@ -162,7 +163,8 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
             (new FixerOptionBuilder('annotation_exclude', 'Class level annotations tags that must be omitted to fix the class, even if all of the white list ones are used as well. (case insensitive)'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues($annotationsAsserts)
-                ->setDefault([
+                ->setDefault(
+                    [
                     '@final',
                     '@Entity',
                     '@ORM\Entity',
@@ -170,14 +172,16 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
                     '@Mapping\Entity',
                     '@Document',
                     '@ODM\Document',
-                ])
+                    ]
+                )
                 ->setNormalizer($annotationsNormalizer)
                 ->getOption(),
             (new FixerOptionBuilder('consider_absent_docblock_as_internal_class', 'Should classes without any DocBlock be fixed to final?'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

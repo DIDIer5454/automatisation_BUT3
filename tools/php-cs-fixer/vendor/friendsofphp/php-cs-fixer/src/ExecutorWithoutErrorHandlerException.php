@@ -19,4 +19,6 @@ namespace PhpCsFixer;
  *
  * @internal
  */
-final class ExecutorWithoutErrorHandlerException extends \RuntimeException {}
+final class ExecutorWithoutErrorHandlerException extends \RuntimeException
+{
+}

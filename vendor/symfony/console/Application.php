@@ -245,12 +245,14 @@ class Application implements ResetInterface
         if (!$name) {
             $name = $this->defaultCommand;
             $definition = $this->getDefinition();
-            $definition->setArguments(array_merge(
-                $definition->getArguments(),
-                [
+            $definition->setArguments(
+                array_merge(
+                    $definition->getArguments(),
+                    [
                     'command' => new InputArgument('command', InputArgument::OPTIONAL, $definition->getArgument('command')->getDescription(), $name),
-                ]
-            ));
+                    ]
+                )
+            );
         }
 
         try {
@@ -361,8 +363,7 @@ class Application implements ResetInterface
      */
     public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
-        if (
-            CompletionInput::TYPE_ARGUMENT_VALUE === $input->getCompletionType()
+        if (CompletionInput::TYPE_ARGUMENT_VALUE === $input->getCompletionType()
             && 'command' === $input->getCompletionName()
         ) {
             $commandNames = [];
@@ -705,9 +706,11 @@ class Application implements ResetInterface
 
             if ($alternatives = $this->findAlternatives($name, $allCommands)) {
                 // remove hidden commands
-                $alternatives = array_filter($alternatives, function ($name) {
-                    return !$this->get($name)->isHidden();
-                });
+                $alternatives = array_filter(
+                    $alternatives, function ($name) {
+                        return !$this->get($name)->isHidden();
+                    }
+                );
 
                 if (1 == \count($alternatives)) {
                     $message .= "\n\nDid you mean this?\n    ";
@@ -723,17 +726,21 @@ class Application implements ResetInterface
         // filter out aliases for commands which are already on the list
         if (\count($commands) > 1) {
             $commandList = $this->commandLoader ? array_merge(array_flip($this->commandLoader->getNames()), $this->commands) : $this->commands;
-            $commands = array_unique(array_filter($commands, function ($nameOrAlias) use (&$commandList, $commands, &$aliases) {
-                if (!$commandList[$nameOrAlias] instanceof Command) {
-                    $commandList[$nameOrAlias] = $this->commandLoader->get($nameOrAlias);
-                }
+            $commands = array_unique(
+                array_filter(
+                    $commands, function ($nameOrAlias) use (&$commandList, $commands, &$aliases) {
+                        if (!$commandList[$nameOrAlias] instanceof Command) {
+                            $commandList[$nameOrAlias] = $this->commandLoader->get($nameOrAlias);
+                        }
 
-                $commandName = $commandList[$nameOrAlias]->getName();
+                        $commandName = $commandList[$nameOrAlias]->getName();
 
-                $aliases[$nameOrAlias] = $commandName;
+                        $aliases[$nameOrAlias] = $commandName;
 
-                return $commandName === $nameOrAlias || !\in_array($commandName, $commands);
-            }));
+                        return $commandName === $nameOrAlias || !\in_array($commandName, $commands);
+                    }
+                )
+            );
         }
 
         if (\count($commands) > 1) {
@@ -743,17 +750,19 @@ class Application implements ResetInterface
             foreach ($abbrevs as $abbrev) {
                 $maxLen = max(Helper::width($abbrev), $maxLen);
             }
-            $abbrevs = array_map(function ($cmd) use ($commandList, $usableWidth, $maxLen, &$commands) {
-                if ($commandList[$cmd]->isHidden()) {
-                    unset($commands[array_search($cmd, $commands)]);
+            $abbrevs = array_map(
+                function ($cmd) use ($commandList, $usableWidth, $maxLen, &$commands) {
+                    if ($commandList[$cmd]->isHidden()) {
+                        unset($commands[array_search($cmd, $commands)]);
 
-                    return false;
-                }
+                        return false;
+                    }
 
-                $abbrev = str_pad($cmd, $maxLen, ' ').' '.$commandList[$cmd]->getDescription();
+                    $abbrev = str_pad($cmd, $maxLen, ' ').' '.$commandList[$cmd]->getDescription();
 
-                return Helper::width($abbrev) > $usableWidth ? Helper::substr($abbrev, 0, $usableWidth - 3).'...' : $abbrev;
-            }, array_values($commands));
+                    return Helper::width($abbrev) > $usableWidth ? Helper::substr($abbrev, 0, $usableWidth - 3).'...' : $abbrev;
+                }, array_values($commands)
+            );
 
             if (\count($commands) > 1) {
                 $suggestions = $this->getAbbreviationSuggestions(array_filter($abbrevs));
@@ -858,9 +867,11 @@ class Application implements ResetInterface
             }
 
             if (str_contains($message, "@anonymous\0")) {
-                $message = preg_replace_callback('/[a-zA-Z_\x7f-\xff][\\\\a-zA-Z0-9_\x7f-\xff]*+@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/', function ($m) {
-                    return class_exists($m[0], false) ? (get_parent_class($m[0]) ?: key(class_implements($m[0])) ?: 'class').'@anonymous' : $m[0];
-                }, $message);
+                $message = preg_replace_callback(
+                    '/[a-zA-Z_\x7f-\xff][\\\\a-zA-Z0-9_\x7f-\xff]*+@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/', function ($m) {
+                        return class_exists($m[0], false) ? (get_parent_class($m[0]) ?: key(class_implements($m[0])) ?: 'class').'@anonymous' : $m[0];
+                    }, $message
+                );
             }
 
             $width = $this->terminal->getWidth() ? $this->terminal->getWidth() - 1 : \PHP_INT_MAX;
@@ -897,12 +908,14 @@ class Application implements ResetInterface
                 // exception related properties
                 $trace = $e->getTrace();
 
-                array_unshift($trace, [
+                array_unshift(
+                    $trace, [
                     'function' => '',
                     'file' => $e->getFile() ?: 'n/a',
                     'line' => $e->getLine() ?: 'n/a',
                     'args' => [],
-                ]);
+                    ]
+                );
 
                 for ($i = 0, $count = \count($trace); $i < $count; ++$i) {
                     $class = $trace[$i]['class'] ?? '';
@@ -935,21 +948,21 @@ class Application implements ResetInterface
         }
 
         switch ($shellVerbosity = (int) getenv('SHELL_VERBOSITY')) {
-            case -1:
-                $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
-                break;
-            case 1:
-                $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
-                break;
-            case 2:
-                $output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
-                break;
-            case 3:
-                $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
-                break;
-            default:
-                $shellVerbosity = 0;
-                break;
+        case -1:
+            $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+            break;
+        case 1:
+            $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+            break;
+        case 2:
+            $output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
+            break;
+        case 3:
+            $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+            break;
+        default:
+            $shellVerbosity = 0;
+            break;
         }
 
         if (true === $input->hasParameterOption(['--quiet', '-q'], true)) {
@@ -1007,9 +1020,11 @@ class Application implements ResetInterface
                     $sttyMode = shell_exec('stty -g');
 
                     foreach ([\SIGINT, \SIGTERM] as $signal) {
-                        $this->signalRegistry->register($signal, static function () use ($sttyMode) {
-                            shell_exec('stty '.$sttyMode);
-                        });
+                        $this->signalRegistry->register(
+                            $signal, static function () use ($sttyMode) {
+                                shell_exec('stty '.$sttyMode);
+                            }
+                        );
                     }
                 }
             }
@@ -1018,16 +1033,18 @@ class Application implements ResetInterface
                 foreach ($this->signalsToDispatchEvent as $signal) {
                     $event = new ConsoleSignalEvent($command, $input, $output, $signal);
 
-                    $this->signalRegistry->register($signal, function ($signal, $hasNext) use ($event) {
-                        $this->dispatcher->dispatch($event, ConsoleEvents::SIGNAL);
+                    $this->signalRegistry->register(
+                        $signal, function ($signal, $hasNext) use ($event) {
+                            $this->dispatcher->dispatch($event, ConsoleEvents::SIGNAL);
 
-                        // No more handlers, we try to simulate PHP default behavior
-                        if (!$hasNext) {
-                            if (!\in_array($signal, [\SIGUSR1, \SIGUSR2], true)) {
-                                exit(0);
+                            // No more handlers, we try to simulate PHP default behavior
+                            if (!$hasNext) {
+                                if (!\in_array($signal, [\SIGUSR1, \SIGUSR2], true)) {
+                                    exit(0);
+                                }
                             }
                         }
-                    });
+                    );
                 }
             }
 
@@ -1096,7 +1113,8 @@ class Application implements ResetInterface
      */
     protected function getDefaultInputDefinition()
     {
-        return new InputDefinition([
+        return new InputDefinition(
+            [
             new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display help for the given command. When no command is given display help for the <info>'.$this->defaultCommand.'</info> command'),
             new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),
@@ -1104,7 +1122,8 @@ class Application implements ResetInterface
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version'),
             new InputOption('--ansi', '', InputOption::VALUE_NEGATABLE, 'Force (or disable --no-ansi) ANSI output', null),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question'),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -1124,12 +1143,14 @@ class Application implements ResetInterface
      */
     protected function getDefaultHelperSet()
     {
-        return new HelperSet([
+        return new HelperSet(
+            [
             new FormatterHelper(),
             new DebugFormatterHelper(),
             new ProcessHelper(),
             new QuestionHelper(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -1196,7 +1217,11 @@ class Application implements ResetInterface
             }
         }
 
-        $alternatives = array_filter($alternatives, function ($lev) use ($threshold) { return $lev < 2 * $threshold; });
+        $alternatives = array_filter(
+            $alternatives, function ($lev) use ($threshold) {
+                return $lev < 2 * $threshold; 
+            }
+        );
         ksort($alternatives, \SORT_NATURAL | \SORT_FLAG_CASE);
 
         return array_keys($alternatives);

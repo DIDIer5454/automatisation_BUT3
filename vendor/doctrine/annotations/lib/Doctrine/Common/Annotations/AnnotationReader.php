@@ -108,9 +108,8 @@ class AnnotationReader implements Reader
      */
     public function __construct(?DocParser $parser = null)
     {
-        if (
-            extension_loaded('Zend Optimizer+') && (ini_get('zend_optimizerplus.save_comments') === '0' ||
-            ini_get('opcache.save_comments') === '0')
+        if (extension_loaded('Zend Optimizer+') && (ini_get('zend_optimizerplus.save_comments') === '0' 
+            || ini_get('opcache.save_comments') === '0')
         ) {
             throw AnnotationException::optimizerPlusSaveComments();
         }
@@ -316,8 +315,7 @@ class AnnotationReader implements Reader
         $traitImports = [];
 
         foreach ($class->getTraits() as $trait) {
-            if (
-                ! $trait->hasMethod($method->getName())
+            if (! $trait->hasMethod($method->getName())
                 || $trait->getFileName() !== $method->getFileName()
             ) {
                 continue;

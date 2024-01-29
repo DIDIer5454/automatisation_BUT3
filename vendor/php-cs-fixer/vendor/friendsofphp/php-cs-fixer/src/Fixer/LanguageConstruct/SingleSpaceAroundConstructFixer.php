@@ -282,15 +282,16 @@ yield  from  baz();
             if ($tokens[$index]->isGivenKind($tokenKindsContainASingleSpace)) {
                 $token = $tokens[$index];
 
-                if (
-                    $token->isGivenKind(T_YIELD_FROM)
+                if ($token->isGivenKind(T_YIELD_FROM)
                     && 'yield from' !== strtolower($token->getContent())
                 ) {
-                    $tokens[$index] = new Token([T_YIELD_FROM, Preg::replace(
-                        '/\s+/',
-                        ' ',
-                        $token->getContent()
-                    )]);
+                    $tokens[$index] = new Token(
+                        [T_YIELD_FROM, Preg::replace(
+                            '/\s+/',
+                            ' ',
+                            $token->getContent()
+                        )]
+                    );
                 }
             }
         }
@@ -318,8 +319,7 @@ yield  from  baz();
                 continue;
             }
 
-            if (
-                $token->isGivenKind(T_STATIC)
+            if ($token->isGivenKind(T_STATIC)
                 && !$tokens[$tokens->getNextMeaningfulToken($index)]->isGivenKind([T_FN, T_FUNCTION, T_NS_SEPARATOR, T_STRING, T_VARIABLE, CT::T_ARRAY_TYPEHINT, CT::T_NULLABLE_TYPE])
             ) {
                 continue;
@@ -365,7 +365,8 @@ yield  from  baz();
         $tokenMapPrecededByASingleSpaceKeys = array_keys(self::$tokenMapPrecededByASingleSpace);
         $tokenMapFollowedByASingleSpaceKeys = array_keys(self::$tokenMapFollowedByASingleSpace);
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('constructs_contain_a_single_space', 'List of constructs which must contain a single space.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset($tokenMapContainASingleSpaceKeys)])
@@ -381,7 +382,8 @@ yield  from  baz();
                 ->setAllowedValues([new AllowedValueSubset($tokenMapFollowedByASingleSpaceKeys)])
                 ->setDefault($tokenMapFollowedByASingleSpaceKeys)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function isMultiLineReturn(Tokens $tokens, int $index): bool
@@ -389,8 +391,7 @@ yield  from  baz();
         ++$index;
         $tokenFollowingReturn = $tokens[$index];
 
-        if (
-            !$tokenFollowingReturn->isGivenKind(T_WHITESPACE)
+        if (!$tokenFollowingReturn->isGivenKind(T_WHITESPACE)
             || !str_contains($tokenFollowingReturn->getContent(), "\n")
         ) {
             return false;

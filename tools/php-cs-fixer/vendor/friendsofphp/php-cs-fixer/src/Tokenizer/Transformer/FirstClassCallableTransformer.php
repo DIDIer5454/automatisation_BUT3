@@ -31,8 +31,7 @@ final class FirstClassCallableTransformer extends AbstractTransformer
 
     public function process(Tokens $tokens, Token $token, int $index): void
     {
-        if (
-            $token->isGivenKind(T_ELLIPSIS)
+        if ($token->isGivenKind(T_ELLIPSIS)
             && $tokens[$tokens->getPrevMeaningfulToken($index)]->equals('(')
             && $tokens[$tokens->getNextMeaningfulToken($index)]->equals(')')
         ) {

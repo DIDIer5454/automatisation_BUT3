@@ -49,8 +49,7 @@ final class ListSetsCommand extends Command
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats.', (new TextReporter())->getFormat()),
                 ]
             )
-            ->setDescription('List all available RuleSets.')
-        ;
+            ->setDescription('List all available RuleSets.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -68,8 +67,7 @@ final class ListSetsCommand extends Command
 
         $output->isDecorated()
             ? $output->write(OutputFormatter::escape($report))
-            : $output->write($report, false, OutputInterface::OUTPUT_RAW)
-        ;
+            : $output->write($report, false, OutputInterface::OUTPUT_RAW);
 
         return 0;
     }

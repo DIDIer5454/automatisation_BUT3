@@ -60,13 +60,15 @@ final class PhpUnitInternalClassFixer extends AbstractPhpUnitFixer implements Wh
     {
         $types = ['normal', 'final', 'abstract'];
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('types', 'What types of classes to mark as internal.'))
                 ->setAllowedValues([new AllowedValueSubset($types)])
                 ->setAllowedTypes(['array'])
                 ->setDefault(['normal', 'final'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void

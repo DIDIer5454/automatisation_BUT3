@@ -94,12 +94,14 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('use_escape_sequences_in_strings', 'Whether characters should be replaced with escape sequences in strings.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -115,8 +117,7 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
         foreach ($tokens as $index => $token) {
             $content = $token->getContent();
 
-            if (
-                true === $this->configuration['use_escape_sequences_in_strings']
+            if (true === $this->configuration['use_escape_sequences_in_strings']
                 && $token->isGivenKind([T_CONSTANT_ENCAPSED_STRING, T_ENCAPSED_AND_WHITESPACE])
             ) {
                 if (!Preg::match('/'.implode('|', array_keys($escapeSequences)).'/', $content)) {

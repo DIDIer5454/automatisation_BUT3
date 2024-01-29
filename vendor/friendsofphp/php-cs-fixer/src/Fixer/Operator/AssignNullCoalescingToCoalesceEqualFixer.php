@@ -136,7 +136,8 @@ final class AssignNullCoalescingToCoalesceEqualFixer extends AbstractFixer
         $previousIndex = $index;
         $previousToken = $tokens[$previousIndex];
 
-        while ($previousToken->equalsAny([
+        while ($previousToken->equalsAny(
+            [
             '$',
             ']',
             ')',
@@ -146,7 +147,8 @@ final class AssignNullCoalescingToCoalesceEqualFixer extends AbstractFixer
             [T_NS_SEPARATOR],
             [T_STRING],
             [T_VARIABLE],
-        ])) {
+            ]
+        )) {
             $blockType = Tokens::detectBlockType($previousToken);
 
             if (null !== $blockType) {

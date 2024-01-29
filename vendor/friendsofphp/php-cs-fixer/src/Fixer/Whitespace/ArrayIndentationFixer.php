@@ -26,10 +26,14 @@ use PhpCsFixer\Tokenizer\Tokens;
 
 final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAwareFixerInterface
 {
-    /** @var int */
+    /**
+     * @var int 
+     */
     private $newlineTokenIndexCache;
 
-    /** @var int */
+    /**
+     * @var int 
+     */
     private $newlineTokenPositionCache;
 
     /**
@@ -79,8 +83,7 @@ final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAw
                 continue;
             }
 
-            if (
-                $token->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_OPEN)
+            if ($token->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_OPEN)
                 || ($token->equals('(') && $tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_ARRAY))
             ) {
                 $endIndex = $tokens->findBlockEnd(
@@ -112,8 +115,7 @@ final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAw
                     for ($searchEndIndex = $index + 1; $searchEndIndex < $scopes[$currentScope]['end_index']; ++$searchEndIndex) {
                         $searchEndToken = $tokens[$searchEndIndex];
 
-                        if (
-                            (!$searchEndToken->isWhitespace() && !$searchEndToken->isComment())
+                        if ((!$searchEndToken->isWhitespace() && !$searchEndToken->isComment())
                             || ($searchEndToken->isWhitespace() && Preg::match('/\R/', $searchEndToken->getContent()))
                         ) {
                             $indent = true;

@@ -193,8 +193,7 @@ final class TokensAnalyzer
                 continue;
             }
 
-            if (
-                $token->isWhitespace()
+            if ($token->isWhitespace()
                 && !$tokens[$index - 1]->isGivenKind(T_END_HEREDOC)
                 && str_contains($token->getContent(), "\n")
             ) {
@@ -366,8 +365,7 @@ final class TokensAnalyzer
 
         $nextIndex = $this->tokens->getNextMeaningfulToken($index);
 
-        if (
-            $this->tokens[$nextIndex]->equalsAny(['(', '{'])
+        if ($this->tokens[$nextIndex]->equalsAny(['(', '{'])
             || $this->tokens[$nextIndex]->isGivenKind([T_AS, T_DOUBLE_COLON, T_ELLIPSIS, T_NS_SEPARATOR, CT::T_RETURN_REF, CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION, T_VARIABLE])
         ) {
             return false;
@@ -679,11 +677,13 @@ final class TokensAnalyzer
         $token = $tokens[$caseIndex];
 
         if (!$token->isGivenKind(T_CASE)) {
-            throw new \LogicException(sprintf(
-                'No T_CASE given at index %d, got %s instead.',
-                $caseIndex,
-                $token->getName() ?? $token->getContent()
-            ));
+            throw new \LogicException(
+                sprintf(
+                    'No T_CASE given at index %d, got %s instead.',
+                    $caseIndex,
+                    $token->getName() ?? $token->getContent()
+                )
+            );
         }
 
         if (!\defined('T_ENUM') || !$tokens->isTokenKindFound(T_ENUM)) {

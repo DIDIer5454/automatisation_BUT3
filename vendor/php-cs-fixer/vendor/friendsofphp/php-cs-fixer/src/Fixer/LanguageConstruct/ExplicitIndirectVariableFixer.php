@@ -72,11 +72,13 @@ final class ExplicitIndirectVariableFixer extends AbstractFixer
                 $closingBrace = CT::T_DYNAMIC_PROP_BRACE_CLOSE;
             }
 
-            $tokens->overrideRange($index, $index, [
+            $tokens->overrideRange(
+                $index, $index, [
                 new Token([$openingBrace, '{']),
                 new Token([T_VARIABLE, $token->getContent()]),
                 new Token([$closingBrace, '}']),
-            ]);
+                ]
+            );
         }
     }
 }

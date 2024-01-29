@@ -84,8 +84,7 @@ final class FileFilterIterator extends \FilterIterator
         $content = FileReader::createSingleton()->read($path);
 
         // mark as skipped:
-        if (
-            // empty file
+        if (// empty file
             '' === $content
             // file that does not need fixing due to cache
             || !$this->cacheManager->needFixing($file->getPathname(), $content)

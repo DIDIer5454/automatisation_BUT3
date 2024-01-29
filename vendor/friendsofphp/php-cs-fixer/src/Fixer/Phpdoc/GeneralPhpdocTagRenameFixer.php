@@ -38,29 +38,37 @@ final class GeneralPhpdocTagRenameFixer extends AbstractFixer implements Configu
         return new FixerDefinition(
             'Renames PHPDoc tags.',
             [
-                new CodeSample("<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
+                new CodeSample(
+                    "<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
                     'replacements' => [
                         'inheritDocs' => 'inheritDoc',
                     ],
-                ]),
-                new CodeSample("<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
+                    ]
+                ),
+                new CodeSample(
+                    "<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
                     'replacements' => [
                         'inheritDocs' => 'inheritDoc',
                     ],
                     'fix_annotation' => false,
-                ]),
-                new CodeSample("<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
+                    ]
+                ),
+                new CodeSample(
+                    "<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
                     'replacements' => [
                         'inheritDocs' => 'inheritDoc',
                     ],
                     'fix_inline' => false,
-                ]),
-                new CodeSample("<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
+                    ]
+                ),
+                new CodeSample(
+                    "<?php\n/**\n * @inheritDocs\n * {@inheritdocs}\n */\n", [
                     'replacements' => [
                         'inheritDocs' => 'inheritDoc',
                     ],
                     'case_sensitive' => true,
-                ]),
+                    ]
+                ),
             ]
         );
     }
@@ -90,7 +98,8 @@ final class GeneralPhpdocTagRenameFixer extends AbstractFixer implements Configu
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('fix_annotation', 'Whether annotation tags should be fixed.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
@@ -101,68 +110,79 @@ final class GeneralPhpdocTagRenameFixer extends AbstractFixer implements Configu
                 ->getOption(),
             (new FixerOptionBuilder('replacements', 'A map of tags to replace.'))
                 ->setAllowedTypes(['array'])
-                ->setNormalizer(static function (Options $options, $value): array {
-                    $normalizedValue = [];
+                ->setNormalizer(
+                    static function (Options $options, $value): array {
+                        $normalizedValue = [];
 
-                    foreach ($value as $from => $to) {
-                        if (!\is_string($from)) {
-                            throw new InvalidOptionsException('Tag to replace must be a string.');
-                        }
-
-                        if (!\is_string($to)) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Tag to replace to from "%s" must be a string.',
-                                $from
-                            ));
-                        }
-
-                        if (1 !== Preg::match('#^\S+$#', $to) || str_contains($to, '*/')) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Tag "%s" cannot be replaced by invalid tag "%s".',
-                                $from,
-                                $to
-                            ));
-                        }
-
-                        $from = trim($from);
-                        $to = trim($to);
-
-                        if (!$options['case_sensitive']) {
-                            $lowercaseFrom = strtolower($from);
-
-                            if (isset($normalizedValue[$lowercaseFrom]) && $normalizedValue[$lowercaseFrom] !== $to) {
-                                throw new InvalidOptionsException(sprintf(
-                                    'Tag "%s" cannot be configured to be replaced with several different tags when case sensitivity is off.',
-                                    $from
-                                ));
+                        foreach ($value as $from => $to) {
+                            if (!\is_string($from)) {
+                                throw new InvalidOptionsException('Tag to replace must be a string.');
                             }
 
-                            $from = $lowercaseFrom;
+                            if (!\is_string($to)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Tag to replace to from "%s" must be a string.',
+                                        $from
+                                    )
+                                );
+                            }
+
+                            if (1 !== Preg::match('#^\S+$#', $to) || str_contains($to, '*/')) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Tag "%s" cannot be replaced by invalid tag "%s".',
+                                        $from,
+                                        $to
+                                    )
+                                );
+                            }
+
+                            $from = trim($from);
+                            $to = trim($to);
+
+                            if (!$options['case_sensitive']) {
+                                $lowercaseFrom = strtolower($from);
+
+                                if (isset($normalizedValue[$lowercaseFrom]) && $normalizedValue[$lowercaseFrom] !== $to) {
+                                    throw new InvalidOptionsException(
+                                        sprintf(
+                                            'Tag "%s" cannot be configured to be replaced with several different tags when case sensitivity is off.',
+                                            $from
+                                        )
+                                    );
+                                }
+
+                                $from = $lowercaseFrom;
+                            }
+
+                            $normalizedValue[$from] = $to;
                         }
 
-                        $normalizedValue[$from] = $to;
-                    }
-
-                    foreach ($normalizedValue as $from => $to) {
-                        if (isset($normalizedValue[$to]) && $normalizedValue[$to] !== $to) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Cannot change tag "%1$s" to tag "%2$s", as the tag "%2$s" is configured to be replaced to "%3$s".',
-                                $from,
-                                $to,
-                                $normalizedValue[$to]
-                            ));
+                        foreach ($normalizedValue as $from => $to) {
+                            if (isset($normalizedValue[$to]) && $normalizedValue[$to] !== $to) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Cannot change tag "%1$s" to tag "%2$s", as the tag "%2$s" is configured to be replaced to "%3$s".',
+                                        $from,
+                                        $to,
+                                        $normalizedValue[$to]
+                                    )
+                                );
+                            }
                         }
-                    }
 
-                    return $normalizedValue;
-                })
+                        return $normalizedValue;
+                    }
+                )
                 ->setDefault([])
                 ->getOption(),
             (new FixerOptionBuilder('case_sensitive', 'Whether tags should be replaced only if they have exact same casing.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -197,17 +217,19 @@ final class GeneralPhpdocTagRenameFixer extends AbstractFixer implements Configu
                 continue;
             }
 
-            $tokens[$index] = new Token([T_DOC_COMMENT, Preg::replaceCallback(
-                $regex,
-                static function (array $matches) use ($caseInsensitive, $replacements) {
-                    if ($caseInsensitive) {
-                        $matches[1] = strtolower($matches[1]);
-                    }
+            $tokens[$index] = new Token(
+                [T_DOC_COMMENT, Preg::replaceCallback(
+                    $regex,
+                    static function (array $matches) use ($caseInsensitive, $replacements) {
+                        if ($caseInsensitive) {
+                            $matches[1] = strtolower($matches[1]);
+                        }
 
-                    return $replacements[$matches[1]];
-                },
-                $token->getContent()
-            )]);
+                        return $replacements[$matches[1]];
+                    },
+                    $token->getContent()
+                )]
+            );
         }
     }
 }

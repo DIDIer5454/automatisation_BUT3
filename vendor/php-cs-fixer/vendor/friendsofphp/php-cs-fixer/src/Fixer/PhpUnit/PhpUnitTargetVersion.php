@@ -39,7 +39,9 @@ final class PhpUnitTargetVersion
     public const VERSION_8_4 = '8.4';
     public const VERSION_NEWEST = 'newest';
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     public static function fulfills(string $candidate, string $target): bool
     {

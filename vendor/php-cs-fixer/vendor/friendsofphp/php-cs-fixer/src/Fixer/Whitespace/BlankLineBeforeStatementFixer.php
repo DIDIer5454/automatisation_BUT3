@@ -283,20 +283,24 @@ function getValues() {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('statements', 'List of statements which must be preceded by an empty line.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(array_keys(self::$tokenMap))])
-                ->setDefault([
+                ->setDefault(
+                    [
                     'break',
                     'continue',
                     'declare',
                     'return',
                     'throw',
                     'try',
-                ])
+                    ]
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function getInsertBlankLineIndex(Tokens $tokens, int $index): int

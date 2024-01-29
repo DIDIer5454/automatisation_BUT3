@@ -46,7 +46,9 @@ class TokenParser
      */
     private $pointer = 0;
 
-    /** @param string $contents */
+    /**
+     * @param string $contents 
+     */
     public function __construct($contents)
     {
         $this->tokens = token_get_all($contents);
@@ -67,7 +69,7 @@ class TokenParser
      * Gets the next non whitespace and non comment token.
      *
      * @param bool $docCommentIsComment If TRUE then a doc comment is considered a comment and skipped.
-     * If FALSE then only whitespace and normal comments are skipped.
+     *                                  If FALSE then only whitespace and normal comments are skipped.
      *
      * @return mixed[]|string|null The token if exists, null otherwise.
      */
@@ -75,10 +77,9 @@ class TokenParser
     {
         for ($i = $this->pointer; $i < $this->numTokens; $i++) {
             $this->pointer++;
-            if (
-                $this->tokens[$i][0] === T_WHITESPACE ||
-                $this->tokens[$i][0] === T_COMMENT ||
-                ($docCommentIsComment && $this->tokens[$i][0] === T_DOC_COMMENT)
+            if ($this->tokens[$i][0] === T_WHITESPACE 
+                || $this->tokens[$i][0] === T_COMMENT 
+                || ($docCommentIsComment && $this->tokens[$i][0] === T_DOC_COMMENT)
             ) {
                 continue;
             }
@@ -107,9 +108,8 @@ class TokenParser
                 $alias  = $token[1];
             } elseif ($explicitAlias && $token[0] === T_STRING) {
                 $alias = $token[1];
-            } elseif (
-                PHP_VERSION_ID >= 80000 &&
-                ($token[0] === T_NAME_QUALIFIED || $token[0] === T_NAME_FULLY_QUALIFIED)
+            } elseif (PHP_VERSION_ID >= 80000 
+                && ($token[0] === T_NAME_QUALIFIED || $token[0] === T_NAME_FULLY_QUALIFIED)
             ) {
                 $class .= $token[1];
 

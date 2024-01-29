@@ -87,13 +87,15 @@ class Foo
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('elements', 'Structural elements where the spacing after the type declaration should be fixed.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset(['function', 'property'])])
                 ->setDefault(['function', 'property'])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -133,8 +135,7 @@ class Foo
         );
 
         foreach ($tokens as $index => $token) {
-            if (
-                $token->isGivenKind(T_FN)
+            if ($token->isGivenKind(T_FN)
                 || ($token->isGivenKind(T_FUNCTION) && !isset($elements[$index]))
             ) {
                 $elements[$index] = 'method';

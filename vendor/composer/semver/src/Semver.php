@@ -18,7 +18,9 @@ class Semver
     const SORT_ASC = 1;
     const SORT_DESC = -1;
 
-    /** @var VersionParser */
+    /**
+     * @var VersionParser 
+     */
     private static $versionParser;
 
     /**
@@ -52,9 +54,11 @@ class Semver
      */
     public static function satisfiedBy(array $versions, $constraints)
     {
-        $versions = array_filter($versions, function ($version) use ($constraints) {
-            return Semver::satisfies($version, $constraints);
-        });
+        $versions = array_filter(
+            $versions, function ($version) use ($constraints) {
+                return Semver::satisfies($version, $constraints);
+            }
+        );
 
         return array_values($versions);
     }
@@ -106,17 +110,19 @@ class Semver
             $normalized[] = array($normalizedVersion, $key);
         }
 
-        usort($normalized, function (array $left, array $right) use ($direction) {
-            if ($left[0] === $right[0]) {
-                return 0;
-            }
+        usort(
+            $normalized, function (array $left, array $right) use ($direction) {
+                if ($left[0] === $right[0]) {
+                    return 0;
+                }
 
-            if (Comparator::lessThan($left[0], $right[0])) {
-                return -$direction;
-            }
+                if (Comparator::lessThan($left[0], $right[0])) {
+                    return -$direction;
+                }
 
-            return $direction;
-        });
+                return $direction;
+            }
+        );
 
         // Recreate input array, using the original indexes which are now in sorted order.
         $sorted = array();

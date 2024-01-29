@@ -97,8 +97,7 @@ final class NoEmptyStatementFixer extends AbstractFixer
             // A semicolon might be removed together with its noop statement, for example "<?php 1;"
             $prePreviousMeaningfulIndex = $tokens->getPrevMeaningfulToken($previousMeaningfulIndex);
 
-            if (
-                $tokens[$prePreviousMeaningfulIndex]->equalsAny([';', '{', '}', [T_OPEN_TAG]])
+            if ($tokens[$prePreviousMeaningfulIndex]->equalsAny([';', '{', '}', [T_OPEN_TAG]])
                 && $tokens[$previousMeaningfulIndex]->isGivenKind([T_CONSTANT_ENCAPSED_STRING, T_DNUMBER, T_LNUMBER, T_STRING, T_VARIABLE])
             ) {
                 $tokens->clearTokenAndMergeSurroundingWhitespace($index);
@@ -150,8 +149,7 @@ final class NoEmptyStatementFixer extends AbstractFixer
 
             $tokensAnalyzer = new TokensAnalyzer($tokens);
 
-            if (
-                $tokens[$classyTestIndex]->isGivenKind(T_NAMESPACE)
+            if ($tokens[$classyTestIndex]->isGivenKind(T_NAMESPACE)
                 || ($tokens[$classyTestIndex]->isClassy() && !$tokensAnalyzer->isAnonymousClass($classyTestIndex))
             ) {
                 $tokens->clearTokenAndMergeSurroundingWhitespace($index);

@@ -15,25 +15,25 @@ final class ReplaceResult
 {
     /**
      * @readonly
-     * @var string
+     * @var      string
      */
     public $result;
 
     /**
      * @readonly
-     * @var 0|positive-int
+     * @var      0|positive-int
      */
     public $count;
 
     /**
      * @readonly
-     * @var bool
+     * @var      bool
      */
     public $matched;
 
     /**
      * @param 0|positive-int $count
-     * @param string $result
+     * @param string         $result
      */
     public function __construct($count, $result)
     {

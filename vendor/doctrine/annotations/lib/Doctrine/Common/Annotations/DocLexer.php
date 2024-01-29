@@ -41,7 +41,9 @@ final class DocLexer extends AbstractLexer
     public const T_COLON               = 112;
     public const T_MINUS               = 113;
 
-    /** @var array<string, self::T*> */
+    /**
+     * @var array<string, self::T*> 
+     */
     protected $noCase = [
         '@'  => self::T_AT,
         ','  => self::T_COMMA,
@@ -55,7 +57,9 @@ final class DocLexer extends AbstractLexer
         '\\' => self::T_NAMESPACE_SEPARATOR,
     ];
 
-    /** @var array<string, self::T*> */
+    /**
+     * @var array<string, self::T*> 
+     */
     protected $withCase = [
         'true'  => self::T_TRUE,
         'false' => self::T_FALSE,
@@ -129,7 +133,9 @@ final class DocLexer extends AbstractLexer
         return $type;
     }
 
-    /** @return array{value: int|string, type:self::T_*|null, position:int} */
+    /**
+     * @return array{value: int|string, type:self::T_*|null, position:int} 
+     */
     public function peek(): ?array
     {
         $token = parent::peek();

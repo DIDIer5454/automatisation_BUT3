@@ -113,7 +113,9 @@ final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
         $toStart     = $fromStart = 1;
         $i           = 0;
 
-        /** @var int $i */
+        /**
+ * @var int $i 
+*/
         foreach ($diff as $i => $entry) {
             if (0 === $entry[1]) { // same
                 if (false === $hunkCapture) {

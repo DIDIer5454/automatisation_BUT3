@@ -29,8 +29,7 @@ final class TokenizerLinter implements LinterInterface
 {
     public function __construct()
     {
-        if (
-            // @TODO: drop condition when PHP 7.3+ is required
+        if (// @TODO: drop condition when PHP 7.3+ is required
             false === class_exists(\CompileError::class)
         ) {
             throw new UnavailableLinterException('Cannot use tokenizer as linter.');

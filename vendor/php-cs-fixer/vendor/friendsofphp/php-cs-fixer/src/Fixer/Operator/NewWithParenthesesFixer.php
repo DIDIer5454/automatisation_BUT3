@@ -157,7 +157,8 @@ final class NewWithParenthesesFixer extends AbstractFixer implements Configurabl
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('named_class', 'Whether named classes should be followed by parentheses.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
@@ -166,7 +167,8 @@ final class NewWithParenthesesFixer extends AbstractFixer implements Configurabl
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function ensureParenthesesAt(Tokens $tokens, int $index): void

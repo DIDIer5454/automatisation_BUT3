@@ -23,7 +23,9 @@ use function sprintf;
  */
 final class Enum
 {
-    /** @phpstan-var list<scalar> */
+    /**
+     * @phpstan-var list<scalar> 
+     */
     public $value;
 
     /**
@@ -46,20 +48,24 @@ final class Enum
 
         foreach ($values['value'] as $var) {
             if (! is_scalar($var)) {
-                throw new InvalidArgumentException(sprintf(
-                    '@Enum supports only scalar values "%s" given.',
-                    is_object($var) ? get_class($var) : gettype($var)
-                ));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        '@Enum supports only scalar values "%s" given.',
+                        is_object($var) ? get_class($var) : gettype($var)
+                    )
+                );
             }
         }
 
         foreach ($values['literal'] as $key => $var) {
             if (! in_array($key, $values['value'])) {
-                throw new InvalidArgumentException(sprintf(
-                    'Undefined enumerator value "%s" for literal "%s".',
-                    $key,
-                    $var
-                ));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Undefined enumerator value "%s" for literal "%s".',
+                        $key,
+                        $var
+                    )
+                );
             }
         }
 

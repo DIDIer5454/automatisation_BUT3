@@ -188,26 +188,30 @@ class ProgressIndicator
             return;
         }
 
-        $this->overwrite(preg_replace_callback("{%([a-z\-_]+)(?:\:([^%]+))?%}i", function ($matches) {
-            if ($formatter = self::getPlaceholderFormatterDefinition($matches[1])) {
-                return $formatter($this);
-            }
+        $this->overwrite(
+            preg_replace_callback(
+                "{%([a-z\-_]+)(?:\:([^%]+))?%}i", function ($matches) {
+                    if ($formatter = self::getPlaceholderFormatterDefinition($matches[1])) {
+                        return $formatter($this);
+                    }
 
-            return $matches[0];
-        }, $this->format ?? ''));
+                    return $matches[0];
+                }, $this->format ?? ''
+            )
+        );
     }
 
     private function determineBestFormat(): string
     {
         switch ($this->output->getVerbosity()) {
             // OutputInterface::VERBOSITY_QUIET: display is disabled anyway
-            case OutputInterface::VERBOSITY_VERBOSE:
-                return $this->output->isDecorated() ? 'verbose' : 'verbose_no_ansi';
-            case OutputInterface::VERBOSITY_VERY_VERBOSE:
-            case OutputInterface::VERBOSITY_DEBUG:
-                return $this->output->isDecorated() ? 'very_verbose' : 'very_verbose_no_ansi';
-            default:
-                return $this->output->isDecorated() ? 'normal' : 'normal_no_ansi';
+        case OutputInterface::VERBOSITY_VERBOSE:
+            return $this->output->isDecorated() ? 'verbose' : 'verbose_no_ansi';
+        case OutputInterface::VERBOSITY_VERY_VERBOSE:
+        case OutputInterface::VERBOSITY_DEBUG:
+            return $this->output->isDecorated() ? 'very_verbose' : 'very_verbose_no_ansi';
+        default:
+            return $this->output->isDecorated() ? 'normal' : 'normal_no_ansi';
         }
     }
 

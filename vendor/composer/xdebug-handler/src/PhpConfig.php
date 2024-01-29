@@ -63,7 +63,7 @@ class PhpConfig
     /**
      * Returns restart data if available and resets the environment
      *
-     * @return array|null
+     * @return         array|null
      * @phpstan-return restartData|null
      */
     private function getDataAndReset()
@@ -80,7 +80,7 @@ class PhpConfig
     /**
      * Updates a restart settings value in the environment
      *
-     * @param string $name
+     * @param string       $name
      * @param string|false $value
      *
      * @return void

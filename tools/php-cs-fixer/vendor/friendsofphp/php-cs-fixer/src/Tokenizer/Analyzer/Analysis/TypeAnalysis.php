@@ -60,7 +60,7 @@ final class TypeAnalysis implements StartEndTokenAwareAnalysis
     private bool $nullable = false;
 
     /**
-     * @param ($startIndex is null ? null : int) $endIndex
+     * @param ( $startIndex is null ? null : int) $endIndex
      */
     public function __construct(string $name, int $startIndex = null, int $endIndex = null)
     {

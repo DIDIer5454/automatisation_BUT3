@@ -89,7 +89,8 @@ class FooTest extends TestCase {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(
                 'force',
                 'Whether to make the data providers static even if they have a dynamic class call'
@@ -99,7 +100,8 @@ class FooTest extends TestCase {
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void

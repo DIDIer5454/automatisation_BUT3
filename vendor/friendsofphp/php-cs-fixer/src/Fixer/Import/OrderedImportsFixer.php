@@ -249,39 +249,47 @@ use Bar;
     {
         $supportedSortTypes = self::SUPPORTED_SORT_TYPES;
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('sort_algorithm', 'whether the statements should be sorted alphabetically or by length, or not sorted'))
                 ->setAllowedValues(self::SUPPORTED_SORT_ALGORITHMS)
                 ->setDefault(self::SORT_ALPHA)
                 ->getOption(),
             (new FixerOptionBuilder('imports_order', 'Defines the order of import types.'))
                 ->setAllowedTypes(['array', 'null'])
-                ->setAllowedValues([static function (?array $value) use ($supportedSortTypes): bool {
-                    if (null !== $value) {
-                        $missing = array_diff($supportedSortTypes, $value);
-                        if (\count($missing) > 0) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Missing sort %s "%s".',
-                                1 === \count($missing) ? 'type' : 'types',
-                                implode('", "', $missing)
-                            ));
+                ->setAllowedValues(
+                    [static function (?array $value) use ($supportedSortTypes): bool {
+                        if (null !== $value) {
+                            $missing = array_diff($supportedSortTypes, $value);
+                            if (\count($missing) > 0) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Missing sort %s "%s".',
+                                        1 === \count($missing) ? 'type' : 'types',
+                                        implode('", "', $missing)
+                                    )
+                                );
+                            }
+
+                            $unknown = array_diff($value, $supportedSortTypes);
+                            if (\count($unknown) > 0) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unknown sort %s "%s".',
+                                        1 === \count($unknown) ? 'type' : 'types',
+                                        implode('", "', $unknown)
+                                    )
+                                );
+                            }
                         }
 
-                        $unknown = array_diff($value, $supportedSortTypes);
-                        if (\count($unknown) > 0) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Unknown sort %s "%s".',
-                                1 === \count($unknown) ? 'type' : 'types',
-                                implode('", "', $unknown)
-                            ));
-                        }
-                    }
-
-                    return true;
-                }])
+                        return true;
+                    }]
+                )
                 ->setDefault(null)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -403,8 +411,7 @@ use Bar;
                                 }
 
                                 // if there is any line ending inside the group import, it should be indented properly
-                                if (
-                                    '' === $firstIndent
+                                if ('' === $firstIndent
                                     && $namespaceTokens[$k2]->isWhitespace()
                                     && str_contains($namespaceTokens[$k2]->getContent(), $lineEnding)
                                 ) {

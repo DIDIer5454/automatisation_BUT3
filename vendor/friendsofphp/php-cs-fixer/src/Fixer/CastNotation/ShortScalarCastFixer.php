@@ -77,10 +77,12 @@ final class ShortScalarCastFixer extends AbstractFixer
                 continue;
             }
 
-            $tokens[$index] = new Token([
+            $tokens[$index] = new Token(
+                [
                 $tokens[$index]->getId(),
                 str_replace($castFrom, $castMap[$castFromLowered], $tokens[$index]->getContent()),
-            ]);
+                ]
+            );
         }
     }
 }

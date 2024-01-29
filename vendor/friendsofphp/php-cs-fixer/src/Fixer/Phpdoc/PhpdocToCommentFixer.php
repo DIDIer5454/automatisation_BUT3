@@ -120,12 +120,14 @@ foreach($connections as $key => $sqlite) {
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('ignored_tags', 'List of ignored tags (matched case insensitively)'))
                 ->setAllowedTypes(['array'])
                 ->setDefault([])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

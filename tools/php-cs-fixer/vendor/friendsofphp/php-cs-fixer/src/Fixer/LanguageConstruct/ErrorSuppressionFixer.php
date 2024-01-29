@@ -82,7 +82,8 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(self::OPTION_MUTE_DEPRECATION_ERROR, 'Whether to add `@` in deprecation notices.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
@@ -95,7 +96,8 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
                 ->setAllowedTypes(['array'])
                 ->setDefault([])
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void

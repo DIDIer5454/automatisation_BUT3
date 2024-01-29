@@ -92,14 +92,16 @@ final class PhpdocReadonlyClassCommentToKeywordFixer extends AbstractFixer
             $index = $tokens->getNextMeaningfulToken($index);
             $addReadonly = true;
 
-            while ($tokens[$index]->isGivenKind([
+            while ($tokens[$index]->isGivenKind(
+                [
                 T_ABSTRACT,
                 T_FINAL,
                 T_PRIVATE,
                 T_PUBLIC,
                 T_PROTECTED,
                 T_READONLY,
-            ])) {
+                ]
+            )) {
                 if ($tokens[$index]->isGivenKind([T_READONLY])) {
                     $addReadonly = false;
                 }

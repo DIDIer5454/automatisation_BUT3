@@ -23,7 +23,9 @@ abstract class AbstractPipes implements PipesInterface
     public array $pipes = [];
 
     private string $inputBuffer = '';
-    /** @var resource|string|\Iterator */
+    /**
+     * @var resource|string|\Iterator 
+     */
     private $input;
     private bool $blocked = true;
     private ?string $lastError = null;

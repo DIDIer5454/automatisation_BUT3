@@ -30,22 +30,34 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class OrderedInterfacesFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const OPTION_DIRECTION = 'direction';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const OPTION_ORDER = 'order';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const DIRECTION_ASCEND = 'ascend';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const DIRECTION_DESCEND = 'descend';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const ORDER_ALPHA = 'alpha';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const ORDER_LENGTH = 'length';
 
     /**
@@ -173,8 +185,9 @@ final class OrderedInterfacesFixer extends AbstractFixer implements Configurable
                 ];
             }
 
-            usort($interfaces, function (array $first, array $second): int {
-                $score = self::ORDER_LENGTH === $this->configuration[self::OPTION_ORDER]
+            usort(
+                $interfaces, function (array $first, array $second): int {
+                    $score = self::ORDER_LENGTH === $this->configuration[self::OPTION_ORDER]
                     ? \strlen($first['normalized']) - \strlen($second['normalized'])
                     : (
                         true === $this->configuration['case_sensitive']
@@ -182,12 +195,13 @@ final class OrderedInterfacesFixer extends AbstractFixer implements Configurable
                         : strcasecmp($first['normalized'], $second['normalized'])
                     );
 
-                if (self::DIRECTION_DESCEND === $this->configuration[self::OPTION_DIRECTION]) {
-                    $score *= -1;
-                }
+                    if (self::DIRECTION_DESCEND === $this->configuration[self::OPTION_DIRECTION]) {
+                        $score *= -1;
+                    }
 
-                return $score;
-            });
+                    return $score;
+                }
+            );
 
             $changed = false;
 
@@ -215,7 +229,8 @@ final class OrderedInterfacesFixer extends AbstractFixer implements Configurable
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(self::OPTION_ORDER, 'How the interfaces should be ordered.'))
                 ->setAllowedValues(self::SUPPORTED_ORDER_OPTIONS)
                 ->setDefault(self::ORDER_ALPHA)
@@ -228,7 +243,8 @@ final class OrderedInterfacesFixer extends AbstractFixer implements Configurable
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

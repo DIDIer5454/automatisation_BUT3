@@ -17,24 +17,24 @@ final class MatchAllResult
      * An array of match group => list of matched strings
      *
      * @readonly
-     * @var array<int|string, list<string|null>>
+     * @var      array<int|string, list<string|null>>
      */
     public $matches;
 
     /**
      * @readonly
-     * @var 0|positive-int
+     * @var      0|positive-int
      */
     public $count;
 
     /**
      * @readonly
-     * @var bool
+     * @var      bool
      */
     public $matched;
 
     /**
-     * @param 0|positive-int $count
+     * @param 0|positive-int            $count
      * @param array<array<string|null>> $matches
      */
     public function __construct($count, array $matches)

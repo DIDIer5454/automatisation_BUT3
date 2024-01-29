@@ -90,7 +90,9 @@ $className = Baz::class;
         $tokensAnalyzer = new TokensAnalyzer($tokens);
         $this->imports = [];
 
-        /** @var int $index */
+        /**
+ * @var int $index 
+*/
         foreach ($tokensAnalyzer->getImportUseIndexes() as $index) {
             if ($index < $startIndex || $index > $endIndex) {
                 continue;
@@ -202,10 +204,14 @@ $className = Baz::class;
             }
         }
 
-        $tokens->insertAt($classBeginIndex, new Token([
-            T_CONSTANT_ENCAPSED_STRING,
-            "'".$this->makeClassFQN($namespacePrefix, $classImport, $classString)."'",
-        ]));
+        $tokens->insertAt(
+            $classBeginIndex, new Token(
+                [
+                T_CONSTANT_ENCAPSED_STRING,
+                "'".$this->makeClassFQN($namespacePrefix, $classImport, $classString)."'",
+                ]
+            )
+        );
     }
 
     /**
@@ -226,9 +232,11 @@ $className = Baz::class;
             return $classImport;
         }
 
-        return implode('\\', array_merge(
-            \array_slice($classImportArray, 0, $classImportLength - $classStringLength + 1),
-            $classStringArray
-        ));
+        return implode(
+            '\\', array_merge(
+                \array_slice($classImportArray, 0, $classImportLength - $classStringLength + 1),
+                $classStringArray
+            )
+        );
     }
 }

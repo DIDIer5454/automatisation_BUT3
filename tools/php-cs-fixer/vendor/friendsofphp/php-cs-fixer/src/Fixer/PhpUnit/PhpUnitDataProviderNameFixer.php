@@ -103,7 +103,8 @@ class FooTest extends TestCase {
 
     public function getConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('prefix', 'Prefix that replaces "test".'))
                 ->setAllowedTypes(['string'])
                 ->setDefault('provide')
@@ -112,7 +113,8 @@ class FooTest extends TestCase {
                 ->setAllowedTypes(['string'])
                 ->setDefault('Cases')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     public function getPriority(): int

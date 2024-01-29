@@ -51,13 +51,15 @@ final class NoTrailingCommaInSinglelineFixer extends AbstractFixer implements Co
     {
         $elements = ['arguments', 'array_destructuring', 'array', 'group_import'];
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('elements', 'Which elements to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset($elements)])
                 ->setDefault($elements)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -95,7 +97,9 @@ final class NoTrailingCommaInSinglelineFixer extends AbstractFixer implements Co
 
     private function shouldBeCleared(Tokens $tokens, int $openIndex): bool
     {
-        /** @var string[] $elements */
+        /**
+ * @var string[] $elements 
+*/
         $elements = $this->configuration['elements'];
 
         if ($tokens[$openIndex]->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_OPEN)) {

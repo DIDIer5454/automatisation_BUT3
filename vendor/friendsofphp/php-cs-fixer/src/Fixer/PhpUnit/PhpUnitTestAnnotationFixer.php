@@ -52,17 +52,21 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
         return new FixerDefinition(
             'Adds or removes @test annotations from tests, following configuration.',
             [
-                new CodeSample('<?php
+                new CodeSample(
+                    '<?php
 class Test extends \\PhpUnit\\FrameWork\\TestCase
 {
     /**
      * @test
      */
-    public function itDoesSomething() {} }'.$this->whitespacesConfig->getLineEnding()),
-                new CodeSample('<?php
+    public function itDoesSomething() {} }'.$this->whitespacesConfig->getLineEnding()
+                ),
+                new CodeSample(
+                    '<?php
 class Test extends \\PhpUnit\\FrameWork\\TestCase
 {
-public function testItDoesSomething() {}}'.$this->whitespacesConfig->getLineEnding(), ['style' => 'annotation']),
+public function testItDoesSomething() {}}'.$this->whitespacesConfig->getLineEnding(), ['style' => 'annotation']
+                ),
             ],
             null,
             'This fixer may change the name of your tests, and could cause incompatibility with'.
@@ -97,12 +101,14 @@ public function testItDoesSomething() {}}'.$this->whitespacesConfig->getLineEndi
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('style', 'Whether to use the @test annotation or not.'))
                 ->setAllowedValues(['prefix', 'annotation'])
                 ->setDefault('prefix')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function applyTestAnnotation(Tokens $tokens, int $startIndex, int $endIndex): void
@@ -185,8 +191,7 @@ public function testItDoesSomething() {}}'.$this->whitespacesConfig->getLineEndi
         // If the function doesn't have test in its name, and no doc block, it is not a test
         return
             $this->isPHPDoc($tokens, $docBlockIndex)
-            && str_contains($tokens[$docBlockIndex]->getContent(), '@test')
-        ;
+            && str_contains($tokens[$docBlockIndex]->getContent(), '@test');
     }
 
     private function isMethod(Tokens $tokens, int $index): bool

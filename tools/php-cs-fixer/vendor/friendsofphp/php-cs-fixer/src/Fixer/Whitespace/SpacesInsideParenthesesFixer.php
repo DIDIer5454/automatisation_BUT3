@@ -151,12 +151,14 @@ function foo(\$bar, \$baz)
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('space', 'Whether to have `single` or `none` space inside parentheses.'))
                 ->setAllowedValues(['none', 'single'])
                 ->setDefault('none')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

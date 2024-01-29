@@ -89,7 +89,8 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('after_heredoc', 'Whether a trailing comma should also be placed after heredoc end.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
@@ -98,19 +99,22 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset([self::ELEMENTS_ARRAYS, self::ELEMENTS_ARGUMENTS, self::ELEMENTS_PARAMETERS, self::MATCH_EXPRESSIONS])])
                 ->setDefault([self::ELEMENTS_ARRAYS])
-                ->setNormalizer(static function (Options $options, array $value) {
-                    if (\PHP_VERSION_ID < 8_00_00) { // @TODO: drop condition when PHP 8.0+ is required
-                        foreach ([self::ELEMENTS_PARAMETERS, self::MATCH_EXPRESSIONS] as $option) {
-                            if (\in_array($option, $value, true)) {
-                                throw new InvalidOptionsForEnvException(sprintf('"%s" option can only be enabled with PHP 8.0+.', $option));
+                ->setNormalizer(
+                    static function (Options $options, array $value) {
+                        if (\PHP_VERSION_ID < 8_00_00) { // @TODO: drop condition when PHP 8.0+ is required
+                            foreach ([self::ELEMENTS_PARAMETERS, self::MATCH_EXPRESSIONS] as $option) {
+                                if (\in_array($option, $value, true)) {
+                                    throw new InvalidOptionsForEnvException(sprintf('"%s" option can only be enabled with PHP 8.0+.', $option));
+                                }
                             }
                         }
-                    }
 
-                    return $value;
-                })
+                        return $value;
+                    }
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -123,11 +127,9 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
             $prevIndex = $tokens->getPrevMeaningfulToken($index);
 
-            if (
-                $fixArrays
-                && (
-                    $tokens[$index]->equals('(') && $tokens[$prevIndex]->isGivenKind(T_ARRAY) // long syntax
-                    || $tokens[$index]->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_OPEN) // short syntax
+            if ($fixArrays
+                && (                $tokens[$index]->equals('(') && $tokens[$prevIndex]->isGivenKind(T_ARRAY) // long syntax
+                || $tokens[$index]->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_OPEN) // short syntax
                 )
             ) {
                 $this->fixBlock($tokens, $index);
@@ -150,12 +152,9 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
                 continue;
             }
 
-            if (
-                $fixParameters
-                && (
-                    $tokens[$prevIndex]->isGivenKind(T_STRING) && $tokens[$prevPrevIndex]->isGivenKind(T_FUNCTION)
-                    || $tokens[$prevIndex]->isGivenKind([T_FN, T_FUNCTION])
-                )
+            if ($fixParameters
+                && (                $tokens[$prevIndex]->isGivenKind(T_STRING) && $tokens[$prevPrevIndex]->isGivenKind(T_FUNCTION)
+                || $tokens[$prevIndex]->isGivenKind([T_FN, T_FUNCTION]))
             ) {
                 $this->fixBlock($tokens, $index);
             }
@@ -184,8 +183,7 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
         $beforeEndToken = $tokens[$beforeEndIndex];
 
         // if there is some item between braces then add `,` after it
-        if (
-            $startIndex !== $beforeEndIndex && !$beforeEndToken->equals(',')
+        if ($startIndex !== $beforeEndIndex && !$beforeEndToken->equals(',')
             && (true === $this->configuration['after_heredoc'] || !$beforeEndToken->isGivenKind(T_END_HEREDOC))
         ) {
             $tokens->insertAt($beforeEndIndex + 1, new Token(','));

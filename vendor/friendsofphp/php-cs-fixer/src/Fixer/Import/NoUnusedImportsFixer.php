@@ -153,8 +153,7 @@ final class NoUnusedImportsFixer extends AbstractFixer
                     continue;
                 }
 
-                if (
-                    $prevMeaningfulToken->isGivenKind([T_NS_SEPARATOR, T_FUNCTION, T_CONST, T_DOUBLE_COLON])
+                if ($prevMeaningfulToken->isGivenKind([T_NS_SEPARATOR, T_FUNCTION, T_CONST, T_DOUBLE_COLON])
                     || $prevMeaningfulToken->isObjectOperator()
                 ) {
                     continue;

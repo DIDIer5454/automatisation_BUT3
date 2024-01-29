@@ -90,8 +90,7 @@ final class DescribeCommand extends Command
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The path to a .php-cs-fixer.php file.'),
                 ]
             )
-            ->setDescription('Describe rule / ruleset.')
-        ;
+            ->setDescription('Describe rule / ruleset.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -129,12 +128,14 @@ final class DescribeCommand extends Command
 
             $this->describeList($output, $e->getType());
 
-            throw new \InvalidArgumentException(sprintf(
-                '%s "%s" not found.%s',
-                ucfirst($e->getType()),
-                $name,
-                null === $alternative ? '' : ' Did you mean "'.$alternative.'"?'
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    '%s "%s" not found.%s',
+                    ucfirst($e->getType()),
+                    $name,
+                    null === $alternative ? '' : ' Did you mean "'.$alternative.'"?'
+                )
+            );
         }
 
         return 0;
@@ -148,7 +149,9 @@ final class DescribeCommand extends Command
             throw new DescribeNameNotFoundException($name, 'rule');
         }
 
-        /** @var FixerInterface $fixer */
+        /**
+ * @var FixerInterface $fixer 
+*/
         $fixer = $fixers[$name];
 
         $definition = $fixer->getDefinition();
@@ -216,9 +219,11 @@ final class DescribeCommand extends Command
                         $option->getAllowedTypes(),
                     );
                 } else {
-                    $allowed = array_map(static fn ($value): string => $value instanceof AllowedValueSubset
+                    $allowed = array_map(
+                        static fn ($value): string => $value instanceof AllowedValueSubset
                         ? 'a subset of <comment>'.Utils::toString($value->getAllowedValues()).'</comment>'
-                        : '<comment>'.Utils::toString($value).'</comment>', $allowed);
+                        : '<comment>'.Utils::toString($value).'</comment>', $allowed
+                    );
                 }
 
                 $line .= ' ('.Utils::naturalLanguageJoin($allowed, '').')';
@@ -253,25 +258,33 @@ final class DescribeCommand extends Command
             $output->writeln('');
         }
 
-        /** @var CodeSampleInterface[] $codeSamples */
-        $codeSamples = array_filter($definition->getCodeSamples(), static function (CodeSampleInterface $codeSample): bool {
-            if ($codeSample instanceof VersionSpecificCodeSampleInterface) {
-                return $codeSample->isSuitableFor(\PHP_VERSION_ID);
-            }
+        /**
+ * @var CodeSampleInterface[] $codeSamples 
+*/
+        $codeSamples = array_filter(
+            $definition->getCodeSamples(), static function (CodeSampleInterface $codeSample): bool {
+                if ($codeSample instanceof VersionSpecificCodeSampleInterface) {
+                    return $codeSample->isSuitableFor(\PHP_VERSION_ID);
+                }
 
-            return true;
-        });
+                return true;
+            }
+        );
 
         if (0 === \count($definition->getCodeSamples())) {
-            $output->writeln([
+            $output->writeln(
+                [
                 'Fixing examples are not available for this rule.',
                 '',
-            ]);
+                ]
+            );
         } elseif (0 === \count($codeSamples)) {
-            $output->writeln([
+            $output->writeln(
+                [
                 'Fixing examples <error>cannot be</error> demonstrated on the current PHP version.',
                 '',
-            ]);
+                ]
+            );
         } else {
             $output->writeln('Fixing examples:');
 
@@ -371,7 +384,9 @@ final class DescribeCommand extends Command
                 continue;
             }
 
-            /** @var FixerInterface $fixer */
+            /**
+ * @var FixerInterface $fixer 
+*/
             $fixer = $fixers[$rule];
 
             $definition = $fixer->getDefinition();
@@ -438,7 +453,9 @@ final class DescribeCommand extends Command
             return;
         }
 
-        /** @var string[] $items */
+        /**
+ * @var string[] $items 
+*/
         foreach ($describe as $list => $items) {
             $output->writeln(sprintf('<comment>Defined %s:</comment>', $list));
 

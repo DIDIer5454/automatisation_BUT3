@@ -71,9 +71,11 @@ final class TypeShortNameResolver
      */
     private function getNamespacesFromTokens(Tokens $tokens): array
     {
-        return array_map(static function (NamespaceAnalysis $info): string {
-            return $info->getFullName();
-        }, (new NamespacesAnalyzer())->getDeclarations($tokens));
+        return array_map(
+            static function (NamespaceAnalysis $info): string {
+                return $info->getFullName();
+            }, (new NamespacesAnalyzer())->getDeclarations($tokens)
+        );
     }
 
     /**

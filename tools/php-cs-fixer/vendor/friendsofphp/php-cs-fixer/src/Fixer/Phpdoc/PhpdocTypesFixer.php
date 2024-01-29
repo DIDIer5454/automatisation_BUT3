@@ -68,7 +68,9 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer implements Configu
         ],
     ];
 
-    /** @var array<string, true> */
+    /**
+     * @var array<string, true> 
+     */
     private array $typesSetToFix;
 
     public function configure(array $configuration): void
@@ -131,28 +133,32 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer implements Configu
     {
         $typeExpression = new TypeExpression($type, null, []);
 
-        $typeExpression->walkTypes(function (TypeExpression $type): void {
-            if (!$type->isUnionType()) {
-                $value = $type->toString();
-                $valueLower = strtolower($value);
-                if (isset($this->typesSetToFix[$valueLower])) {
-                    $value = $valueLower;
+        $typeExpression->walkTypes(
+            function (TypeExpression $type): void {
+                if (!$type->isUnionType()) {
+                    $value = $type->toString();
+                    $valueLower = strtolower($value);
+                    if (isset($this->typesSetToFix[$valueLower])) {
+                        $value = $valueLower;
+                    }
+
+                    // normalize shape/callable/generic identifiers too
+                    // TODO parse them as inner types and this will be not needed then
+                    $value = Preg::replaceCallback(
+                        '/^(\??\s*)([^()[\]{}<>\'"]+)(?<!\s)(\s*[\s()[\]{}<>])/',
+                        fn ($matches) => $matches[1].$this->normalize($matches[2]).$matches[3],
+                        $value
+                    );
+
+                    // TODO TypeExpression should be immutable and walkTypes method should be changed to mapTypes method
+                    \Closure::bind(
+                        static function () use ($type, $value): void {
+                            $type->value = $value;
+                        }, null, TypeExpression::class
+                    )();
                 }
-
-                // normalize shape/callable/generic identifiers too
-                // TODO parse them as inner types and this will be not needed then
-                $value = Preg::replaceCallback(
-                    '/^(\??\s*)([^()[\]{}<>\'"]+)(?<!\s)(\s*[\s()[\]{}<>])/',
-                    fn ($matches) => $matches[1].$this->normalize($matches[2]).$matches[3],
-                    $value
-                );
-
-                // TODO TypeExpression should be immutable and walkTypes method should be changed to mapTypes method
-                \Closure::bind(static function () use ($type, $value): void {
-                    $type->value = $value;
-                }, null, TypeExpression::class)();
             }
-        });
+        );
 
         return $typeExpression->toString();
     }
@@ -161,12 +167,14 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer implements Configu
     {
         $possibleGroups = array_keys(self::POSSIBLE_TYPES);
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('groups', 'Type groups to fix.'))
                 ->setAllowedTypes(['array'])
                 ->setAllowedValues([new AllowedValueSubset($possibleGroups)])
                 ->setDefault($possibleGroups)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 }

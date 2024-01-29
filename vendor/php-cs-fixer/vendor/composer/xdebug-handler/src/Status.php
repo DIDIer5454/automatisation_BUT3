@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 /**
- * @author John Stevenson <john-stevenson@blueyonder.co.uk>
+ * @author   John Stevenson <john-stevenson@blueyonder.co.uk>
  * @internal
  */
 class Status
@@ -31,27 +31,39 @@ class Status
     const RESTARTING = 'Restarting';
     const RESTARTED = 'Restarted';
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $debug;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $envAllowXdebug;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     private $loaded;
 
-    /** @var LoggerInterface|null */
+    /**
+     * @var LoggerInterface|null 
+     */
     private $logger;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $modeOff;
 
-     /** @var float */
+     /**
+      * @var float 
+      */
     private $time;
 
     /**
      * @param string $envAllowXdebug Prefixed _ALLOW_XDEBUG name
-     * @param bool $debug Whether debug output is required
+     * @param bool   $debug          Whether debug output is required
      */
     public function __construct(string $envAllowXdebug, bool $debug)
     {

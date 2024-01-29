@@ -77,10 +77,12 @@ RST;
                 $alternatives = $fixer->getSuccessorsNames();
 
                 if (0 !== \count($alternatives)) {
-                    $documentation .= RstUtils::toRst(sprintf(
-                        '   Use %s instead.',
-                        Utils::naturalLanguageJoinWithBackticks($alternatives)
-                    ), 3);
+                    $documentation .= RstUtils::toRst(
+                        sprintf(
+                            '   Use %s instead.',
+                            Utils::naturalLanguageJoinWithBackticks($alternatives)
+                        ), 3
+                    );
                 }
 
                 $documentation .= "\n";
@@ -111,9 +113,11 @@ RST;
 
                     if (null === $allowed) {
                         $allowedKind = 'Allowed types';
-                        $allowed = array_map(static function ($value): string {
-                            return '``'.$value.'``';
-                        }, $option->getAllowedTypes());
+                        $allowed = array_map(
+                            static function ($value): string {
+                                return '``'.$value.'``';
+                            }, $option->getAllowedTypes()
+                        );
                     } else {
                         $allowedKind = 'Allowed values';
 

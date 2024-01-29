@@ -65,10 +65,12 @@ final class FixerDocumentGenerator
             $alternatives = $fixer->getSuccessorsNames();
 
             if (0 !== \count($alternatives)) {
-                $doc .= RstUtils::toRst(sprintf(
-                    "\n\nYou should use %s instead.",
-                    Utils::naturalLanguageJoinWithBackticks($alternatives)
-                ), 3);
+                $doc .= RstUtils::toRst(
+                    sprintf(
+                        "\n\nYou should use %s instead.",
+                        Utils::naturalLanguageJoinWithBackticks($alternatives)
+                    ), 3
+                );
             }
         }
 
@@ -132,9 +134,11 @@ RST;
 
                 if (null === $allowed) {
                     $allowedKind = 'Allowed types';
-                    $allowed = array_map(static function ($value): string {
-                        return '``'.$value.'``';
-                    }, $option->getAllowedTypes());
+                    $allowed = array_map(
+                        static function ($value): string {
+                            return '``'.$value.'``';
+                        }, $option->getAllowedTypes()
+                    );
                 } else {
                     $allowedKind = 'Allowed values';
 
@@ -247,9 +251,11 @@ RST;
             'Phpdoc' => 'PHPDoc',
         ];
 
-        usort($fixers, static function (FixerInterface $a, FixerInterface $b): int {
-            return strcmp(\get_class($a), \get_class($b));
-        });
+        usort(
+            $fixers, static function (FixerInterface $a, FixerInterface $b): int {
+                return strcmp(\get_class($a), \get_class($b));
+            }
+        );
 
         $documentation = <<<'RST'
 =======================
@@ -328,8 +334,7 @@ RST;
         $tokens = Tokens::fromCode($old);
         $file = $sample instanceof FileSpecificCodeSampleInterface
             ? $sample->getSplFileInfo()
-            : new StdinFileInfo()
-        ;
+            : new StdinFileInfo();
 
         if ($fixer instanceof ConfigurableFixerInterface) {
             $fixer->configure($sample->getConfiguration() ?? []);

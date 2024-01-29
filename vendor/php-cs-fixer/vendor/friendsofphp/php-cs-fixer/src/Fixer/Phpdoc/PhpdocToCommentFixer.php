@@ -125,7 +125,8 @@ function returnClassName() {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('ignored_tags', 'List of ignored tags (matched case insensitively).'))
                 ->setAllowedTypes(['array'])
                 ->setDefault([])
@@ -134,7 +135,8 @@ function returnClassName() {
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false) // @TODO 4.0: set to `true`
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void

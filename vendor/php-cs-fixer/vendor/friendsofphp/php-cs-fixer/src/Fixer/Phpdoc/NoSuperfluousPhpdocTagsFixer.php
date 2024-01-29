@@ -48,7 +48,9 @@ use PhpCsFixer\Tokenizer\TokensAnalyzer;
  */
 final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
-    /** @var _TypeInfo */
+    /**
+     * @var _TypeInfo 
+     */
     private const NO_TYPE_INFO = [
         'types' => [],
         'allows_null' => true,
@@ -59,7 +61,8 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
         return new FixerDefinition(
             'Removes `@param`, `@return` and `@var` tags that don\'t provide any useful information.',
             [
-                new CodeSample('<?php
+                new CodeSample(
+                    '<?php
 class Foo {
     /**
      * @param Bar $bar
@@ -69,8 +72,10 @@ class Foo {
      */
     public function doFoo(Bar $bar, $baz): Baz {}
 }
-'),
-                new CodeSample('<?php
+'
+                ),
+                new CodeSample(
+                    '<?php
 class Foo {
     /**
      * @param Bar $bar
@@ -78,16 +83,20 @@ class Foo {
      */
     public function doFoo(Bar $bar, $baz) {}
 }
-', ['allow_mixed' => true]),
-                new CodeSample('<?php
+', ['allow_mixed' => true]
+                ),
+                new CodeSample(
+                    '<?php
 class Foo {
     /**
      * @inheritDoc
      */
     public function doFoo(Bar $bar, $baz) {}
 }
-', ['remove_inheritdoc' => true]),
-                new CodeSample('<?php
+', ['remove_inheritdoc' => true]
+                ),
+                new CodeSample(
+                    '<?php
 class Foo {
     /**
      * @param Bar $bar
@@ -96,7 +105,8 @@ class Foo {
      */
     public function doFoo(Bar $bar, $baz /*, $qux = null */) {}
 }
-', ['allow_unused_params' => true]),
+', ['allow_unused_params' => true]
+                ),
             ]
         );
     }
@@ -200,7 +210,8 @@ class Foo {
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('allow_mixed', 'Whether type `mixed` without description is allowed (`true`) or considered superfluous (`false`).'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
@@ -213,7 +224,8 @@ class Foo {
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -422,8 +434,7 @@ class Foo {
 
             if (!$info['allows_null']) {
                 $nextIndex = $tokens->getNextMeaningfulToken($index);
-                if (
-                    $tokens[$nextIndex]->equals('=')
+                if ($tokens[$nextIndex]->equals('=')
                     && $tokens[$tokens->getNextMeaningfulToken($nextIndex)]->equals([T_STRING, 'null'], false)
                 ) {
                     $info['allows_null'] = true;
@@ -617,7 +628,8 @@ class Foo {
 
     private function removeSuperfluousInheritDoc(string $docComment): string
     {
-        return Preg::replace('~
+        return Preg::replace(
+            '~
             # $1: before @inheritDoc tag
             (
                 # beginning of comment or a PHPDoc tag
@@ -663,7 +675,8 @@ class Foo {
                     [ \t]*\*/$
                 )
             )
-        ~ix', '$1$2', $docComment);
+        ~ix', '$1$2', $docComment
+        );
     }
 
     /**

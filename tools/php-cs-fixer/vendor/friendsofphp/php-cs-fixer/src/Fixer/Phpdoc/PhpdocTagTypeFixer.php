@@ -80,10 +80,12 @@ final class PhpdocTagTypeFixer extends AbstractFixer implements ConfigurableFixe
 
         $regularExpression = sprintf(
             '/({?@(?:%s).*?(?:(?=\s\*\/)|(?=\n)}?))/i',
-            implode('|', array_map(
-                static fn (string $tag): string => preg_quote($tag, '/'),
-                array_keys($this->configuration['tags'])
-            ))
+            implode(
+                '|', array_map(
+                    static fn (string $tag): string => preg_quote($tag, '/'),
+                    array_keys($this->configuration['tags'])
+                )
+            )
         );
 
         foreach ($tokens as $index => $token) {
@@ -133,19 +135,23 @@ final class PhpdocTagTypeFixer extends AbstractFixer implements ConfigurableFixe
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('tags', 'The list of tags to fix.'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([static function (array $value): bool {
-                    foreach ($value as $type) {
-                        if (!\in_array($type, ['annotation', 'inline'], true)) {
-                            throw new InvalidOptionsException("Unknown tag type \"{$type}\".");
+                ->setAllowedValues(
+                    [static function (array $value): bool {
+                        foreach ($value as $type) {
+                            if (!\in_array($type, ['annotation', 'inline'], true)) {
+                                throw new InvalidOptionsException("Unknown tag type \"{$type}\".");
+                            }
                         }
-                    }
 
-                    return true;
-                }])
-                ->setDefault([
+                        return true;
+                    }]
+                )
+                ->setDefault(
+                    [
                     'api' => 'annotation',
                     'author' => 'annotation',
                     'copyright' => 'annotation',
@@ -167,18 +173,22 @@ final class PhpdocTagTypeFixer extends AbstractFixer implements ConfigurableFixe
                     'uses' => 'annotation',
                     'var' => 'annotation',
                     'version' => 'annotation',
-                ])
-                ->setNormalizer(static function (Options $options, array $value): array {
-                    $normalized = [];
+                    ]
+                )
+                ->setNormalizer(
+                    static function (Options $options, array $value): array {
+                        $normalized = [];
 
-                    foreach ($value as $tag => $type) {
-                        $normalized[strtolower($tag)] = $type;
+                        foreach ($value as $tag => $type) {
+                            $normalized[strtolower($tag)] = $type;
+                        }
+
+                        return $normalized;
                     }
-
-                    return $normalized;
-                })
+                )
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**

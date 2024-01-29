@@ -116,7 +116,9 @@ call_user_func(static function ($a, $b) { var_dump($a, $b); }, 1, 2);
             $tokens->getNextMeaningfulToken($index)
         );
 
-        /** @var Token $firstArgToken */
+        /**
+ * @var Token $firstArgToken 
+*/
         $firstArgToken = $tokens[$firstArgIndex];
 
         if ($firstArgToken->isGivenKind(T_CONSTANT_ENCAPSED_STRING)) {
@@ -223,7 +225,9 @@ call_user_func(static function ($a, $b) { var_dump($a, $b); }, 1, 2);
         $subCollection = new Tokens($size);
 
         for ($i = 0; $i < $size; ++$i) {
-            /** @var Token $toClone */
+            /**
+ * @var Token $toClone 
+*/
             $toClone = $tokens[$i + $indexStart];
             $subCollection[$i] = clone $toClone;
         }

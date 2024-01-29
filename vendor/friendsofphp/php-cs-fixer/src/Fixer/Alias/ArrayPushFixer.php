@@ -153,7 +153,8 @@ final class ArrayPushFixer extends AbstractFixer
         $nextIndex = $tokens->getNextMeaningfulToken($index);
         $nextToken = $tokens[$nextIndex];
 
-        while ($nextToken->equalsAny([
+        while ($nextToken->equalsAny(
+            [
             '$',
             '[',
             '(',
@@ -165,7 +166,8 @@ final class ArrayPushFixer extends AbstractFixer
             [T_STATIC],
             [T_STRING],
             [T_VARIABLE],
-        ])) {
+            ]
+        )) {
             $blockType = Tokens::detectBlockType($nextToken);
 
             if (null !== $blockType) {

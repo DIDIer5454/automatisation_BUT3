@@ -171,13 +171,15 @@ final class MyTest extends \PHPUnit_Framework_TestCase
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('target', 'Target version of PHPUnit.'))
                 ->setAllowedTypes(['string'])
                 ->setAllowedValues([PhpUnitTargetVersion::VERSION_5_2, PhpUnitTargetVersion::VERSION_5_6, PhpUnitTargetVersion::VERSION_8_4, PhpUnitTargetVersion::VERSION_NEWEST])
                 ->setDefault(PhpUnitTargetVersion::VERSION_NEWEST)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -238,8 +240,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
                     $paramIndicatorIndex = $tokens->getNextMeaningfulToken($argBefore);
                     $afterParamIndicatorIndex = $tokens->getNextMeaningfulToken($paramIndicatorIndex);
 
-                    if (
-                        $tokens[$paramIndicatorIndex]->equals([T_STRING, 'null'], false)
+                    if ($tokens[$paramIndicatorIndex]->equals([T_STRING, 'null'], false)
                         && $tokens[$afterParamIndicatorIndex]->equals(')')
                     ) {
                         if ($tokens[$argBefore + 1]->isWhitespace()) {

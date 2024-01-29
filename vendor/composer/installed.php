@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => null,
         'name' => 'privatebin/privatebin',
         'dev' => true,
     ),
@@ -205,7 +205,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => null,
             'dev_requirement' => false,
         ),
         'psr/cache' => array(

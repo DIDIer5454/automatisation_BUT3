@@ -192,7 +192,9 @@ $c = get_class($d);
         $namespaces = $tokens->getNamespaceDeclarations();
 
         // 'scope' is 'namespaced' here
-        /** @var NamespaceAnalysis $namespace */
+        /**
+ * @var NamespaceAnalysis $namespace 
+*/
         foreach (array_reverse($namespaces) as $namespace) {
             $this->fixFunctionCalls($tokens, $this->functionFilter, $namespace->getScopeStartIndex(), $namespace->getScopeEndIndex(), $namespace->isGlobalNamespace());
         }
@@ -200,47 +202,56 @@ $c = get_class($d);
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('exclude', 'List of functions to ignore.'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([static function (array $value): bool {
-                    foreach ($value as $functionName) {
-                        if (!\is_string($functionName) || '' === trim($functionName) || trim($functionName) !== $functionName) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Each element must be a non-empty, trimmed string, got "%s" instead.',
-                                get_debug_type($functionName)
-                            ));
+                ->setAllowedValues(
+                    [static function (array $value): bool {
+                        foreach ($value as $functionName) {
+                            if (!\is_string($functionName) || '' === trim($functionName) || trim($functionName) !== $functionName) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Each element must be a non-empty, trimmed string, got "%s" instead.',
+                                        get_debug_type($functionName)
+                                    )
+                                );
+                            }
                         }
-                    }
 
-                    return true;
-                }])
+                        return true;
+                    }]
+                )
                 ->setDefault([])
                 ->getOption(),
             (new FixerOptionBuilder('include', 'List of function names or sets to fix. Defined sets are `@internal` (all native functions), `@all` (all global functions) and `@compiler_optimized` (functions that are specially optimized by Zend).'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([static function (array $value): bool {
-                    foreach ($value as $functionName) {
-                        if (!\is_string($functionName) || '' === trim($functionName) || trim($functionName) !== $functionName) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Each element must be a non-empty, trimmed string, got "%s" instead.',
-                                get_debug_type($functionName)
-                            ));
-                        }
+                ->setAllowedValues(
+                    [static function (array $value): bool {
+                        foreach ($value as $functionName) {
+                            if (!\is_string($functionName) || '' === trim($functionName) || trim($functionName) !== $functionName) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Each element must be a non-empty, trimmed string, got "%s" instead.',
+                                        get_debug_type($functionName)
+                                    )
+                                );
+                            }
 
-                        $sets = [
+                            $sets = [
                             self::SET_ALL,
                             self::SET_INTERNAL,
                             self::SET_COMPILER_OPTIMIZED,
-                        ];
+                            ];
 
-                        if (str_starts_with($functionName, '@') && !\in_array($functionName, $sets, true)) {
-                            throw new InvalidOptionsException(sprintf('Unknown set "%s", known sets are %s.', $functionName, Utils::naturalLanguageJoin($sets)));
+                            if (str_starts_with($functionName, '@') && !\in_array($functionName, $sets, true)) {
+                                throw new InvalidOptionsException(sprintf('Unknown set "%s", known sets are %s.', $functionName, Utils::naturalLanguageJoin($sets)));
+                            }
                         }
-                    }
 
-                    return true;
-                }])
+                        return true;
+                    }]
+                )
                 ->setDefault([self::SET_COMPILER_OPTIMIZED])
                 ->getOption(),
             (new FixerOptionBuilder('scope', 'Only fix function calls that are made within a namespace or fix all.'))
@@ -251,7 +262,8 @@ $c = get_class($d);
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixFunctionCalls(Tokens $tokens, callable $functionFilter, int $start, int $end, bool $tryToRemove): void
@@ -326,7 +338,8 @@ $c = get_class($d);
      */
     private function getAllCompilerOptimizedFunctionsNormalized(): array
     {
-        return $this->normalizeFunctionNames([
+        return $this->normalizeFunctionNames(
+            [
             // @see https://github.com/php/php-src/blob/PHP-7.4/Zend/zend_compile.c "zend_try_compile_special_func"
             'array_key_exists',
             'array_slice',
@@ -373,7 +386,8 @@ $c = get_class($d);
             'function_exists',
             'is_callable',
             'ini_get',
-        ]);
+            ]
+        );
     }
 
     /**

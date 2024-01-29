@@ -80,23 +80,29 @@ final class Utils
      */
     public static function stableSort(array $elements, callable $getComparedValue, callable $compareValues): array
     {
-        array_walk($elements, static function (&$element, int $index) use ($getComparedValue): void {
-            $element = [$element, $index, $getComparedValue($element)];
-        });
-
-        usort($elements, static function ($a, $b) use ($compareValues): int {
-            $comparison = $compareValues($a[2], $b[2]);
-
-            if (0 !== $comparison) {
-                return $comparison;
+        array_walk(
+            $elements, static function (&$element, int $index) use ($getComparedValue): void {
+                $element = [$element, $index, $getComparedValue($element)];
             }
+        );
 
-            return $a[1] <=> $b[1];
-        });
+        usort(
+            $elements, static function ($a, $b) use ($compareValues): int {
+                $comparison = $compareValues($a[2], $b[2]);
 
-        return array_map(static function (array $item) {
-            return $item[0];
-        }, $elements);
+                if (0 !== $comparison) {
+                    return $comparison;
+                }
+
+                return $a[1] <=> $b[1];
+            }
+        );
+
+        return array_map(
+            static function (array $item) {
+                return $item[0];
+            }, $elements
+        );
     }
 
     /**
@@ -134,9 +140,11 @@ final class Utils
             throw new \InvalidArgumentException('Array of names cannot be empty.');
         }
 
-        $names = array_map(static function (string $name): string {
-            return sprintf('`%s`', $name);
-        }, $names);
+        $names = array_map(
+            static function (string $name): string {
+                return sprintf('`%s`', $name);
+            }, $names
+        );
 
         $last = array_pop($names);
 

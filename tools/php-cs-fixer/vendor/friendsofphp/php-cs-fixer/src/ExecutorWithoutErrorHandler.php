@@ -21,7 +21,9 @@ namespace PhpCsFixer;
  */
 final class ExecutorWithoutErrorHandler
 {
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * @template T
@@ -34,14 +36,18 @@ final class ExecutorWithoutErrorHandler
      */
     public static function execute(callable $callback): mixed
     {
-        /** @var ?string */
+        /**
+ * @var ?string 
+*/
         $error = null;
 
-        set_error_handler(static function (int $errorNumber, string $errorString, string $errorFile, int $errorLine) use (&$error): bool {
-            $error = $errorString;
+        set_error_handler(
+            static function (int $errorNumber, string $errorString, string $errorFile, int $errorLine) use (&$error): bool {
+                $error = $errorString;
 
-            return true;
-        });
+                return true;
+            }
+        );
 
         try {
             $result = $callback();

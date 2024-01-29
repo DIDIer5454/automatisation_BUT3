@@ -220,9 +220,11 @@ final class Annotation
      */
     public function getNormalizedTypes(): array
     {
-        $normalized = array_map(static function (string $type): string {
-            return strtolower($type);
-        }, $this->getTypes());
+        $normalized = array_map(
+            static function (string $type): string {
+                return strtolower($type);
+            }, $this->getTypes()
+        );
 
         sort($normalized);
 

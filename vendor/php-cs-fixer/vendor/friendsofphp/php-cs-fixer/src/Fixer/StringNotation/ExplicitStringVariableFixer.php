@@ -125,11 +125,13 @@ final class ExplicitStringVariableFixer extends AbstractFixer
                 if (1 === \count($distinctVariableSet['tokens'])) {
                     $singleVariableIndex = array_key_first($distinctVariableSet['tokens']);
                     $singleVariableToken = current($distinctVariableSet['tokens']);
-                    $tokens->overrideRange($singleVariableIndex, $singleVariableIndex, [
+                    $tokens->overrideRange(
+                        $singleVariableIndex, $singleVariableIndex, [
                         new Token([T_CURLY_OPEN, '{']),
                         new Token([T_VARIABLE, $singleVariableToken->getContent()]),
                         new Token([CT::T_CURLY_CLOSE, '}']),
-                    ]);
+                        ]
+                    );
                 } else {
                     foreach ($distinctVariableSet['tokens'] as $variablePartIndex => $variablePartToken) {
                         if ($variablePartToken->isGivenKind(T_NUM_STRING)) {

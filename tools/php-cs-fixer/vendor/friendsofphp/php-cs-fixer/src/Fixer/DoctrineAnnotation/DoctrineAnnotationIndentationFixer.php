@@ -43,13 +43,15 @@ final class DoctrineAnnotationIndentationFixer extends AbstractDoctrineAnnotatio
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             ...parent::createConfigurationDefinition()->getOptions(),
             (new FixerOptionBuilder('indent_mixed_lines', 'Whether to indent lines that have content before closing parenthesis.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function fixAnnotations(Tokens $doctrineAnnotationTokens): void
@@ -92,11 +94,13 @@ final class DoctrineAnnotationIndentationFixer extends AbstractDoctrineAnnotatio
                 }
             }
 
-            $token->setContent(Preg::replace(
-                '/(\n( +\*)?) *$/',
-                '$1'.str_repeat(' ', 4 * ($indentLevel + $extraIndentLevel) + 1),
-                $token->getContent()
-            ));
+            $token->setContent(
+                Preg::replace(
+                    '/(\n( +\*)?) *$/',
+                    '$1'.str_repeat(' ', 4 * ($indentLevel + $extraIndentLevel) + 1),
+                    $token->getContent()
+                )
+            );
 
             if ($delta > 0 || $mixedBraces) {
                 ++$indentLevel;

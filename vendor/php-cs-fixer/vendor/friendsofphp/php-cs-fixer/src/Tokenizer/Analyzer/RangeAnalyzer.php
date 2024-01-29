@@ -66,8 +66,7 @@ final class RangeAnalyzer
             $leftToken = $tokens[$leftStart];
             $rightToken = $tokens[$rightStart];
 
-            if (
-                !$leftToken->equals($rightToken)
+            if (!$leftToken->equals($rightToken)
                 && !($leftToken->equalsAny($arrayOpenTypes) && $rightToken->equalsAny($arrayOpenTypes))
                 && !($leftToken->equalsAny($arrayCloseTypes) && $rightToken->equalsAny($arrayCloseTypes))
             ) {

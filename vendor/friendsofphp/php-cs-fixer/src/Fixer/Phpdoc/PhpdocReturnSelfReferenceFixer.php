@@ -144,41 +144,49 @@ class Sample
             '@static' => 'static',
         ];
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('replacements', 'Mapping between replaced return types with new ones.'))
                 ->setAllowedTypes(['array'])
-                ->setNormalizer(static function (Options $options, array $value) use ($default): array {
-                    $normalizedValue = [];
+                ->setNormalizer(
+                    static function (Options $options, array $value) use ($default): array {
+                        $normalizedValue = [];
 
-                    foreach ($value as $from => $to) {
-                        if (\is_string($from)) {
-                            $from = strtolower($from);
+                        foreach ($value as $from => $to) {
+                            if (\is_string($from)) {
+                                $from = strtolower($from);
+                            }
+
+                            if (!isset($default[$from])) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unknown key "%s", expected any of "%s".',
+                                        \gettype($from).'#'.$from,
+                                        implode('", "', array_keys($default))
+                                    )
+                                );
+                            }
+
+                            if (!\in_array($to, self::$toTypes, true)) {
+                                throw new InvalidOptionsException(
+                                    sprintf(
+                                        'Unknown value "%s", expected any of "%s".',
+                                        \is_object($to) ? \get_class($to) : \gettype($to).(\is_resource($to) ? '' : '#'.$to),
+                                        implode('", "', self::$toTypes)
+                                    )
+                                );
+                            }
+
+                            $normalizedValue[$from] = $to;
                         }
 
-                        if (!isset($default[$from])) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Unknown key "%s", expected any of "%s".',
-                                \gettype($from).'#'.$from,
-                                implode('", "', array_keys($default))
-                            ));
-                        }
-
-                        if (!\in_array($to, self::$toTypes, true)) {
-                            throw new InvalidOptionsException(sprintf(
-                                'Unknown value "%s", expected any of "%s".',
-                                \is_object($to) ? \get_class($to) : \gettype($to).(\is_resource($to) ? '' : '#'.$to),
-                                implode('", "', self::$toTypes)
-                            ));
-                        }
-
-                        $normalizedValue[$from] = $to;
+                        return $normalizedValue;
                     }
-
-                    return $normalizedValue;
-                })
+                )
                 ->setDefault($default)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixMethod(Tokens $tokens, int $index): void

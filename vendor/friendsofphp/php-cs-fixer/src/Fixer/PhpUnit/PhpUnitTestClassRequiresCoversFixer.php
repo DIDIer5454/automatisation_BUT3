@@ -86,19 +86,26 @@ final class MyTest extends \PHPUnit_Framework_TestCase
             $doc = new DocBlock($docContent);
 
             // skip if already has annotation
-            if (0 !== \count($doc->getAnnotationsOfType([
-                'covers',
-                'coversDefaultClass',
-                'coversNothing',
-            ]))) {
+            if (0 !== \count(
+                $doc->getAnnotationsOfType(
+                    [
+                    'covers',
+                    'coversDefaultClass',
+                    'coversNothing',
+                    ]
+                )
+            )
+            ) {
                 return;
             }
         } else {
             $docIndex = $index;
-            $tokens->insertAt($docIndex, [
+            $tokens->insertAt(
+                $docIndex, [
                 new Token([T_DOC_COMMENT, sprintf('/**%s%s */', $this->whitespacesConfig->getLineEnding(), $indent)]),
                 new Token([T_WHITESPACE, sprintf('%s%s', $this->whitespacesConfig->getLineEnding(), $indent)]),
-            ]);
+                ]
+            );
 
             if (!$tokens[$docIndex - 1]->isGivenKind(T_WHITESPACE)) {
                 $extraNewLines = $this->whitespacesConfig->getLineEnding();
@@ -107,9 +114,11 @@ final class MyTest extends \PHPUnit_Framework_TestCase
                     $extraNewLines .= $this->whitespacesConfig->getLineEnding();
                 }
 
-                $tokens->insertAt($docIndex, [
+                $tokens->insertAt(
+                    $docIndex, [
                     new Token([T_WHITESPACE, $extraNewLines.$indent]),
-                ]);
+                    ]
+                );
                 ++$docIndex;
             }
 
@@ -122,11 +131,13 @@ final class MyTest extends \PHPUnit_Framework_TestCase
             \count($lines) - 1,
             0,
             [
-                new Line(sprintf(
-                    '%s * @coversNothing%s',
-                    $indent,
-                    $this->whitespacesConfig->getLineEnding()
-                )),
+                new Line(
+                    sprintf(
+                        '%s * @coversNothing%s',
+                        $indent,
+                        $this->whitespacesConfig->getLineEnding()
+                    )
+                ),
             ]
         );
 

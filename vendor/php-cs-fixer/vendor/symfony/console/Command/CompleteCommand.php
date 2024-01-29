@@ -70,8 +70,7 @@ final class CompleteCommand extends Command
             ->addOption('input', 'i', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'An array of input tokens (e.g. COMP_WORDS or argv)')
             ->addOption('current', 'c', InputOption::VALUE_REQUIRED, 'The index of the "input" array that the cursor is in (e.g. COMP_CWORD)')
             ->addOption('api-version', 'a', InputOption::VALUE_REQUIRED, 'The API version of the completion script')
-            ->addOption('symfony', 'S', InputOption::VALUE_REQUIRED, 'deprecated')
-        ;
+            ->addOption('symfony', 'S', InputOption::VALUE_REQUIRED, 'deprecated');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -105,7 +104,8 @@ final class CompleteCommand extends Command
             $completionInput = $this->createCompletionInput($input);
             $suggestions = new CompletionSuggestions();
 
-            $this->log([
+            $this->log(
+                [
                 '',
                 '<comment>'.date('Y-m-d H:i:s').'</>',
                 '<info>Input:</> <comment>("|" indicates the cursor position)</>',
@@ -113,15 +113,15 @@ final class CompleteCommand extends Command
                 '<info>Command:</>',
                 '  '.(string) implode(' ', $_SERVER['argv']),
                 '<info>Messages:</>',
-            ]);
+                ]
+            );
 
             $command = $this->findCommand($completionInput, $output);
             if (null === $command) {
                 $this->log('  No command found, completing using the Application class.');
 
                 $this->getApplication()->complete($completionInput, $suggestions);
-            } elseif (
-                $completionInput->mustSuggestArgumentValuesFor('command')
+            } elseif ($completionInput->mustSuggestArgumentValuesFor('command')
                 && $command->getName() !== $completionInput->getCompletionValue()
                 && !\in_array($completionInput->getCompletionValue(), $command->getAliases(), true)
             ) {
@@ -138,10 +138,12 @@ final class CompleteCommand extends Command
 
                     $suggestions->suggestOptions($command->getDefinition()->getOptions());
                 } else {
-                    $this->log([
+                    $this->log(
+                        [
                         '  Completing using the <comment>'.($command instanceof LazyCommand ? $command->getCommand() : $command)::class.'</> class.',
                         '  Completing <comment>'.$completionInput->getCompletionType().'</> for <comment>'.$completionInput->getCompletionName().'</>',
-                    ]);
+                        ]
+                    );
                     if (null !== $compval = $completionInput->getCompletionValue()) {
                         $this->log('  Current value: <comment>'.$compval.'</>');
                     }
@@ -150,7 +152,9 @@ final class CompleteCommand extends Command
                 }
             }
 
-            /** @var CompletionOutputInterface $completionOutput */
+            /**
+ * @var CompletionOutputInterface $completionOutput 
+*/
             $completionOutput = new $completionOutput();
 
             $this->log('<info>Suggestions:</>');
@@ -164,10 +168,12 @@ final class CompleteCommand extends Command
 
             $completionOutput->write($suggestions, $output);
         } catch (\Throwable $e) {
-            $this->log([
+            $this->log(
+                [
                 '<error>Error!</error>',
                 (string) $e,
-            ]);
+                ]
+            );
 
             if ($output->isDebug()) {
                 throw $e;

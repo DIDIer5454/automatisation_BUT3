@@ -329,8 +329,7 @@ final class ConfigurationResolver
             $this->fixers = $this->createFixerFactory()
                 ->useRuleSet($this->getRuleSet())
                 ->setWhitespacesConfig(new WhitespacesFixerConfig($this->config->getIndent(), $this->config->getLineEnding()))
-                ->getFixers()
-            ;
+                ->getFixers();
 
             if (false === $this->getRiskyAllowed()) {
                 $riskyFixers = array_map(
@@ -390,10 +389,12 @@ final class ConfigurationResolver
                             : $cwd.\DIRECTORY_SEPARATOR.$path;
 
                         if (!file_exists($absolutePath)) {
-                            throw new InvalidConfigurationException(sprintf(
-                                'The path "%s" is not readable.',
-                                $path
-                            ));
+                            throw new InvalidConfigurationException(
+                                sprintf(
+                                    'The path "%s" is not readable.',
+                                    $path
+                                )
+                            );
                         }
 
                         return $absolutePath;
@@ -419,11 +420,13 @@ final class ConfigurationResolver
                 if (null === $progressType) {
                     $progressType = $this->getConfig()->getHideProgress() ? 'none' : 'dots';
                 } elseif (!\in_array($progressType, $progressTypes, true)) {
-                    throw new InvalidConfigurationException(sprintf(
-                        'The progress type "%s" is not defined, supported are "%s".',
-                        $progressType,
-                        implode('", "', $progressTypes)
-                    ));
+                    throw new InvalidConfigurationException(
+                        sprintf(
+                            'The progress type "%s" is not defined, supported are "%s".',
+                            $progressType,
+                            implode('", "', $progressTypes)
+                        )
+                    );
                 }
 
                 $this->progress = $progressType;
@@ -692,15 +695,21 @@ final class ConfigurationResolver
 
         $ruleSet = new RuleSet($ruleSet);
 
-        /** @var string[] $configuredFixers */
+        /**
+ * @var string[] $configuredFixers 
+*/
         $configuredFixers = array_keys($ruleSet->getRules());
 
         $fixers = $this->createFixerFactory()->getFixers();
 
-        /** @var string[] $availableFixers */
-        $availableFixers = array_map(static function (FixerInterface $fixer): string {
-            return $fixer->getName();
-        }, $fixers);
+        /**
+ * @var string[] $availableFixers 
+*/
+        $availableFixers = array_map(
+            static function (FixerInterface $fixer): string {
+                return $fixer->getName();
+            }, $fixers
+        );
 
         $unknownFixers = array_diff(
             $configuredFixers,
@@ -823,22 +832,27 @@ final class ConfigurationResolver
             $this->options['path-mode'],
             $modes,
             true
-        )) {
-            throw new InvalidConfigurationException(sprintf(
-                'The path-mode "%s" is not defined, supported are "%s".',
-                $this->options['path-mode'],
-                implode('", "', $modes)
-            ));
+        )
+        ) {
+            throw new InvalidConfigurationException(
+                sprintf(
+                    'The path-mode "%s" is not defined, supported are "%s".',
+                    $this->options['path-mode'],
+                    implode('", "', $modes)
+                )
+            );
         }
 
         $isIntersectionPathMode = self::PATH_MODE_INTERSECTION === $this->options['path-mode'];
 
-        $paths = array_filter(array_map(
-            static function (string $path) {
-                return realpath($path);
-            },
-            $this->getPath()
-        ));
+        $paths = array_filter(
+            array_map(
+                static function (string $path) {
+                    return realpath($path);
+                },
+                $this->getPath()
+            )
+        );
 
         if (0 === \count($paths)) {
             if ($isIntersectionPathMode) {

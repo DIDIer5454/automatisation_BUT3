@@ -17,24 +17,34 @@ namespace Composer\Semver\Constraint;
 class MultiConstraint implements ConstraintInterface
 {
     /**
-     * @var ConstraintInterface[]
+     * @var         ConstraintInterface[]
      * @phpstan-var non-empty-array<ConstraintInterface>
      */
     protected $constraints;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     protected $prettyString;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     protected $string;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     protected $conjunctive;
 
-    /** @var Bound|null */
+    /**
+     * @var Bound|null 
+     */
     protected $lowerBound;
 
-    /** @var Bound|null */
+    /**
+     * @var Bound|null 
+     */
     protected $upperBound;
 
     /**
@@ -257,8 +267,7 @@ class MultiConstraint implements ConstraintInterface
             $optimized = false;
             for ($i = 1, $l = \count($constraints); $i < $l; $i++) {
                 $right = $constraints[$i];
-                if (
-                    $left instanceof self
+                if ($left instanceof self
                     && $left->conjunctive
                     && $right instanceof self
                     && $right->conjunctive
@@ -280,7 +289,8 @@ class MultiConstraint implements ConstraintInterface
                             $left->constraints[0],
                             $right->constraints[1],
                         ),
-                        true);
+                        true
+                    );
                 } else {
                     $mergedConstraints[] = $left;
                     $left = $right;

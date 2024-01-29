@@ -69,8 +69,7 @@ final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAw
                 continue;
             }
 
-            if (
-                $token->isGivenKind([CT::T_ARRAY_SQUARE_BRACE_OPEN, CT::T_DESTRUCTURING_SQUARE_BRACE_OPEN])
+            if ($token->isGivenKind([CT::T_ARRAY_SQUARE_BRACE_OPEN, CT::T_DESTRUCTURING_SQUARE_BRACE_OPEN])
                 || ($token->equals('(') && $tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind([T_ARRAY, T_LIST]))
             ) {
                 $blockType = Tokens::detectBlockType($token);
@@ -104,8 +103,7 @@ final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAw
                     for ($searchEndIndex = $index + 1; $searchEndIndex < $scopes[$currentScope]['end_index']; ++$searchEndIndex) {
                         $searchEndToken = $tokens[$searchEndIndex];
 
-                        if (
-                            (!$searchEndToken->isWhitespace() && !$searchEndToken->isComment())
+                        if ((!$searchEndToken->isWhitespace() && !$searchEndToken->isComment())
                             || ($searchEndToken->isWhitespace() && Preg::match('/\R/', $searchEndToken->getContent()))
                         ) {
                             $indent = true;

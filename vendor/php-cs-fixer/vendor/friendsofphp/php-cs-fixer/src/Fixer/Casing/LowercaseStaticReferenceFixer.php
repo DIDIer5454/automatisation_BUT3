@@ -32,7 +32,8 @@ final class LowercaseStaticReferenceFixer extends AbstractFixer
         return new FixerDefinition(
             'Class static references `self`, `static` and `parent` MUST be in lower case.',
             [
-                new CodeSample('<?php
+                new CodeSample(
+                    '<?php
 class Foo extends Bar
 {
     public function baz1()
@@ -50,7 +51,8 @@ class Foo extends Bar
         return true;
     }
 }
-'),
+'
+                ),
                 new CodeSample(
                     '<?php
 class Foo extends Bar

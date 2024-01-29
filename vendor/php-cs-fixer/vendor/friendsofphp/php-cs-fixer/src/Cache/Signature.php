@@ -87,11 +87,13 @@ final class Signature implements SignatureInterface
      */
     private static function makeJsonEncodable(array $data): array
     {
-        array_walk_recursive($data, static function (&$item): void {
-            if (\is_string($item) && !mb_detect_encoding($item, 'utf-8', true)) {
-                $item = base64_encode($item);
+        array_walk_recursive(
+            $data, static function (&$item): void {
+                if (\is_string($item) && !mb_detect_encoding($item, 'utf-8', true)) {
+                    $item = base64_encode($item);
+                }
             }
-        });
+        );
 
         return $data;
     }

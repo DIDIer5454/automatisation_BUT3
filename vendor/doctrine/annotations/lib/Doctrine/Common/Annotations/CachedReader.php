@@ -23,22 +23,34 @@ use function time;
  */
 final class CachedReader implements Reader
 {
-    /** @var Reader */
+    /**
+     * @var Reader 
+     */
     private $delegate;
 
-    /** @var Cache */
+    /**
+     * @var Cache 
+     */
     private $cache;
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $debug;
 
-    /** @var array<string, array<object>> */
+    /**
+     * @var array<string, array<object>> 
+     */
     private $loadedAnnotations = [];
 
-    /** @var int[] */
+    /**
+     * @var int[] 
+     */
     private $loadedFilemtimes = [];
 
-    /** @param bool $debug */
+    /**
+     * @param bool $debug 
+     */
     public function __construct(Reader $reader, Cache $cache, $debug = false)
     {
         $this->delegate = $reader;
@@ -228,16 +240,22 @@ final class CachedReader implements Reader
 
         $parent = $class->getParentClass();
 
-        $lastModification =  max(array_merge(
-            [$filename ? filemtime($filename) : 0],
-            array_map(function (ReflectionClass $reflectionTrait): int {
-                return $this->getTraitLastModificationTime($reflectionTrait);
-            }, $class->getTraits()),
-            array_map(function (ReflectionClass $class): int {
-                return $this->getLastModification($class);
-            }, $class->getInterfaces()),
-            $parent ? [$this->getLastModification($parent)] : []
-        ));
+        $lastModification =  max(
+            array_merge(
+                [$filename ? filemtime($filename) : 0],
+                array_map(
+                    function (ReflectionClass $reflectionTrait): int {
+                        return $this->getTraitLastModificationTime($reflectionTrait);
+                    }, $class->getTraits()
+                ),
+                array_map(
+                    function (ReflectionClass $class): int {
+                        return $this->getLastModification($class);
+                    }, $class->getInterfaces()
+                ),
+                $parent ? [$this->getLastModification($parent)] : []
+            )
+        );
 
         assert($lastModification !== false);
 
@@ -252,12 +270,16 @@ final class CachedReader implements Reader
             return $this->loadedFilemtimes[$fileName];
         }
 
-        $lastModificationTime = max(array_merge(
-            [$fileName ? filemtime($fileName) : 0],
-            array_map(function (ReflectionClass $reflectionTrait): int {
-                return $this->getTraitLastModificationTime($reflectionTrait);
-            }, $reflectionTrait->getTraits())
-        ));
+        $lastModificationTime = max(
+            array_merge(
+                [$fileName ? filemtime($fileName) : 0],
+                array_map(
+                    function (ReflectionClass $reflectionTrait): int {
+                        return $this->getTraitLastModificationTime($reflectionTrait);
+                    }, $reflectionTrait->getTraits()
+                )
+            )
+        );
 
         assert($lastModificationTime !== false);
 

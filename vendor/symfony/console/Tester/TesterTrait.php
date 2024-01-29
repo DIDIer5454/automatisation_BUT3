@@ -23,13 +23,19 @@ use Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful;
  */
 trait TesterTrait
 {
-    /** @var StreamOutput */
+    /**
+     * @var StreamOutput 
+     */
     private $output;
     private $inputs = [];
     private $captureStreamsIndependently = false;
-    /** @var InputInterface */
+    /**
+     * @var InputInterface 
+     */
     private $input;
-    /** @var int */
+    /**
+     * @var int 
+     */
     private $statusCode;
 
     /**

@@ -26,18 +26,22 @@ class OptionsResolverIntrospector
 
     public function __construct(OptionsResolver $optionsResolver)
     {
-        $this->get = \Closure::bind(function ($property, $option, $message) {
-            /** @var OptionsResolver $this */
-            if (!$this->isDefined($option)) {
-                throw new UndefinedOptionsException(sprintf('The option "%s" does not exist.', $option));
-            }
+        $this->get = \Closure::bind(
+            function ($property, $option, $message) {
+                /**
+            * @var OptionsResolver $this 
+            */
+                if (!$this->isDefined($option)) {
+                    throw new UndefinedOptionsException(sprintf('The option "%s" does not exist.', $option));
+                }
 
-            if (!\array_key_exists($option, $this->{$property})) {
-                throw new NoConfigurationException($message);
-            }
+                if (!\array_key_exists($option, $this->{$property})) {
+                    throw new NoConfigurationException($message);
+                }
 
-            return $this->{$property}[$option];
-        }, $optionsResolver, $optionsResolver);
+                return $this->{$property}[$option];
+            }, $optionsResolver, $optionsResolver
+        );
     }
 
     /**

@@ -227,10 +227,12 @@ class Intervals
             // > 2.0 != dev-foo must return a conjunctive constraint
             if ($intervals['branches']['exclude']) {
                 if (\count($constraints) > 1) {
-                    return new MultiConstraint(array_merge(
-                        array(new MultiConstraint($constraints, false)),
-                        $devConstraints
-                    ), true);
+                    return new MultiConstraint(
+                        array_merge(
+                            array(new MultiConstraint($constraints, false)),
+                            $devConstraints
+                        ), true
+                    );
                 }
 
                 if (\count($constraints) === 1 && (string)$constraints[0] === (string)Interval::fromZero()) {
@@ -266,7 +268,7 @@ class Intervals
      * if the returned branches array is empty it means no dev-* versions are matched
      * if a constraint matches all possible dev-* versions, branches will contain Interval::anyDev()
      *
-     * @return array
+     * @return         array
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
      */
     public static function get(ConstraintInterface $constraint)
@@ -382,14 +384,16 @@ class Intervals
         }
 
         $opSortOrder = self::$opSortOrder;
-        usort($borders, function ($a, $b) use ($opSortOrder) {
-            $order = version_compare($a['version'], $b['version']);
-            if ($order === 0) {
-                return $opSortOrder[$a['operator']] - $opSortOrder[$b['operator']];
-            }
+        usort(
+            $borders, function ($a, $b) use ($opSortOrder) {
+                $order = version_compare($a['version'], $b['version']);
+                if ($order === 0) {
+                    return $opSortOrder[$a['operator']] - $opSortOrder[$b['operator']];
+                }
 
-            return $order;
-        });
+                return $order;
+            }
+        );
 
         $activeIntervals = 0;
         $intervals = array();
@@ -406,12 +410,9 @@ class Intervals
                 $start = new Constraint($border['operator'], $border['version']);
             } elseif ($start && $activeIntervals < $activationThreshold) {
                 // filter out invalid intervals like > x - <= x, or >= x - < x
-                if (
-                    version_compare($start->getVersion(), $border['version'], '=')
-                    && (
-                        ($start->getOperator() === '>' && $border['operator'] === '<=')
-                        || ($start->getOperator() === '>=' && $border['operator'] === '<')
-                    )
+                if (version_compare($start->getVersion(), $border['version'], '=')
+                    && (                    ($start->getOperator() === '>' && $border['operator'] === '<=')
+                    || ($start->getOperator() === '>=' && $border['operator'] === '<'))
                 ) {
                     unset($intervals[$index]);
                 } else {

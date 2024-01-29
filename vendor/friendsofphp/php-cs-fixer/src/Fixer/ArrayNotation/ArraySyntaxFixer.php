@@ -110,12 +110,14 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurableFixerI
      */
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('syntax', 'Whether to use the `long` or `short` array syntax.'))
                 ->setAllowedValues(['long', 'short'])
                 ->setDefault('short')
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     private function fixToLongArraySyntax(Tokens $tokens, int $index): void

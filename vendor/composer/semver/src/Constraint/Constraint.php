@@ -37,7 +37,7 @@ class Constraint implements ConstraintInterface
     /**
      * Operator to integer translation table.
      *
-     * @var array
+     * @var         array
      * @phpstan-var array<self::STR_OP_*, self::OP_*>
      */
     private static $transOpStr = array(
@@ -54,7 +54,7 @@ class Constraint implements ConstraintInterface
     /**
      * Integer to operator translation table.
      *
-     * @var array
+     * @var         array
      * @phpstan-var array<self::OP_*, self::STR_OP_*>
      */
     private static $transOpInt = array(
@@ -67,21 +67,29 @@ class Constraint implements ConstraintInterface
     );
 
     /**
-     * @var int
+     * @var         int
      * @phpstan-var self::OP_*
      */
     protected $operator;
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     protected $version;
 
-    /** @var string|null */
+    /**
+     * @var string|null 
+     */
     protected $prettyString;
 
-    /** @var Bound */
+    /**
+     * @var Bound 
+     */
     protected $lowerBound;
 
-    /** @var Bound */
+    /**
+     * @var Bound 
+     */
     protected $upperBound;
 
     /**
@@ -97,11 +105,13 @@ class Constraint implements ConstraintInterface
     public function __construct($operator, $version)
     {
         if (!isset(self::$transOpStr[$operator])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Invalid operator "%s" given, expected one of: %s',
-                $operator,
-                implode(', ', self::getSupportedOperators())
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid operator "%s" given, expected one of: %s',
+                    $operator,
+                    implode(', ', self::getSupportedOperators())
+                )
+            );
         }
 
         $this->operator = self::$transOpStr[$operator];
@@ -200,11 +210,13 @@ class Constraint implements ConstraintInterface
     public function versionCompare($a, $b, $operator, $compareBranches = false)
     {
         if (!isset(self::$transOpStr[$operator])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Invalid operator "%s" given, expected one of: %s',
-                $operator,
-                implode(', ', self::getSupportedOperators())
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid operator "%s" given, expected one of: %s',
+                    $operator,
+                    implode(', ', self::getSupportedOperators())
+                )
+            );
         }
 
         $aIsBranch = strpos($a, 'dev-') === 0;
@@ -406,30 +418,30 @@ class Constraint implements ConstraintInterface
         }
 
         switch ($this->operator) {
-            case self::OP_EQ:
-                $this->lowerBound = new Bound($this->version, true);
-                $this->upperBound = new Bound($this->version, true);
-                break;
-            case self::OP_LT:
-                $this->lowerBound = Bound::zero();
-                $this->upperBound = new Bound($this->version, false);
-                break;
-            case self::OP_LE:
-                $this->lowerBound = Bound::zero();
-                $this->upperBound = new Bound($this->version, true);
-                break;
-            case self::OP_GT:
-                $this->lowerBound = new Bound($this->version, false);
-                $this->upperBound = Bound::positiveInfinity();
-                break;
-            case self::OP_GE:
-                $this->lowerBound = new Bound($this->version, true);
-                $this->upperBound = Bound::positiveInfinity();
-                break;
-            case self::OP_NE:
-                $this->lowerBound = Bound::zero();
-                $this->upperBound = Bound::positiveInfinity();
-                break;
+        case self::OP_EQ:
+            $this->lowerBound = new Bound($this->version, true);
+            $this->upperBound = new Bound($this->version, true);
+            break;
+        case self::OP_LT:
+            $this->lowerBound = Bound::zero();
+            $this->upperBound = new Bound($this->version, false);
+            break;
+        case self::OP_LE:
+            $this->lowerBound = Bound::zero();
+            $this->upperBound = new Bound($this->version, true);
+            break;
+        case self::OP_GT:
+            $this->lowerBound = new Bound($this->version, false);
+            $this->upperBound = Bound::positiveInfinity();
+            break;
+        case self::OP_GE:
+            $this->lowerBound = new Bound($this->version, true);
+            $this->upperBound = Bound::positiveInfinity();
+            break;
+        case self::OP_NE:
+            $this->lowerBound = Bound::zero();
+            $this->upperBound = Bound::positiveInfinity();
+            break;
         }
     }
 }

@@ -244,7 +244,11 @@ class ByteString extends AbstractString
             $regexp .= 'i';
         }
 
-        set_error_handler(static function ($t, $m) { throw new InvalidArgumentException($m); });
+        set_error_handler(
+            static function ($t, $m) {
+                throw new InvalidArgumentException($m); 
+            }
+        );
 
         try {
             if (false === $match($regexp, $this->string, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset)) {
@@ -324,7 +328,11 @@ class ByteString extends AbstractString
             $replace = $to instanceof \Closure ? 'preg_replace_callback' : 'preg_replace';
         }
 
-        set_error_handler(static function ($t, $m) { throw new InvalidArgumentException($m); });
+        set_error_handler(
+            static function ($t, $m) {
+                throw new InvalidArgumentException($m); 
+            }
+        );
 
         try {
             if (null === $string = $replace($fromRegexp, $to, $this->string)) {
@@ -441,7 +449,11 @@ class ByteString extends AbstractString
             return $u;
         }
 
-        set_error_handler(static function ($t, $m) { throw new InvalidArgumentException($m); });
+        set_error_handler(
+            static function ($t, $m) {
+                throw new InvalidArgumentException($m); 
+            }
+        );
 
         try {
             try {

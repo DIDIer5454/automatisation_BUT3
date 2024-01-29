@@ -46,10 +46,12 @@ final class ErrorOutput
      */
     public function listErrors(string $process, array $errors): void
     {
-        $this->output->writeln(['', sprintf(
-            'Files that were not fixed due to errors reported during %s:',
-            $process
-        )]);
+        $this->output->writeln(
+            ['', sprintf(
+                'Files that were not fixed due to errors reported during %s:',
+                $process
+            )]
+        );
 
         $showDetails = $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE;
         $showTrace = $this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG;
@@ -123,12 +125,14 @@ final class ErrorOutput
     private function outputTrace(array $trace): void
     {
         if (isset($trace['class'], $trace['type'], $trace['function'])) {
-            $this->output->writeln(sprintf(
-                '      <comment>%s</comment>%s<comment>%s()</comment>',
-                $this->prepareOutput($trace['class']),
-                $this->prepareOutput($trace['type']),
-                $this->prepareOutput($trace['function'])
-            ));
+            $this->output->writeln(
+                sprintf(
+                    '      <comment>%s</comment>%s<comment>%s()</comment>',
+                    $this->prepareOutput($trace['class']),
+                    $this->prepareOutput($trace['type']),
+                    $this->prepareOutput($trace['function'])
+                )
+            );
         } elseif (isset($trace['function'])) {
             $this->output->writeln(sprintf('      <comment>%s()</comment>', $this->prepareOutput($trace['function'])));
         }
