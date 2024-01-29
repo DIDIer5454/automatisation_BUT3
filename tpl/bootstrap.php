@@ -581,11 +581,11 @@ if ($isPage) {
                     <p id="aboutbox" class="col-md-6 col-xs-12">
                         <?php echo sprintf(
     I18n::_(
-                                '%s is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted/decrypted %sin the browser%s using 256 bits AES.',
-                                I18n::_($NAME),
-                                '%s',
-                                '%s'
-                            ),
+        '%s is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted/decrypted %sin the browser%s using 256 bits AES.',
+        I18n::_($NAME),
+        '%s',
+        '%s'
+    ),
     '<i>',
     '</i>'
 ), ' ', $INFO, PHP_EOL;
