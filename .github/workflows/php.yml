@@ -19,7 +19,7 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
-
+    
     - name: Cache Composer packages
       id: composer-cache
       uses: actions/cache@v3
@@ -31,18 +31,15 @@ jobs:
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
-
+    - name: installation de codesniffe
+      run: composer require --dev squizlabs/php_codesniffer
+    
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
   
   
     #   run: composer run-script test
-    -  name: installer phpunit
-       run: apt-get install phpunit -y
-    -  name: installation xdebug
-       run: apt-get install php-xdebug -y  
-    -  name: lancement du test de couverture
-       run: phpunit --coverage-text
+    
      # name: code coverage
     #- run: 
     #- run: docker
