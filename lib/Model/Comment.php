@@ -1,13 +1,15 @@
 <?php
-/**
- * PrivateBin
+
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
  *
- * a zero-knowledge paste bin
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
- * @link      https://github.com/PrivateBin/PrivateBin
- * @copyright 2012 Sébastien SAUVAGE (sebsauvage.net)
- * @license   https://www.opensource.org/licenses/zlib-license.php The zlib/libpng License
- * @version   1.6.2
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace PrivateBin\Model;
@@ -19,7 +21,7 @@ use PrivateBin\Persistence\TrafficLimiter;
 use PrivateBin\Vizhash16x16;
 
 /**
- * Comment
+ * Comment.
  *
  * Model of a PrivateBin comment.
  */
@@ -28,18 +30,16 @@ class Comment extends AbstractModel
     /**
      * Instance's parent.
      *
-     * @access private
-     * @var    Paste
+     * @var Paste
      */
     private $_paste;
 
     /**
      * Store the comment's data.
      *
-     * @access public
      * @throws Exception
      */
-    public function store()
+    public function store(): void
     {
         // Make sure paste exists.
         $pasteid = $this->getPaste()->getId();
@@ -60,12 +60,12 @@ class Comment extends AbstractModel
         $this->_data['meta']['created'] = time();
 
         // store comment
-        if ($this->_store->createComment(
+        if (false === $this->_store->createComment(
             $pasteid,
             $this->getParentId(),
             $this->getId(),
             $this->_data
-        ) === false
+        )
         ) {
             throw new Exception('Error saving comment. Sorry.', 70);
         }
@@ -74,10 +74,9 @@ class Comment extends AbstractModel
     /**
      * Delete the comment.
      *
-     * @access public
      * @throws Exception
      */
-    public function delete()
+    public function delete(): void
     {
         throw new Exception('To delete a comment, delete its parent paste', 64);
     }
@@ -85,7 +84,6 @@ class Comment extends AbstractModel
     /**
      * Test if comment exists in store.
      *
-     * @access public
      * @return bool
      */
     public function exists()
@@ -100,20 +98,17 @@ class Comment extends AbstractModel
     /**
      * Set paste.
      *
-     * @access public
-     * @param  Paste $paste
      * @throws Exception
      */
-    public function setPaste(Paste $paste)
+    public function setPaste(Paste $paste): void
     {
-        $this->_paste           = $paste;
+        $this->_paste = $paste;
         $this->_data['pasteid'] = $paste->getId();
     }
 
     /**
      * Get paste.
      *
-     * @access public
      * @return Paste
      */
     public function getPaste()
@@ -124,11 +119,11 @@ class Comment extends AbstractModel
     /**
      * Set parent ID.
      *
-     * @access public
-     * @param  string $id
+     * @param string $id
+     *
      * @throws Exception
      */
-    public function setParentId($id)
+    public function setParentId($id): void
     {
         if (!self::isValidId($id)) {
             throw new Exception('Invalid paste ID.', 65);
@@ -139,59 +134,58 @@ class Comment extends AbstractModel
     /**
      * Get parent ID.
      *
-     * @access public
      * @return string
      */
     public function getParentId()
     {
-        if (!array_key_exists('parentid', $this->_data)) {
+        if (!\array_key_exists('parentid', $this->_data)) {
             $this->_data['parentid'] = $this->getPaste()->getId();
         }
+
         return $this->_data['parentid'];
     }
 
     /**
      * Sanitizes data to conform with current configuration.
      *
-     * @access protected
-     * @param  array $data
      * @return array
      */
     protected function _sanitize(array $data)
     {
         // we generate an icon based on a SHA512 HMAC of the users IP, if configured
         $icon = $this->_conf->getKey('icon');
-        if ($icon != 'none') {
+        if ('none' !== $icon) {
             $pngdata = '';
-            $hmac    = TrafficLimiter::getHash();
-            if ($icon == 'identicon') {
+            $hmac = TrafficLimiter::getHash();
+            if ('identicon' === $icon) {
                 $identicon = new Identicon();
-                $pngdata   = $identicon->getImageDataUri($hmac, 16);
-            } elseif ($icon == 'jdenticon') {
+                $pngdata = $identicon->getImageDataUri($hmac, 16);
+            } elseif ('jdenticon' === $icon) {
                 $jdenticon = new Jdenticon(
-                    array(
-                    'hash'  => $hmac,
-                    'size'  => 16,
-                    'style' => array(
-                        'backgroundColor'   => '#fff0', // fully transparent, for dark mode
-                        'padding'           => 0,
-                    ),
-                    )
+                    [
+                        'hash' => $hmac,
+                        'size' => 16,
+                        'style' => [
+                            'backgroundColor' => '#fff0', // fully transparent, for dark mode
+                            'padding' => 0,
+                        ],
+                    ]
                 );
-                $pngdata   = $jdenticon->getImageDataUri('png');
-            } elseif ($icon == 'vizhash') {
-                $vh      = new Vizhash16x16();
-                $pngdata = 'data:image/png;base64,' . base64_encode(
+                $pngdata = $jdenticon->getImageDataUri('png');
+            } elseif ('vizhash' === $icon) {
+                $vh = new Vizhash16x16();
+                $pngdata = 'data:image/png;base64,'.base64_encode(
                     $vh->generate($hmac)
                 );
             }
-            if ($pngdata != '') {
-                if (!array_key_exists('meta', $data)) {
-                    $data['meta'] = array();
+            if ('' !== $pngdata) {
+                if (!\array_key_exists('meta', $data)) {
+                    $data['meta'] = [];
                 }
                 $data['meta']['icon'] = $pngdata;
             }
         }
+
         return $data;
     }
 }

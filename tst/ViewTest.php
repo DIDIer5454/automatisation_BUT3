@@ -1,39 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 use PHPUnit\Framework\TestCase;
 use PrivateBin\I18n;
 use PrivateBin\View;
 
-class ViewTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ViewTest extends TestCase
 {
     private static $error = 'foo bar';
 
     private static $status = '!*#@?$+';
 
-    private static $formatters = array(
-        'plaintext'          => 'Plain Text',
+    private static $formatters = [
+        'plaintext' => 'Plain Text',
         'syntaxhighlighting' => 'Source Code',
-        'markdown'           => 'Markdown',
-    );
+        'markdown' => 'Markdown',
+    ];
 
     private static $formatter_default = 'plaintext';
 
-    private static $expire = array(
-        '5min'  => '5 minutes',
+    private static $expire = [
+        '5min' => '5 minutes',
         '1hour' => '1 hour',
         'never' => 'Never',
-    );
+    ];
 
     private static $expire_default = '1hour';
 
     private static $version = 'Version 1.2.3';
 
-    private $_content = array();
+    private $_content = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        /* Setup Routine */
-        $page = new View;
+        // Setup Routine
+        $page = new View();
         $page->assign('NAME', 'PrivateBinTest');
         $page->assign('BASEPATH', '');
         $page->assign('ERROR', self::$error);
@@ -64,9 +80,9 @@ class ViewTest extends TestCase
         $page->assign('COMPRESSION', 'zlib');
         $page->assign('CSPHEADER', 'default-src \'none\'');
 
-        $dir = dir(PATH . 'tpl');
+        $dir = dir(PATH.'tpl');
         while (false !== ($file = $dir->read())) {
-            if (substr($file, -4) === '.php') {
+            if ('.php' === substr($file, -4)) {
                 $template = substr($file, 0, -4);
                 ob_start();
                 $page->draw($template);
@@ -80,8 +96,8 @@ class ViewTest extends TestCase
         $page->draw($template);
         $this->_content[$template] = ob_get_contents();
         ob_end_clean();
-        foreach (array('-dark', '-compact') as $suffix) {
-            $template = 'bootstrap' . $suffix;
+        foreach (['-dark', '-compact'] as $suffix) {
+            $template = 'bootstrap'.$suffix;
             ob_start();
             $page->draw($template);
             $this->_content[$template] = ob_get_contents();
@@ -95,45 +111,45 @@ class ViewTest extends TestCase
         }
     }
 
-    public function testTemplateRendersCorrectly()
+    public function testTemplateRendersCorrectly(): void
     {
         foreach ($this->_content as $template => $content) {
-            $this->assertMatchesRegularExpression(
-                '#<div[^>]+id="errormessage"[^>]*>.*' . self::$error . '#s',
+            static::assertMatchesRegularExpression(
+                '#<div[^>]+id="errormessage"[^>]*>.*'.self::$error.'#s',
                 $content,
-                $template . ': outputs error correctly'
+                $template.': outputs error correctly'
             );
-            if ($template === 'yourlsproxy') {
+            if ('yourlsproxy' === $template) {
                 // yourlsproxy template only displays error message
                 continue;
             }
-            $this->assertMatchesRegularExpression(
+            static::assertMatchesRegularExpression(
                 '#<[^>]+id="password"[^>]*>#',
                 $content,
-                $template . ': password available if configured'
+                $template.': password available if configured'
             );
-            $this->assertMatchesRegularExpression(
+            static::assertMatchesRegularExpression(
                 '#<input[^>]+id="opendiscussion"[^>]*checked="checked"[^>]*>#',
                 $content,
-                $template . ': checked discussion if configured'
+                $template.': checked discussion if configured'
             );
-            $this->assertMatchesRegularExpression(
+            static::assertMatchesRegularExpression(
                 '#<[^>]+id="opendiscussionoption"[^>]*>#',
                 $content,
-                $template . ': discussions available if configured'
+                $template.': discussions available if configured'
             );
             // testing version number in JS address, since other instances may not be present in different templates
-            $this->assertMatchesRegularExpression(
-                '#<script[^>]+src="js/privatebin.js\\?' . rawurlencode(self::$version) . '"[^>]*>#',
+            static::assertMatchesRegularExpression(
+                '#<script[^>]+src="js/privatebin.js\\?'.rawurlencode(self::$version).'"[^>]*>#',
                 $content,
-                $template . ': outputs version correctly'
+                $template.': outputs version correctly'
             );
         }
     }
 
-    public function testMissingTemplate()
+    public function testMissingTemplate(): void
     {
-        $test = new View;
+        $test = new View();
         $this->expectException(Exception::class);
         $this->expectExceptionCode(80);
         $test->draw('123456789 does not exist!');

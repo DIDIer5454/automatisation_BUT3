@@ -1,10 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 use PHPUnit\Framework\TestCase;
 use PrivateBin\Data\Filesystem;
 use PrivateBin\Persistence\ServerSalt;
 
-class ServerSaltTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ServerSaltTest extends TestCase
 {
     private $_path;
 
@@ -14,77 +30,77 @@ class ServerSaltTest extends TestCase
 
     private $_invalidFile;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        /* Setup Routine */
-        $this->_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'privatebin_data';
+        // Setup Routine
+        $this->_path = sys_get_temp_dir().DIRECTORY_SEPARATOR.'privatebin_data';
         if (!is_dir($this->_path)) {
             mkdir($this->_path);
         }
         ServerSalt::setStore(
-            new Filesystem(array('dir' => $this->_path))
+            new Filesystem(['dir' => $this->_path])
         );
 
-        $this->_otherPath = $this->_path . DIRECTORY_SEPARATOR . 'foo';
+        $this->_otherPath = $this->_path.DIRECTORY_SEPARATOR.'foo';
 
-        $this->_invalidPath = $this->_path . DIRECTORY_SEPARATOR . 'bar';
+        $this->_invalidPath = $this->_path.DIRECTORY_SEPARATOR.'bar';
         if (!is_dir($this->_invalidPath)) {
             mkdir($this->_invalidPath);
         }
-        $this->_invalidFile = $this->_invalidPath . DIRECTORY_SEPARATOR . 'salt.php';
+        $this->_invalidFile = $this->_invalidPath.DIRECTORY_SEPARATOR.'salt.php';
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        /* Tear Down Routine */
+        // Tear Down Routine
         chmod($this->_invalidPath, 0700);
         Helper::rmDir($this->_path);
     }
 
-    public function testGeneration()
+    public function testGeneration(): void
     {
         // generating new salt
         ServerSalt::setStore(
-            new Filesystem(array('dir' => $this->_path))
+            new Filesystem(['dir' => $this->_path])
         );
         $salt = ServerSalt::get();
 
         // try setting a different path and resetting it
         ServerSalt::setStore(
-            new Filesystem(array('dir' => $this->_otherPath))
+            new Filesystem(['dir' => $this->_otherPath])
         );
-        $this->assertNotEquals($salt, ServerSalt::get());
+        static::assertNotSame($salt, ServerSalt::get());
         ServerSalt::setStore(
-            new Filesystem(array('dir' => $this->_path))
+            new Filesystem(['dir' => $this->_path])
         );
-        $this->assertEquals($salt, ServerSalt::get());
+        static::assertSame($salt, ServerSalt::get());
     }
 
-    public function testPathShenanigans()
+    public function testPathShenanigans(): void
     {
         // try setting an invalid path
         chmod($this->_invalidPath, 0000);
-        $store = new Filesystem(array('dir' => $this->_invalidPath));
+        $store = new Filesystem(['dir' => $this->_invalidPath]);
         ServerSalt::setStore($store);
         $salt = ServerSalt::get();
         ServerSalt::setStore($store);
-        $this->assertNotEquals($salt, ServerSalt::get());
+        static::assertNotSame($salt, ServerSalt::get());
     }
 
-    public function testFileRead()
+    public function testFileRead(): void
     {
         // try setting an invalid file
         chmod($this->_invalidPath, 0700);
         file_put_contents($this->_invalidFile, '');
         chmod($this->_invalidFile, 0000);
-        $store = new Filesystem(array('dir' => $this->_invalidPath));
+        $store = new Filesystem(['dir' => $this->_invalidPath]);
         ServerSalt::setStore($store);
         $salt = ServerSalt::get();
         ServerSalt::setStore($store);
-        $this->assertNotEquals($salt, ServerSalt::get());
+        static::assertNotSame($salt, ServerSalt::get());
     }
 
-    public function testFileWrite()
+    public function testFileWrite(): void
     {
         // try setting an invalid file
         chmod($this->_invalidPath, 0700);
@@ -92,26 +108,26 @@ class ServerSaltTest extends TestCase
             chmod($this->_invalidFile, 0600);
             unlink($this->_invalidFile);
         }
-        file_put_contents($this->_invalidPath . DIRECTORY_SEPARATOR . '.htaccess', '');
+        file_put_contents($this->_invalidPath.DIRECTORY_SEPARATOR.'.htaccess', '');
         chmod($this->_invalidPath, 0500);
-        $store = new Filesystem(array('dir' => $this->_invalidPath));
+        $store = new Filesystem(['dir' => $this->_invalidPath]);
         ServerSalt::setStore($store);
         $salt = ServerSalt::get();
         ServerSalt::setStore($store);
-        $this->assertNotEquals($salt, ServerSalt::get());
+        static::assertNotSame($salt, ServerSalt::get());
     }
 
-    public function testPermissionShenanigans()
+    public function testPermissionShenanigans(): void
     {
         // try creating an invalid path
         chmod($this->_invalidPath, 0000);
         ServerSalt::setStore(
-            new Filesystem(array('dir' => $this->_invalidPath . DIRECTORY_SEPARATOR . 'baz'))
+            new Filesystem(['dir' => $this->_invalidPath.DIRECTORY_SEPARATOR.'baz'])
         );
-        $store = new Filesystem(array('dir' => $this->_invalidPath));
+        $store = new Filesystem(['dir' => $this->_invalidPath]);
         ServerSalt::setStore($store);
         $salt = ServerSalt::get();
         ServerSalt::setStore($store);
-        $this->assertNotEquals($salt, ServerSalt::get());
+        static::assertNotSame($salt, ServerSalt::get());
     }
 }

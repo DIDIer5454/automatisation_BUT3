@@ -1,13 +1,15 @@
 <?php
-/**
- * PrivateBin
+
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
  *
- * a zero-knowledge paste bin
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
- * @link      https://github.com/PrivateBin/PrivateBin
- * @copyright 2012 Sébastien SAUVAGE (sebsauvage.net)
- * @license   https://www.opensource.org/licenses/zlib-license.php The zlib/libpng License
- * @version   1.6.2
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace PrivateBin;
@@ -15,7 +17,7 @@ namespace PrivateBin;
 use Exception;
 
 /**
- * YourlsProxy
+ * YourlsProxy.
  *
  * Forwards a URL for shortening to YOURLS (your own URL shortener) and stores
  * the result.
@@ -23,72 +25,75 @@ use Exception;
 class YourlsProxy
 {
     /**
-     * error message
+     * error message.
      *
-     * @access private
-     * @var    string
+     * @var string
      */
     private $_error = '';
 
     /**
-     * shortened URL
+     * shortened URL.
      *
-     * @access private
-     * @var    string
+     * @var string
      */
     private $_url = '';
 
     /**
-     * constructor
+     * constructor.
      *
      * initializes and runs PrivateBin
      *
-     * @access public
-     * @param  string $link
+     * @param string $link
      */
     public function __construct(Configuration $conf, $link)
     {
-        if (strpos($link, $conf->getKey('basepath') . '?') === false) {
+        if (!str_contains($link, $conf->getKey('basepath').'?')) {
             $this->_error = 'Trying to shorten a URL that isn\'t pointing at our instance.';
+
             return;
         }
 
         $yourls_api_url = $conf->getKey('apiurl', 'yourls');
         if (empty($yourls_api_url)) {
             $this->_error = 'Error calling YOURLS. Probably a configuration issue, like wrong or missing "apiurl" or "signature".';
+
             return;
         }
 
         $data = file_get_contents(
-            $yourls_api_url, false, stream_context_create(
-                array(
-                    'http' => array(
-                        'method'  => 'POST',
-                        'header'  => "Content-Type: application/x-www-form-urlencoded\r\n",
+            $yourls_api_url,
+            false,
+            stream_context_create(
+                [
+                    'http' => [
+                        'method' => 'POST',
+                        'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
                         'content' => http_build_query(
-                            array(
+                            [
                                 'signature' => $conf->getKey('signature', 'yourls'),
-                                'format'    => 'json',
-                                'action'    => 'shorturl',
-                                'url'       => $link,
-                            )
+                                'format' => 'json',
+                                'action' => 'shorturl',
+                                'url' => $link,
+                            ]
                         ),
-                    ),
-                )
+                    ],
+                ]
             )
         );
+
         try {
             $data = Json::decode($data);
         } catch (Exception $e) {
             $this->_error = 'Error calling YOURLS. Probably a configuration issue, like wrong or missing "apiurl" or "signature".';
-            error_log('Error calling YOURLS: ' . $e->getMessage());
+            error_log('Error calling YOURLS: '.$e->getMessage());
+
             return;
         }
 
-        if (!is_null($data) 
-            && array_key_exists('statusCode', $data) 
-            && $data['statusCode'] == 200 
-            && array_key_exists('shorturl', $data)
+        if (null !== $data
+            && \array_key_exists('statusCode', $data)
+            && 200 === $data['statusCode']
+            && \array_key_exists('shorturl', $data)
         ) {
             $this->_url = $data['shorturl'];
         } else {
@@ -97,9 +102,8 @@ class YourlsProxy
     }
 
     /**
-     * Returns the (untranslated) error message
+     * Returns the (untranslated) error message.
      *
-     * @access public
      * @return string
      */
     public function getError()
@@ -108,9 +112,8 @@ class YourlsProxy
     }
 
     /**
-     * Returns the shortened URL
+     * Returns the shortened URL.
      *
-     * @access public
      * @return string
      */
     public function getUrl()
@@ -119,9 +122,8 @@ class YourlsProxy
     }
 
     /**
-     * Returns true if any error has occurred
+     * Returns true if any error has occurred.
      *
-     * @access public
      * @return bool
      */
     public function isError()

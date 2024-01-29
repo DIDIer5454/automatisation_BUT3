@@ -1,9 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 use PHPUnit\Framework\TestCase;
 use PrivateBin\Configuration;
 
-class ConfigurationTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ConfigurationTest extends TestCase
 {
     private $_minimalConfig;
 
@@ -11,22 +27,22 @@ class ConfigurationTest extends TestCase
 
     private $_path;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        /* Setup Routine */
+        // Setup Routine
         Helper::confBackup();
-        $this->_minimalConfig                   = '[main]' . PHP_EOL . '[model]' . PHP_EOL . '[model_options]';
-        $this->_options                         = Configuration::getDefaults();
-        $this->_options['model_options']['dir'] = PATH . $this->_options['model_options']['dir'];
-        $this->_path                            = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'privatebin_cfg';
+        $this->_minimalConfig = '[main]'.PHP_EOL.'[model]'.PHP_EOL.'[model_options]';
+        $this->_options = Configuration::getDefaults();
+        $this->_options['model_options']['dir'] = PATH.$this->_options['model_options']['dir'];
+        $this->_path = sys_get_temp_dir().DIRECTORY_SEPARATOR.'privatebin_cfg';
         if (!is_dir($this->_path)) {
             mkdir($this->_path);
         }
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        /* Tear Down Routine */
+        // Tear Down Routine
         Helper::rmDir($this->_path);
         if (is_file(CONF)) {
             unlink(CONF);
@@ -34,124 +50,123 @@ class ConfigurationTest extends TestCase
         Helper::confRestore();
     }
 
-    public function testDefaultConfigFile()
+    public function testDefaultConfigFile(): void
     {
-        $conf = new Configuration;
-        $this->assertEquals($this->_options, $conf->get(), 'default configuration is correct');
+        $conf = new Configuration();
+        static::assertSame($this->_options, $conf->get(), 'default configuration is correct');
     }
 
-    public function testHandleFreshConfigFile()
+    public function testHandleFreshConfigFile(): void
     {
         Helper::createIniFile(CONF, $this->_options);
-        $conf = new Configuration;
-        $this->assertEquals($this->_options, $conf->get(), 'newly generated configuration is correct');
+        $conf = new Configuration();
+        static::assertSame($this->_options, $conf->get(), 'newly generated configuration is correct');
     }
 
-    public function testHandleMissingConfigFile()
+    public function testHandleMissingConfigFile(): void
     {
         if (is_file(CONF)) {
             unlink(CONF);
         }
-        $conf = new Configuration;
-        $this->assertEquals($this->_options, $conf->get(), 'returns correct defaults on missing file');
+        $conf = new Configuration();
+        static::assertSame($this->_options, $conf->get(), 'returns correct defaults on missing file');
     }
 
-    public function testHandleBlankConfigFile()
+    public function testHandleBlankConfigFile(): void
     {
         file_put_contents(CONF, '');
         $this->expectException(Exception::class);
         $this->expectExceptionCode(2);
-        new Configuration;
+        new Configuration();
     }
 
-    public function testHandleMinimalConfigFile()
+    public function testHandleMinimalConfigFile(): void
     {
         file_put_contents(CONF, $this->_minimalConfig);
-        $conf = new Configuration;
-        $this->assertEquals($this->_options, $conf->get(), 'returns correct defaults on empty file');
+        $conf = new Configuration();
+        static::assertSame($this->_options, $conf->get(), 'returns correct defaults on empty file');
     }
 
-    public function testHandleInvalidSection()
+    public function testHandleInvalidSection(): void
     {
         file_put_contents(CONF, $this->_minimalConfig);
-        $conf = new Configuration;
+        $conf = new Configuration();
         $this->expectException(Exception::class);
         $this->expectExceptionCode(3);
         $conf->getKey('foo', 'bar');
     }
 
-    public function testHandleInvalidKey()
+    public function testHandleInvalidKey(): void
     {
         file_put_contents(CONF, $this->_minimalConfig);
-        $conf = new Configuration;
+        $conf = new Configuration();
         $this->expectException(Exception::class);
         $this->expectExceptionCode(4);
         $conf->getKey('foo');
     }
 
-    public function testHandleGetKey()
+    public function testHandleGetKey(): void
     {
         file_put_contents(CONF, $this->_minimalConfig);
-        $conf = new Configuration;
-        $this->assertEquals($this->_options['main']['sizelimit'], $conf->getKey('sizelimit'), 'get default size');
+        $conf = new Configuration();
+        static::assertSame($this->_options['main']['sizelimit'], $conf->getKey('sizelimit'), 'get default size');
     }
 
-    public function testHandleWrongTypes()
+    public function testHandleWrongTypes(): void
     {
-        $original_options                                    = $this->_options;
+        $original_options = $this->_options;
         $original_options['main']['syntaxhighlightingtheme'] = 'foo';
-        $options                                             = $original_options;
-        $options['main']['discussion']                       = 'true';
-        $options['main']['opendiscussion']                   = 0;
-        $options['main']['password']                         = -1; // evaluates to TRUE
-        $options['main']['fileupload']                       = 'false';
-        $options['expire_options']['foo']                    = 'bar';
-        $options['formatter_options'][]                      = 'foo';
+        $options = $original_options;
+        $options['main']['discussion'] = 'true';
+        $options['main']['opendiscussion'] = 0;
+        $options['main']['password'] = -1; // evaluates to TRUE
+        $options['main']['fileupload'] = 'false';
+        $options['expire_options']['foo'] = 'bar';
+        $options['formatter_options'][] = 'foo';
         Helper::createIniFile(CONF, $options);
-        $conf                                      = new Configuration;
-        $original_options['expire_options']['foo'] = intval('bar');
-        $original_options['formatter_options'][0]  = 'foo';
-        $this->assertEquals($original_options, $conf->get(), 'incorrect types are corrected');
+        $conf = new Configuration();
+        $original_options['expire_options']['foo'] = (int) 'bar';
+        $original_options['formatter_options'][0] = 'foo';
+        static::assertSame($original_options, $conf->get(), 'incorrect types are corrected');
     }
 
-    public function testHandleMissingSubKeys()
+    public function testHandleMissingSubKeys(): void
     {
         $options = $this->_options;
-        unset($options['expire_options']['1week']);
-        unset($options['expire_options']['1year']);
-        unset($options['expire_options']['never']);
+        unset($options['expire_options']['1week'], $options['expire_options']['1year'], $options['expire_options']['never']);
+
         Helper::createIniFile(CONF, $options);
-        $conf                         = new Configuration;
+        $conf = new Configuration();
         $options['expire']['default'] = '5min';
-        $this->assertEquals($options, $conf->get(), 'not overriding "missing" subkeys');
+        static::assertSame($options, $conf->get(), 'not overriding "missing" subkeys');
     }
 
-    public function testHandlePreRenameConfig()
+    public function testHandlePreRenameConfig(): void
     {
-        $options                   = $this->_options;
+        $options = $this->_options;
         $options['model']['class'] = 'zerobin_data';
         Helper::createIniFile(CONF, $options);
-        $conf = new Configuration;
-        $this->assertEquals('Filesystem', $conf->getKey('class', 'model'), 'old data class gets renamed');
+        $conf = new Configuration();
+        static::assertSame('Filesystem', $conf->getKey('class', 'model'), 'old data class gets renamed');
 
         $options['model']['class'] = 'zerobin_db';
         Helper::createIniFile(CONF, $options);
-        $conf = new Configuration;
-        $this->assertEquals('Database', $conf->getKey('class', 'model'), 'old db class gets renamed');
+        $conf = new Configuration();
+        static::assertSame('Database', $conf->getKey('class', 'model'), 'old db class gets renamed');
     }
 
-    public function testConfigPath()
+    public function testConfigPath(): void
     {
         // setup
-        $configFile              = $this->_path . DIRECTORY_SEPARATOR . 'conf.php';
-        $options                 = $this->_options;
+        $configFile = $this->_path.DIRECTORY_SEPARATOR.'conf.php';
+        $options = $this->_options;
         $options['main']['name'] = 'OtherBin';
         Helper::createIniFile($configFile, $options);
 
         // test
-        putenv('CONFIG_PATH=' . $this->_path);
-        $conf = new Configuration;
-        $this->assertEquals('OtherBin', $conf->getKey('name'), 'changing config path is supported');
+        putenv('CONFIG_PATH='.$this->_path);
+        $conf = new Configuration();
+        static::assertSame('OtherBin', $conf->getKey('name'), 'changing config path is supported');
 
         // cleanup environment
         if (is_file($configFile)) {

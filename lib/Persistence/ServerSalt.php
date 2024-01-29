@@ -1,13 +1,15 @@
 <?php
-/**
- * PrivateBin
+
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
  *
- * a zero-knowledge paste bin
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
- * @link      https://github.com/PrivateBin/PrivateBin
- * @copyright 2012 Sébastien SAUVAGE (sebsauvage.net)
- * @license   https://www.opensource.org/licenses/zlib-license.php The zlib/libpng License
- * @version   1.6.2
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace PrivateBin\Persistence;
@@ -15,7 +17,7 @@ namespace PrivateBin\Persistence;
 use PrivateBin\Data\AbstractData;
 
 /**
- * ServerSalt
+ * ServerSalt.
  *
  * This is a random string which is unique to each PrivateBin installation.
  * It is automatically created if not present.
@@ -27,19 +29,19 @@ use PrivateBin\Data\AbstractData;
 class ServerSalt extends AbstractPersistence
 {
     /**
-     * generated salt
+     * generated salt.
      *
-     * @access private
      * @static
-     * @var    string
+     *
+     * @var string
      */
     private static $_salt = '';
 
     /**
-     * generate a large random hexadecimal salt
+     * generate a large random hexadecimal salt.
      *
-     * @access public
      * @static
+     *
      * @return string
      */
     public static function generate()
@@ -48,15 +50,15 @@ class ServerSalt extends AbstractPersistence
     }
 
     /**
-     * get server salt
+     * get server salt.
      *
-     * @access public
      * @static
+     *
      * @return string
      */
     public static function get()
     {
-        if (strlen(self::$_salt)) {
+        if (\strlen(self::$_salt)) {
             return self::$_salt;
         }
 
@@ -69,17 +71,16 @@ class ServerSalt extends AbstractPersistence
                 error_log('failed to store the server salt, delete tokens, traffic limiter and user icons won\'t work');
             }
         }
+
         return self::$_salt;
     }
 
     /**
-     * set the path
+     * set the path.
      *
-     * @access public
      * @static
-     * @param  AbstractData $store
      */
-    public static function setStore(AbstractData $store)
+    public static function setStore(AbstractData $store): void
     {
         self::$_salt = '';
         parent::setStore($store);

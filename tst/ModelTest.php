@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 use Identicon\Identicon;
 use PHPUnit\Framework\TestCase;
 use PrivateBin\Configuration;
@@ -11,63 +23,66 @@ use PrivateBin\Persistence\ServerSalt;
 use PrivateBin\Persistence\TrafficLimiter;
 use PrivateBin\Vizhash16x16;
 
-class ModelTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ModelTest extends TestCase
 {
+    protected $_path;
     private $_conf;
 
     private $_model;
 
-    protected $_path;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
-        /* Setup Routine */
-        $this->_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'privatebin_data';
+        // Setup Routine
+        $this->_path = sys_get_temp_dir().DIRECTORY_SEPARATOR.'privatebin_data';
         if (!is_dir($this->_path)) {
             mkdir($this->_path);
         }
-        $options                   = parse_ini_file(CONF_SAMPLE, true);
+        $options = parse_ini_file(CONF_SAMPLE, true);
         $options['purge']['limit'] = 0;
-        $options['model']          = array(
+        $options['model'] = [
             'class' => 'Database',
-        );
-        $options['model_options'] = array(
+        ];
+        $options['model_options'] = [
             'dsn' => 'sqlite::memory:',
             'usr' => null,
             'pwd' => null,
-            'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        );
+            'opt' => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+        ];
         Helper::confBackup();
         Helper::createIniFile(CONF, $options);
         ServerSalt::setStore(new Database($options['model_options']));
-        $this->_conf            = new Configuration;
-        $this->_model           = new Model($this->_conf);
+        $this->_conf = new Configuration();
+        $this->_model = new Model($this->_conf);
         $_SERVER['REMOTE_ADDR'] = '::1';
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        /* Tear Down Routine */
+        // Tear Down Routine
         unlink(CONF);
         Helper::confRestore();
         Helper::rmDir($this->_path);
     }
 
-    public function testBasicWorkflow()
+    public function testBasicWorkflow(): void
     {
         // storing pastes
         $pasteData = Helper::getPastePost();
         unset($pasteData['meta']['created'], $pasteData['meta']['salt']);
         $this->_model->getPaste(Helper::getPasteId())->delete();
         $paste = $this->_model->getPaste(Helper::getPasteId());
-        $this->assertFalse($paste->exists(), 'paste does not yet exist');
+        static::assertFalse($paste->exists(), 'paste does not yet exist');
 
         $paste = $this->_model->getPaste();
         $paste->setData($pasteData);
         $paste->store();
 
         $paste = $this->_model->getPaste(Helper::getPasteId());
-        $this->assertTrue($paste->exists(), 'paste exists after storing it');
+        static::assertTrue($paste->exists(), 'paste exists after storing it');
         $paste = $paste->get();
         unset(
             $pasteData['meta'],
@@ -77,54 +92,54 @@ class ModelTest extends TestCase
             $paste['comment_offset'],
             $paste['@context']
         );
-        $this->assertEquals($pasteData, $paste);
+        static::assertSame($pasteData, $paste);
 
         // storing comments
         $commentData = Helper::getCommentPost();
-        $paste       = $this->_model->getPaste(Helper::getPasteId());
-        $comment     = $paste->getComment(Helper::getPasteId(), Helper::getCommentId());
-        $this->assertFalse($comment->exists(), 'comment does not yet exist');
+        $paste = $this->_model->getPaste(Helper::getPasteId());
+        $comment = $paste->getComment(Helper::getPasteId(), Helper::getCommentId());
+        static::assertFalse($comment->exists(), 'comment does not yet exist');
 
         $comment = $paste->getComment(Helper::getPasteId());
         $comment->setData($commentData);
         $comment->store();
 
         $comments = $this->_model->getPaste(Helper::getPasteId())->get()['comments'];
-        $this->assertTrue(count($comments) === 1, 'comment exists after storing it');
-        $commentData['id']              = Helper::getPasteId();
+        static::assertTrue(1 === count($comments), 'comment exists after storing it');
+        $commentData['id'] = Helper::getPasteId();
         $commentData['meta']['created'] = current($comments)['meta']['created'];
-        $commentData['meta']['icon']    = current($comments)['meta']['icon'];
-        $this->assertEquals($commentData, current($comments));
+        $commentData['meta']['icon'] = current($comments)['meta']['icon'];
+        static::assertSame($commentData, current($comments));
 
         // deleting pastes
         $this->_model->getPaste(Helper::getPasteId())->delete();
         $paste = $this->_model->getPaste(Helper::getPasteId());
-        $this->assertFalse($paste->exists(), 'paste successfully deleted');
-        $this->assertEquals(array(), $paste->getComments(), 'comment was deleted with paste');
+        static::assertFalse($paste->exists(), 'paste successfully deleted');
+        static::assertSame([], $paste->getComments(), 'comment was deleted with paste');
     }
 
-    public function testPasteV1()
+    public function testPasteV1(): void
     {
         $pasteData = Helper::getPaste(1);
         unset($pasteData['meta']['formatter']);
 
-        $path = $this->_path . DIRECTORY_SEPARATOR . 'v1-test.sq3';
+        $path = $this->_path.DIRECTORY_SEPARATOR.'v1-test.sq3';
         if (is_file($path)) {
             unlink($path);
         }
-        $options                   = parse_ini_file(CONF_SAMPLE, true);
+        $options = parse_ini_file(CONF_SAMPLE, true);
         $options['purge']['limit'] = 0;
-        $options['model']          = array(
+        $options['model'] = [
             'class' => 'Database',
-        );
-        $options['model_options'] = array(
-            'dsn' => 'sqlite:' . $path,
+        ];
+        $options['model_options'] = [
+            'dsn' => 'sqlite:'.$path,
             'usr' => null,
             'pwd' => null,
-            'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        );
+            'opt' => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+        ];
         Helper::createIniFile(CONF, $options);
-        $model = new Model(new Configuration);
+        $model = new Model(new Configuration());
         $model->getPaste('0000000000000000')->exists(); // triggers database table creation
         $model->getPaste(Helper::getPasteId())->delete(); // deletes the cache
 
@@ -136,7 +151,7 @@ class ModelTest extends TestCase
         );
         $statement = $db->prepare('INSERT INTO paste VALUES(?,?,?,?,?,?,?,?,?)');
         $statement->execute(
-            array(
+            [
                 Helper::getPasteId(),
                 $pasteData['data'],
                 $pasteData['meta']['postdate'],
@@ -146,18 +161,18 @@ class ModelTest extends TestCase
                 json_encode($pasteData['meta']),
                 null,
                 null,
-            )
+            ]
         );
         $statement->closeCursor();
 
         $paste = $model->getPaste(Helper::getPasteId());
-        $this->assertNotEmpty($paste->getDeleteToken(), 'excercise the condition to load the data from storage');
-        $this->assertEquals('plaintext', $paste->get()['meta']['formatter'], 'paste got created with default formatter');
+        static::assertNotEmpty($paste->getDeleteToken(), 'excercise the condition to load the data from storage');
+        static::assertSame('plaintext', $paste->get()['meta']['formatter'], 'paste got created with default formatter');
     }
 
-    public function testCommentDefaults()
+    public function testCommentDefaults(): void
     {
-        $class   = 'PrivateBin\\Data\\' . $this->_conf->getKey('class', 'model');
+        $class = 'PrivateBin\\Data\\'.$this->_conf->getKey('class', 'model');
         $comment = new Comment(
             $this->_conf,
             new $class(
@@ -165,10 +180,10 @@ class ModelTest extends TestCase
             )
         );
         $comment->setPaste($this->_model->getPaste(Helper::getPasteId()));
-        $this->assertEquals(Helper::getPasteId(), $comment->getParentId(), 'comment parent ID gets initialized to paste ID');
+        static::assertSame(Helper::getPasteId(), $comment->getParentId(), 'comment parent ID gets initialized to paste ID');
     }
 
-    public function testPasteDuplicate()
+    public function testPasteDuplicate(): void
     {
         $pasteData = Helper::getPastePost();
 
@@ -184,27 +199,27 @@ class ModelTest extends TestCase
         $paste->store();
     }
 
-    public function testStoreFail()
+    public function testStoreFail(): void
     {
-        $path = $this->_path . DIRECTORY_SEPARATOR . 'model-store-test.sq3';
+        $path = $this->_path.DIRECTORY_SEPARATOR.'model-store-test.sq3';
         if (is_file($path)) {
             unlink($path);
         }
-        $options                   = parse_ini_file(CONF_SAMPLE, true);
+        $options = parse_ini_file(CONF_SAMPLE, true);
         $options['purge']['limit'] = 0;
-        $options['model']          = array(
+        $options['model'] = [
             'class' => 'Database',
-        );
-        $options['model_options'] = array(
-            'dsn' => 'sqlite:' . $path,
+        ];
+        $options['model_options'] = [
+            'dsn' => 'sqlite:'.$path,
             'usr' => null,
             'pwd' => null,
-            'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        );
+            'opt' => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+        ];
         Helper::createIniFile(CONF, $options);
-        $model = new Model(new Configuration);
+        $model = new Model(new Configuration());
 
-        $pasteData   = Helper::getPastePost();
+        $pasteData = Helper::getPastePost();
         $model->getPaste(Helper::getPasteId())->delete();
         $model->getPaste(Helper::getPasteId())->exists();
 
@@ -225,34 +240,34 @@ class ModelTest extends TestCase
         $paste->store();
     }
 
-    public function testCommentStoreFail()
+    public function testCommentStoreFail(): void
     {
-        $path = $this->_path . DIRECTORY_SEPARATOR . 'model-test.sq3';
+        $path = $this->_path.DIRECTORY_SEPARATOR.'model-test.sq3';
         if (is_file($path)) {
             unlink($path);
         }
-        $options                   = parse_ini_file(CONF_SAMPLE, true);
+        $options = parse_ini_file(CONF_SAMPLE, true);
         $options['purge']['limit'] = 0;
-        $options['model']          = array(
+        $options['model'] = [
             'class' => 'Database',
-        );
-        $options['model_options'] = array(
-            'dsn' => 'sqlite:' . $path,
+        ];
+        $options['model_options'] = [
+            'dsn' => 'sqlite:'.$path,
             'usr' => null,
             'pwd' => null,
-            'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        );
+            'opt' => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+        ];
         Helper::createIniFile(CONF, $options);
-        $model = new Model(new Configuration);
+        $model = new Model(new Configuration());
 
-        $pasteData   = Helper::getPastePost();
+        $pasteData = Helper::getPastePost();
         $commentData = Helper::getCommentPost();
         $model->getPaste(Helper::getPasteId())->delete();
 
         $paste = $model->getPaste();
         $paste->setData($pasteData);
         $paste->store();
-        $this->assertTrue($paste->exists(), 'paste exists before creating comment');
+        static::assertTrue($paste->exists(), 'paste exists before creating comment');
 
         $comment = $paste->getComment(Helper::getPasteId());
         $comment->setData($commentData);
@@ -272,9 +287,9 @@ class ModelTest extends TestCase
         $comment->store();
     }
 
-    public function testCommentDuplicate()
+    public function testCommentDuplicate(): void
     {
-        $pasteData   = Helper::getPastePost();
+        $pasteData = Helper::getPastePost();
         $commentData = Helper::getCommentPost();
         $this->_model->getPaste(Helper::getPasteId())->delete();
 
@@ -293,9 +308,9 @@ class ModelTest extends TestCase
         $comment->store();
     }
 
-    public function testImplicitDefaults()
+    public function testImplicitDefaults(): void
     {
-        $pasteData   = Helper::getPastePost();
+        $pasteData = Helper::getPastePost();
         $commentData = Helper::getCommentPost();
         $this->_model->getPaste(Helper::getPasteId())->delete();
 
@@ -309,19 +324,19 @@ class ModelTest extends TestCase
         $comment->store();
 
         $identicon = new Identicon();
-        $pngdata   = $identicon->getImageDataUri(TrafficLimiter::getHash(), 16);
-        $comment   = current($this->_model->getPaste(Helper::getPasteId())->get()['comments']);
-        $this->assertEquals($pngdata, $comment['meta']['icon'], 'icon gets set');
+        $pngdata = $identicon->getImageDataUri(TrafficLimiter::getHash(), 16);
+        $comment = current($this->_model->getPaste(Helper::getPasteId())->get()['comments']);
+        static::assertSame($pngdata, $comment['meta']['icon'], 'icon gets set');
     }
 
-    public function testPasteIdValidation()
+    public function testPasteIdValidation(): void
     {
-        $this->assertTrue(Paste::isValidId('a242ab7bdfb2581a'), 'valid paste id');
-        $this->assertFalse(Paste::isValidId('foo'), 'invalid hex values');
-        $this->assertFalse(Paste::isValidId('../bar/baz'), 'path attack');
+        static::assertTrue(Paste::isValidId('a242ab7bdfb2581a'), 'valid paste id');
+        static::assertFalse(Paste::isValidId('foo'), 'invalid hex values');
+        static::assertFalse(Paste::isValidId('../bar/baz'), 'path attack');
     }
 
-    public function testInvalidPaste()
+    public function testInvalidPaste(): void
     {
         $this->_model->getPaste(Helper::getPasteId())->delete();
         $paste = $this->_model->getPaste(Helper::getPasteId());
@@ -330,24 +345,24 @@ class ModelTest extends TestCase
         $paste->get();
     }
 
-    public function testInvalidPasteFormat()
+    public function testInvalidPasteFormat(): void
     {
-        $pasteData             = Helper::getPastePost();
+        $pasteData = Helper::getPastePost();
         $pasteData['adata'][1] = 'format does not exist';
-        $paste                 = $this->_model->getPaste();
+        $paste = $this->_model->getPaste();
         $this->expectException(Exception::class);
         $this->expectExceptionCode(75);
         $paste->setData($pasteData);
     }
 
-    public function testInvalidPasteId()
+    public function testInvalidPasteId(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(60);
         $this->_model->getPaste('');
     }
 
-    public function testInvalidComment()
+    public function testInvalidComment(): void
     {
         $paste = $this->_model->getPaste();
         $this->expectException(Exception::class);
@@ -355,10 +370,10 @@ class ModelTest extends TestCase
         $paste->getComment(Helper::getPasteId());
     }
 
-    public function testInvalidCommentDeletedPaste()
+    public function testInvalidCommentDeletedPaste(): void
     {
         $pasteData = Helper::getPastePost();
-        $paste     = $this->_model->getPaste(Helper::getPasteId());
+        $paste = $this->_model->getPaste(Helper::getPasteId());
         $paste->setData($pasteData);
         $paste->store();
 
@@ -369,11 +384,11 @@ class ModelTest extends TestCase
         $comment->store();
     }
 
-    public function testInvalidCommentData()
+    public function testInvalidCommentData(): void
     {
-        $pasteData             = Helper::getPastePost();
+        $pasteData = Helper::getPastePost();
         $pasteData['adata'][2] = 0;
-        $paste                 = $this->_model->getPaste(Helper::getPasteId());
+        $paste = $this->_model->getPaste(Helper::getPasteId());
         $paste->setData($pasteData);
         $paste->store();
 
@@ -383,30 +398,30 @@ class ModelTest extends TestCase
         $comment->store();
     }
 
-    public function testInvalidCommentParent()
+    public function testInvalidCommentParent(): void
     {
-        $paste     = $this->_model->getPaste(Helper::getPasteId());
+        $paste = $this->_model->getPaste(Helper::getPasteId());
         $this->expectException(Exception::class);
         $this->expectExceptionCode(65);
         $paste->getComment('');
     }
 
-    public function testExpiration()
+    public function testExpiration(): void
     {
         $pasteData = Helper::getPastePost();
         $this->_model->getPaste(Helper::getPasteId())->delete();
         $paste = $this->_model->getPaste(Helper::getPasteId());
-        $this->assertFalse($paste->exists(), 'paste does not yet exist');
+        static::assertFalse($paste->exists(), 'paste does not yet exist');
 
         $paste = $this->_model->getPaste();
         $paste->setData($pasteData);
         $paste->store();
 
         $paste = $paste->get();
-        $this->assertEquals((float) 300, (float) $paste['meta']['time_to_live'], 'remaining time is set correctly', 1.0);
+        static::assertEquals((float) 300, (float) $paste['meta']['time_to_live'], 'remaining time is set correctly', 1.0);
     }
 
-    public function testCommentDeletion()
+    public function testCommentDeletion(): void
     {
         $pasteData = Helper::getPastePost();
         $this->_model->getPaste(Helper::getPasteId())->delete();
@@ -419,100 +434,100 @@ class ModelTest extends TestCase
         $paste->getComment(Helper::getPasteId())->delete();
     }
 
-    public function testPurge()
+    public function testPurge(): void
     {
-        $conf  = new Configuration;
+        $conf = new Configuration();
         $store = new Database($conf->getSection('model_options'));
         $store->delete(Helper::getPasteId());
-        $expired = Helper::getPaste(2, array('expire_date' => 1344803344));
-        $paste   = Helper::getPaste(2, array('expire_date' => time() + 3600));
-        $keys    = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'x', 'y', 'z');
-        $ids     = array();
+        $expired = Helper::getPaste(2, ['expire_date' => 1344803344]);
+        $paste = Helper::getPaste(2, ['expire_date' => time() + 3600]);
+        $keys = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'x', 'y', 'z'];
+        $ids = [];
         foreach ($keys as $key) {
             $ids[$key] = hash('fnv164', $key);
             $store->delete($ids[$key]);
-            $this->assertFalse($store->exists($ids[$key]), "paste $key does not yet exist");
-            if (in_array($key, array('x', 'y', 'z'))) {
-                $this->assertTrue($store->create($ids[$key], $paste), "store $key paste");
+            static::assertFalse($store->exists($ids[$key]), "paste {$key} does not yet exist");
+            if (in_array($key, ['x', 'y', 'z'], true)) {
+                static::assertTrue($store->create($ids[$key], $paste), "store {$key} paste");
             } else {
-                $this->assertTrue($store->create($ids[$key], $expired), "store $key paste");
+                static::assertTrue($store->create($ids[$key], $expired), "store {$key} paste");
             }
-            $this->assertTrue($store->exists($ids[$key]), "paste $key exists after storing it");
+            static::assertTrue($store->exists($ids[$key]), "paste {$key} exists after storing it");
         }
         $this->_model->purge(10);
         foreach ($ids as $key => $id) {
-            if (in_array($key, array('x', 'y', 'z'))) {
-                $this->assertTrue($this->_model->getPaste($id)->exists(), "paste $key exists after purge");
+            if (in_array($key, ['x', 'y', 'z'], true)) {
+                static::assertTrue($this->_model->getPaste($id)->exists(), "paste {$key} exists after purge");
                 $this->_model->getPaste($id)->delete();
             } else {
-                $this->assertFalse($this->_model->getPaste($id)->exists(), "paste $key was purged");
+                static::assertFalse($this->_model->getPaste($id)->exists(), "paste {$key} was purged");
             }
         }
     }
 
-    public function testCommentWithDisabledVizhash()
+    public function testCommentWithDisabledVizhash(): void
     {
-        $options                 = parse_ini_file(CONF, true);
+        $options = parse_ini_file(CONF, true);
         $options['main']['icon'] = 'none';
-        $options['model']        = array(
+        $options['model'] = [
             'class' => 'Database',
-        );
-        $options['model_options'] = array(
+        ];
+        $options['model_options'] = [
             'dsn' => 'sqlite::memory:',
             'usr' => null,
             'pwd' => null,
-            'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        );
+            'opt' => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+        ];
         Helper::createIniFile(CONF, $options);
-        $model = new Model(new Configuration);
+        $model = new Model(new Configuration());
 
         $pasteData = Helper::getPastePost();
         $this->_model->getPaste(Helper::getPasteId())->delete();
         $paste = $model->getPaste(Helper::getPasteId());
-        $this->assertFalse($paste->exists(), 'paste does not yet exist');
+        static::assertFalse($paste->exists(), 'paste does not yet exist');
 
         $paste = $model->getPaste();
         $paste->setData($pasteData);
         $paste->store();
 
         $paste = $model->getPaste(Helper::getPasteId());
-        $this->assertTrue($paste->exists(), 'paste exists after storing it');
+        static::assertTrue($paste->exists(), 'paste exists after storing it');
 
         // storing comments
         $commentData = Helper::getCommentPost();
         unset($commentData['meta']['icon']);
-        $paste       = $model->getPaste(Helper::getPasteId());
-        $comment     = $paste->getComment(Helper::getPasteId(), Helper::getPasteId());
-        $this->assertFalse($comment->exists(), 'comment does not yet exist');
+        $paste = $model->getPaste(Helper::getPasteId());
+        $comment = $paste->getComment(Helper::getPasteId(), Helper::getPasteId());
+        static::assertFalse($comment->exists(), 'comment does not yet exist');
 
         $comment = $paste->getComment(Helper::getPasteId());
         $comment->setData($commentData);
         $comment->store();
 
         $comment = $paste->getComment(Helper::getPasteId(), Helper::getPasteId());
-        $this->assertTrue($comment->exists(), 'comment exists after storing it');
+        static::assertTrue($comment->exists(), 'comment exists after storing it');
 
         $comment = current($this->_model->getPaste(Helper::getPasteId())->get()['comments']);
-        $this->assertFalse(array_key_exists('icon', $comment['meta']), 'icon was not generated');
+        static::assertFalse(array_key_exists('icon', $comment['meta']), 'icon was not generated');
     }
 
-    public function testCommentVizhash()
+    public function testCommentVizhash(): void
     {
-        $options                 = parse_ini_file(CONF, true);
+        $options = parse_ini_file(CONF, true);
         $options['main']['icon'] = 'vizhash';
-        $options['model']        = array(
+        $options['model'] = [
             'class' => 'Database',
-        );
-        $options['model_options'] = array(
+        ];
+        $options['model_options'] = [
             'dsn' => 'sqlite::memory:',
             'usr' => null,
             'pwd' => null,
-            'opt' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-        );
+            'opt' => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+        ];
         Helper::createIniFile(CONF, $options);
-        $model = new Model(new Configuration);
+        $model = new Model(new Configuration());
 
-        $pasteData   = Helper::getPastePost();
+        $pasteData = Helper::getPastePost();
         $commentData = Helper::getCommentPost();
         $model->getPaste(Helper::getPasteId())->delete();
 
@@ -524,9 +539,9 @@ class ModelTest extends TestCase
         $comment->setData($commentData);
         $comment->store();
 
-        $vz        = new Vizhash16x16();
-        $pngdata   = 'data:image/png;base64,' . base64_encode($vz->generate(TrafficLimiter::getHash()));
-        $comment   = current($this->_model->getPaste(Helper::getPasteId())->get()['comments']);
-        $this->assertEquals($pngdata, $comment['meta']['icon'], 'nickname triggers vizhash to be set');
+        $vz = new Vizhash16x16();
+        $pngdata = 'data:image/png;base64,'.base64_encode($vz->generate(TrafficLimiter::getHash()));
+        $comment = current($this->_model->getPaste(Helper::getPasteId())->get()['comments']);
+        static::assertSame($pngdata, $comment['meta']['icon'], 'nickname triggers vizhash to be set');
     }
 }
