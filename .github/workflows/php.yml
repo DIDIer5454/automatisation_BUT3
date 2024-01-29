@@ -45,7 +45,7 @@ jobs:
       run: composer require --dev squizlabs/php_codesniffer
     - name: test sniffer
       run: ../vendor/bin/phpcs .
-      #working-directory: tst
+      working-directory: privatebin
     #- name: rectification erreur
      # run: ../vendor/bin/phpcbf .
      # working-directory: tst
