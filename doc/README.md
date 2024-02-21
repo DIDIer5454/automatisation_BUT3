@@ -7,7 +7,7 @@ Please have a look at these questions *before* opening an issue in this repo.
 ## [Installation guide](https://github.com/PrivateBin/PrivateBin/blob/master/doc/Installation.md#installation)
 
 Minimal requirements, hardening and securing your installation and initial
-configuration.
+configuration. 
 
 ## [Configuration guide](https://github.com/PrivateBin/PrivateBin/wiki/Configuration)
 
